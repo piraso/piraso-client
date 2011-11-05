@@ -18,18 +18,108 @@
 
 package ard.piraso.ui.base.wizard;
 
+import ard.piraso.ui.api.PreferenceProperty;
+import ard.piraso.ui.api.PreferenceProvider;
+import ard.piraso.ui.base.GeneralPreferenceProviderImpl;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import org.apache.commons.collections.CollectionUtils;
+import org.openide.util.Lookup;
+
 import javax.swing.*;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public final class NewMonitorWindowVisualPanel2 extends JPanel {
 
+    private JCheckBox[] chkPreferences;
+    private String[] preferenceKeys;
+            
     /** Creates new form NewMonitorWindowVisualPanel2 */
     public NewMonitorWindowVisualPanel2() {
         initComponents();
+        initPrefenceComponents();
     }
+    
+    private List<PreferenceProvider> getProviders() {
+        Collection<? extends PreferenceProvider> providers = Lookup.getDefault().lookupAll(PreferenceProvider.class);
+        List<PreferenceProvider> tmp = new ArrayList<PreferenceProvider>(providers);
+        Collections.sort(tmp, new Comparator<PreferenceProvider>() {
+            @Override
+            public int compare(PreferenceProvider t, PreferenceProvider t1) {
+                if(GeneralPreferenceProviderImpl.class.isInstance(t)) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        });      
+        
+        return tmp;
+    }
+    
+    private void initPrefenceComponents() {
+        Collection<? extends PreferenceProvider> providers = Lookup.getDefault().lookupAll(PreferenceProvider.class);
+        CellConstraints c = new CellConstraints();
+        
+        int size = 0;
+        for(PreferenceProvider provider : providers) {
+            size += CollectionUtils.size(provider.getPreferences());
+        }
+                
+        int l = 0, r = 2;
+        chkPreferences = new JCheckBox[size];
+        preferenceKeys = new String[size];
+        Iterator<PreferenceProvider> itrpp = getProviders().iterator();
+        for(int i = 0; i < providers.size(); i++) {
+            PreferenceProvider provider = itrpp.next();
 
+            JLabel lblHeader = new JLabel(provider.getName());
+            Font of = lblHeader.getFont();
+            lblHeader.setFont(new Font(of.getFamily(), Font.BOLD, of.getSize()));
+            pnlPreferences.add(lblHeader, c.xyw(2, r, 3));
+            r += 2;
+            
+            Iterator<? extends PreferenceProperty> itrp = provider.getPreferences().iterator();
+            for(int j = 0; j < provider.getPreferences().size(); j++, l++) {
+                PreferenceProperty prop = itrp.next();
+                
+                preferenceKeys[l] = prop.getName();
+                chkPreferences[l] = new JCheckBox();
+                chkPreferences[l].setText(provider.getMessage(prop.getName()));
+
+                pnlPreferences.add(chkPreferences[l], c.xy(4, r));                
+                r += 2;
+            }
+        }
+    }
+    
+    private FormLayout createLayout() {
+        StringBuilder buf = new StringBuilder();
+                
+        buf.append("2dlu, ");
+        
+        for(PreferenceProvider provider : getProviders()) {            
+            buf.append("p, 4dlu, ");
+            
+            Iterator<? extends PreferenceProperty> itrp = provider.getPreferences().iterator();
+            while(itrp.hasNext()) {
+                PreferenceProperty prop = itrp.next();
+                
+                buf.append("p, ");
+                buf.append(itrp.hasNext() ? " 2dlu, " : " 6dlu, ");
+            }
+        }
+        
+        buf.append("2dlu");
+        
+        return new FormLayout("2dlu, 6dlu, 2dlu, p:g, 2dlu", buf.toString());
+    }
+    
     @Override
     public String getName() {
-        return "Step #2";
+        return "Monitoring Preferences";
     }
 
     /** This method is called from within the constructor to
@@ -44,18 +134,7 @@ public final class NewMonitorWindowVisualPanel2 extends JPanel {
         pnlPreferences = new javax.swing.JPanel();
 
         pnlPreferences.setOpaque(false);
-
-        javax.swing.GroupLayout pnlPreferencesLayout = new javax.swing.GroupLayout(pnlPreferences);
-        pnlPreferences.setLayout(pnlPreferencesLayout);
-        pnlPreferencesLayout.setHorizontalGroup(
-            pnlPreferencesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 356, Short.MAX_VALUE)
-        );
-        pnlPreferencesLayout.setVerticalGroup(
-            pnlPreferencesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 256, Short.MAX_VALUE)
-        );
-
+        pnlPreferences.setLayout(createLayout());
         jScrollPane1.setViewportView(pnlPreferences);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -79,4 +158,5 @@ public final class NewMonitorWindowVisualPanel2 extends JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel pnlPreferences;
     // End of variables declaration//GEN-END:variables
+
 }

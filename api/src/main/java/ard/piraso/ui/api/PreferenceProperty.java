@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ard.piraso.ui.api;
 
 /**
@@ -26,6 +27,8 @@ public class PreferenceProperty {
     private String name;
     
     private Class type;
+    
+    private boolean defaultValue;
     
     public PreferenceProperty(String name, Class type) {
         this.name = name;
@@ -39,4 +42,6 @@ public class PreferenceProperty {
     public Class getType() {
         return type;
     }
+    
+    
 }
