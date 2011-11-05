@@ -16,34 +16,16 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.io;
-
-import ard.piraso.api.io.EntryReadListener;
-
-import java.util.List;
+package ard.piraso.ui.base.cookie;
 
 /**
  *
- * @author adleon
+ * @author alvin
  */
-public interface IOEntrySource {
+public interface StopCookie {
     
-    public void start();
-    
+    /**
+     * Stop cookie
+     */
     public void stop();
-    
-    public String getId();
-    
-    public String getWatchedAddr();
-
-    public boolean isStopped();
-
-    public List<EntryReadListener> getListeners();
-
-    public void addListener(EntryReadListener listener);
-
-    public void removeListener(EntryReadListener listener);
-
-    public void clearListeners();
-    
 }

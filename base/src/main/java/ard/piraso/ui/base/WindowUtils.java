@@ -16,34 +16,33 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.io;
+package ard.piraso.ui.base;
 
-import ard.piraso.api.io.EntryReadListener;
+import org.openide.windows.TopComponent;
 
-import java.util.List;
+import java.util.Set;
 
 /**
+ * 
  *
- * @author adleon
+ * @author alvin
  */
-public interface IOEntrySource {
+public final class WindowUtils {
     
-    public void start();
+    private WindowUtils() {}
     
-    public void stop();
-    
-    public String getId();
-    
-    public String getWatchedAddr();
+    /**
+     * Request visibility for the given top component.
+     * 
+     * @param clazz 
+     */
+    public static void selectWindow(Class<? extends TopComponent> clazz) {
+        Set<TopComponent> opened = TopComponent.getRegistry().getOpened();
 
-    public boolean isStopped();
-
-    public List<EntryReadListener> getListeners();
-
-    public void addListener(EntryReadListener listener);
-
-    public void removeListener(EntryReadListener listener);
-
-    public void clearListeners();
-    
+        for(TopComponent component : opened) {
+            if(clazz.isInstance(component)) {
+                component.requestVisible();
+            }
+        }
+    }
 }
