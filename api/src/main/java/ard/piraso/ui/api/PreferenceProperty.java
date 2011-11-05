@@ -31,8 +31,13 @@ public class PreferenceProperty {
     private boolean defaultValue;
     
     public PreferenceProperty(String name, Class type) {
+        this(name, type, false);
+    }
+    
+    public PreferenceProperty(String name, Class type, boolean defaultValue) {
         this.name = name;
         this.type = type;
+        this.defaultValue = defaultValue;
     }
 
     public String getName() {
@@ -42,6 +47,8 @@ public class PreferenceProperty {
     public Class getType() {
         return type;
     }
-    
-    
+
+    public boolean isDefaultValue() {
+        return defaultValue;
+    }    
 }

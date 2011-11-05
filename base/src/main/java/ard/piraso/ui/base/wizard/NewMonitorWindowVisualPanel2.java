@@ -88,6 +88,7 @@ public final class NewMonitorWindowVisualPanel2 extends JPanel {
                 preferenceKeys[l] = prop.getName();
                 chkPreferences[l] = new JCheckBox();
                 chkPreferences[l].setText(provider.getMessage(prop.getName()));
+                chkPreferences[l].setSelected(prop.isDefaultValue());
 
                 pnlPreferences.add(chkPreferences[l], c.xy(4, r));                
                 r += 2;

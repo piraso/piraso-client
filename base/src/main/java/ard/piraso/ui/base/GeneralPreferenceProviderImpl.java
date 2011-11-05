@@ -35,7 +35,7 @@ public class GeneralPreferenceProviderImpl implements PreferenceProvider {
         List<PreferenceProperty> preferences = new ArrayList<PreferenceProperty>(2);
         
         preferences.add(new PreferenceProperty(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), Boolean.class));
-        preferences.add(new PreferenceProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), Boolean.class));
+        preferences.add(new PreferenceProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), Boolean.class, true));
         
         return preferences;
     }

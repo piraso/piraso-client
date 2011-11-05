@@ -41,7 +41,8 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
         for(SQLPreferenceEnum flag : SQLPreferenceEnum.values()) {
             PreferenceProperty property;
             if(flag.isLevel()) {
-                property = new PreferenceProperty(flag.getPropertyName(), Boolean.class);
+                property = new PreferenceProperty(flag.getPropertyName(), Boolean.class, 
+                        SQLPreferenceEnum.CONNECTION_ENABLED == flag || SQLPreferenceEnum.PREPARED_STATEMENT_ENABLED == flag);                
             } else {
                 property = new PreferenceProperty(flag.getPropertyName(), Integer.class);
             }
