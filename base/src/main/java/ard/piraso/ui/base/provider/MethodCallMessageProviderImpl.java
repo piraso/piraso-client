@@ -16,27 +16,27 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.base.provider;
 
-import ard.piraso.ui.base.extension.IdleTimeOutManager;
-import org.openide.modules.ModuleInstall;
+import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.MessageEntry;
+import ard.piraso.api.entry.MethodCallEntry;
+import ard.piraso.ui.api.MessageProvider;
+import org.openide.util.lookup.ServiceProvider;
 
-import java.util.logging.Logger;
-
-public class Installer extends ModuleInstall {
-    private static final Logger LOG = Logger.getLogger(Installer.class.getName());
+/**
+ * Method call message provider
+ */
+@ServiceProvider(service=MessageProvider.class)
+public class MethodCallMessageProviderImpl implements MessageProvider {
 
     @Override
-    public void restored() {
-        LOG.info("Module Started.");
-        IdleTimeOutManager.INSTANCE.start();
+    public boolean isSupported(Entry entry) {
+        return MessageEntry.class.isInstance(entry);
     }
 
     @Override
-    public boolean closing() {
-        LOG.info("Module Closing.");
-        IdleTimeOutManager.INSTANCE.stop();
-
-        return true;
+    public String toMessage(Entry entry) {
+        return "METHOD: " + ((MethodCallEntry) entry).getMethodName() + "()";
     }
 }

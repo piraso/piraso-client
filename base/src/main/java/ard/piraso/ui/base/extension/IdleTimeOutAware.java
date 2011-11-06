@@ -16,27 +16,24 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.base.extension;
 
-import ard.piraso.ui.base.extension.IdleTimeOutManager;
-import org.openide.modules.ModuleInstall;
+import java.lang.reflect.InvocationTargetException;
 
-import java.util.logging.Logger;
+/**
+ * Interface that defines a idle timeout aware class.
+ */
+public interface IdleTimeOutAware {
 
-public class Installer extends ModuleInstall {
-    private static final Logger LOG = Logger.getLogger(Installer.class.getName());
+    /**
+     * Determines if current class is idle timeout.
+     *
+     * @return {@code true} if timeout, {@code false} otherwise.
+     */
+    public boolean isIdleTimeOut();
 
-    @Override
-    public void restored() {
-        LOG.info("Module Started.");
-        IdleTimeOutManager.INSTANCE.start();
-    }
-
-    @Override
-    public boolean closing() {
-        LOG.info("Module Closing.");
-        IdleTimeOutManager.INSTANCE.stop();
-
-        return true;
-    }
+    /**
+     * Action to do on timeout.
+     */
+    public void doOnTimeOut() throws InvocationTargetException, InterruptedException;
 }

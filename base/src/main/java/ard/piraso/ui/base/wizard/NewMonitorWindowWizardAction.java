@@ -18,6 +18,7 @@
 
 package ard.piraso.ui.base.wizard;
 
+import ard.piraso.ui.base.ContextMonitorTopComponent;
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
 import org.openide.awt.ActionID;
@@ -54,7 +55,9 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
         dialog.toFront();
         boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
         if (!cancelled) {
-            // do something
+            ContextMonitorTopComponent editor = new ContextMonitorTopComponent();
+            editor.open();
+            editor.requestActive();            
         }
     }
 

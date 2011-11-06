@@ -20,7 +20,7 @@ package ard.piraso.ui.base.wizard;
 
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
-import ard.piraso.ui.base.GeneralPreferenceProviderImpl;
+import ard.piraso.ui.base.provider.GeneralPreferenceProviderImpl;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.commons.collections.CollectionUtils;

@@ -16,27 +16,27 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.sql.provider;
 
-import ard.piraso.ui.base.extension.IdleTimeOutManager;
-import org.openide.modules.ModuleInstall;
+import ard.piraso.api.entry.Entry;
+import ard.piraso.api.sql.SQLViewEntry;
+import ard.piraso.ui.api.MessageProvider;
+import org.openide.util.lookup.ServiceProvider;
 
-import java.util.logging.Logger;
-
-public class Installer extends ModuleInstall {
-    private static final Logger LOG = Logger.getLogger(Installer.class.getName());
-
+/**
+ * Provides message for {@link ard.piraso.api.sql.SQLViewEntry} class.
+ */
+@ServiceProvider(service=MessageProvider.class)
+public class SQLViewMessageProviderImpl implements MessageProvider {
     @Override
-    public void restored() {
-        LOG.info("Module Started.");
-        IdleTimeOutManager.INSTANCE.start();
+    public boolean isSupported(Entry entry) {
+        return SQLViewEntry.class.isInstance(entry);
     }
 
     @Override
-    public boolean closing() {
-        LOG.info("Module Closing.");
-        IdleTimeOutManager.INSTANCE.stop();
+    public String toMessage(Entry entry) {
+        SQLViewEntry sql = (SQLViewEntry) entry;
 
-        return true;
+        return sql.getSql();
     }
 }

@@ -16,27 +16,16 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.api;
 
-import ard.piraso.ui.base.extension.IdleTimeOutManager;
-import org.openide.modules.ModuleInstall;
+import ard.piraso.api.entry.Entry;
 
-import java.util.logging.Logger;
+/**
+ * Provides Entry messages.
+ */
+public interface MessageProvider {
 
-public class Installer extends ModuleInstall {
-    private static final Logger LOG = Logger.getLogger(Installer.class.getName());
-
-    @Override
-    public void restored() {
-        LOG.info("Module Started.");
-        IdleTimeOutManager.INSTANCE.start();
-    }
-
-    @Override
-    public boolean closing() {
-        LOG.info("Module Closing.");
-        IdleTimeOutManager.INSTANCE.stop();
-
-        return true;
-    }
+    public boolean isSupported(Entry entry);
+    
+    public String toMessage(Entry entry);
 }

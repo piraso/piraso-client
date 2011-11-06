@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.base.provider;
 
 import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.ui.api.PreferenceProperty;

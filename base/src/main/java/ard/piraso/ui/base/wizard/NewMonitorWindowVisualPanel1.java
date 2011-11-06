@@ -82,8 +82,9 @@ public final class NewMonitorWindowVisualPanel1 extends JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(rdoOtherAddress)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtOtherAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
-                            .addComponent(rdoMyAddress))))
+                                .addComponent(txtOtherAddress, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(rdoMyAddress))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)))
                 .addGap(33, 33, 33))
         );
         layout.setVerticalGroup(

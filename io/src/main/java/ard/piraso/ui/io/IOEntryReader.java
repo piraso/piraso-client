@@ -109,7 +109,7 @@ public class IOEntryReader implements EntryReadListener {
     public void fireEntryReadEvent(IOEntryEvent evt) {
         List<IOEntryListener> tmp = new ArrayList<IOEntryListener>(listeners);
         for(IOEntryListener listener : tmp) {
-            listener.receviedEntry(evt);
+            listener.receivedEntry(evt);
         }
     }
     

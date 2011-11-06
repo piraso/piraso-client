@@ -2,3 +2,4 @@ Manifest-Version: 1.0
 OpenIDE-Module-Install: ard/piraso/ui/base/Installer.class
 OpenIDE-Module-Localizing-Bundle: ard/piraso/ui/base/Bundle.properties
 OpenIDE-Module-Layer: ard/piraso/ui/base/layer.xml
+OpenIDE-Module-Requires: org.openide.windows.WindowManager

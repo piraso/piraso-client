@@ -16,27 +16,32 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.base.extension;
 
-import ard.piraso.ui.base.extension.IdleTimeOutManager;
-import org.openide.modules.ModuleInstall;
+import ard.piraso.api.entry.Entry;
+import ard.piraso.ui.api.MessageProvider;
+import org.openide.util.Lookup;
 
-import java.util.logging.Logger;
+import java.util.Collection;
 
-public class Installer extends ModuleInstall {
-    private static final Logger LOG = Logger.getLogger(Installer.class.getName());
+/**
+ * Provides messages for entries.
+ */
+public class MessageProviderManager {
 
-    @Override
-    public void restored() {
-        LOG.info("Module Started.");
-        IdleTimeOutManager.INSTANCE.start();
-    }
+    public static final MessageProviderManager INSTANCE = new MessageProviderManager();
 
-    @Override
-    public boolean closing() {
-        LOG.info("Module Closing.");
-        IdleTimeOutManager.INSTANCE.stop();
+    private MessageProviderManager() {}
 
-        return true;
+    public String getMessage(Entry entry) {
+        Collection<? extends MessageProvider> providers = Lookup.getDefault().lookupAll(MessageProvider.class);
+
+        for(MessageProvider provider : providers) {
+            if(provider.isSupported(entry)) {
+                return provider.toMessage(entry);
+            }
+        }
+
+        return entry.getClass().toString();
     }
 }

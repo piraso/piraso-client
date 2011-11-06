@@ -103,6 +103,14 @@ public class IOEntryManager {
         
         return createOrGetRequest(requestId).getTotalPages(pageSize);
     }
+
+    public IOEntry getEntryAt(Long requestId, int rowNum) throws IOException {
+        if(!requests.containsKey(requestId)) {
+            throw new IllegalArgumentException(String.format("Request with id '%d' not found.", requestId));
+        }
+
+        return createOrGetRequest(requestId).get(rowNum);
+    }
     
     public int getTotalEntries(Long requestId) {
         if(!requests.containsKey(requestId)) {
