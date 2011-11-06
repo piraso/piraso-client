@@ -28,9 +28,11 @@ import java.util.List;
 /**
  * Request url combo box
  */
-public class IOEntryComboBoxModel extends AbstractListModel {
+public class IOEntryComboBoxModel extends AbstractListModel implements ComboBoxModel {
 
     private List<RequestEntry> requests;
+
+    private RequestEntry selected;
 
     public IOEntryComboBoxModel() {
          requests = new ArrayList<RequestEntry> ();
@@ -58,5 +60,21 @@ public class IOEntryComboBoxModel extends AbstractListModel {
         synchronized (this) {
             return requests.get(index);
         }
+    }
+
+    @Override
+    public void setSelectedItem(Object anItem) {
+        if ((selected != null && !selected.equals(anItem)) ||
+            selected == null && anItem != null) {
+            if(RequestEntry.class.isInstance(anItem)) {
+                selected = (RequestEntry) anItem;
+                fireContentsChanged(this, -1, -1);
+            }
+        }
+    }
+
+    @Override
+    public Object getSelectedItem() {
+        return selected;
     }
 }

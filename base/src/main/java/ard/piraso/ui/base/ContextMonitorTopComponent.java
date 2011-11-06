@@ -22,11 +22,11 @@
  */
 package ard.piraso.ui.base;
 
+import ard.piraso.ui.base.model.IOEntryComboBoxModel;
+import ard.piraso.ui.base.model.IOEntryTableModel;
+import ard.piraso.ui.io.IOEntryReader;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -34,7 +34,10 @@ import javax.swing.table.DefaultTableModel;
  */
 public final class ContextMonitorTopComponent extends TopComponent {
 
-    public ContextMonitorTopComponent() {
+    public ContextMonitorTopComponent(IOEntryReader reader) {
+        tableModel = new IOEntryTableModel(reader);
+        comboBoxModel = tableModel.getComboBoxModel();
+        
         initComponents();
         setName(NbBundle.getMessage(ContextMonitorTopComponent.class, "CTL_ContextMonitorTopComponent"));
         setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
@@ -63,7 +66,7 @@ public final class ContextMonitorTopComponent extends TopComponent {
         toolbar.add(jSeparator1);
 
         cboUrl.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
-        cboUrl.setModel(new DefaultComboBoxModel());
+        cboUrl.setModel(comboBoxModel);
         toolbar.add(cboUrl);
 
         org.openide.awt.Mnemonics.setLocalizedText(btnLockUrl, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnLockUrl.text")); // NOI18N
@@ -84,33 +87,30 @@ public final class ContextMonitorTopComponent extends TopComponent {
         tableScrollPane.setFont(new java.awt.Font("Monospaced", 0, 10));
 
         table.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
-        table.setModel(new DefaultTableModel());
+        table.setModel(tableModel);
         tableScrollPane.setViewportView(table);
 
         add(tableScrollPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-private void btnLockUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLockUrlActionPerformed
-//        synchronized(getTreeLock()) {
-//            if(btnLockUrl.isSelected() && !cboUrl.isEnabled()) {
-//                setEnableComponents(true);
-//            }
-//        }
-}//GEN-LAST:event_btnLockUrlActionPerformed
+    private void btnLockUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLockUrlActionPerformed
+
+    }//GEN-LAST:event_btnLockUrlActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton btnLockUrl;
-    private javax.swing.JComboBox cboUrl;
-    private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JTable table;
-    private javax.swing.JScrollPane tableScrollPane;
-    private javax.swing.JToolBar toolbar;
+    protected javax.swing.JToggleButton btnLockUrl;
+    protected javax.swing.JComboBox cboUrl;
+    protected IOEntryComboBoxModel comboBoxModel;
+    protected javax.swing.JToolBar.Separator jSeparator1;
+    protected javax.swing.JTable table;
+    protected IOEntryTableModel tableModel;
+    protected javax.swing.JScrollPane tableScrollPane;
+    protected javax.swing.JToolBar toolbar;
     // End of variables declaration//GEN-END:variables
 
     
     @Override
     public void componentClosed() {
-        DefaultTableModel model = new DefaultTableModel();
     }
 
     @Override

@@ -18,7 +18,7 @@
 
 package ard.piraso.ui.base;
 
-import ard.piraso.ui.base.extension.IdleTimeOutManager;
+import ard.piraso.ui.base.manager.IdleTimeOutManager;
 import org.openide.modules.ModuleInstall;
 
 import java.util.logging.Logger;

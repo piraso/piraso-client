@@ -21,9 +21,9 @@ package ard.piraso.ui.base.model;
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
-import ard.piraso.ui.base.extension.IdleTimeOutAware;
-import ard.piraso.ui.base.extension.IdleTimeOutManager;
-import ard.piraso.ui.base.extension.MessageProviderManager;
+import ard.piraso.ui.base.manager.IdleTimeOutAware;
+import ard.piraso.ui.base.manager.IdleTimeOutManager;
+import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.io.*;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -90,9 +90,14 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         return currentRequestId;
     }
 
-    public void setCurrentRequestId(Long currentRequestId) {
+    public void setCurrentRequestId(Long newRequestId) {
         synchronized (self) {
-            this.currentRequestId = currentRequestId;
+            Long oldRequestId = currentRequestId;
+            if((currentRequestId == null && newRequestId != null) ||
+                    newRequestId != null && !newRequestId.equals(currentRequestId)) {
+                currentRequestId = newRequestId;
+                selectRequestItem(oldRequestId, newRequestId);
+            }
         }
     }
 
@@ -188,21 +193,30 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         return MessageProviderManager.INSTANCE.getMessage(entry);
     }
 
-    private String getElapse(Entry entry) {
-        return null;
-    }
-
-    private Long getElapseMillis(Entry entry) {
-        ElapseTimeAware elapseTime = ((ElapseTimeAware) entry);
+    private String getElapsePrettyPrint(Entry entry) {
+        ElapseTimeAware aware = ((ElapseTimeAware) entry);
         if(!ElapseTimeAware.class.isInstance(entry)) {
             return null;
         }
 
-        if(elapseTime.getElapseTime() == null) {
+        if(aware.getElapseTime() == null) {
             return null;
         }
 
-        return elapseTime.getElapseTime().getElapseTime();
+        return aware.getElapseTime().prettyPrint();
+    }
+
+    private Long getElapseMilliseconds(Entry entry) {
+        ElapseTimeAware aware = ((ElapseTimeAware) entry);
+        if(!ElapseTimeAware.class.isInstance(entry)) {
+            return null;
+        }
+
+        if(aware.getElapseTime() == null) {
+            return null;
+        }
+
+        return aware.getElapseTime().getElapseTime();
     }
 
     @Override
@@ -216,8 +230,8 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
                 case 1: return entry.getLevel();
                 case 2: return getGroup(entry);
                 case 3: return getMessage(entry);
-                case 4: return getElapse(entry);
-                case 5: return getElapseMillis(entry);
+                case 4: return getElapsePrettyPrint(entry);
+                case 5: return getElapseMilliseconds(entry);
             }
         } catch (IOException e) {
             LOG.warning(e.getMessage());
@@ -249,6 +263,11 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         listeners.clear();
     }
 
+    public void selectRequestItem(Long oldValue, Long newValue) {
+        comboBoxModel.setSelectedItem(manager.getRequest(newValue).getEntry());
+        fireChangeRequestEvent(new ChangeRequestEvent(this, oldValue, newValue));
+    }
+
     private class EntryReceivedRunnable implements Runnable {
 
         private List<IOEntry> entries;
@@ -266,7 +285,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
                 if(oldRequestId != null && !entry.getId().equals(oldRequestId)) {
                     synchronized (self) {
                         currentRequestId = entry.getId();
-                        fireChangeRequestEvent(new ChangeRequestEvent(this, oldRequestId, currentRequestId));
+                        selectRequestItem(oldRequestId, currentRequestId);
                         fireTableDataChanged();
                     }
 
@@ -295,7 +314,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             synchronized (self) {
                 if(currentRequestId == null) {
                     currentRequestId = entries.get(0).getId();
-                    fireChangeRequestEvent(new ChangeRequestEvent(this, null, currentRequestId));
+                    selectRequestItem(null, currentRequestId);
                 }
             }
 

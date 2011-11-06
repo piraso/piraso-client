@@ -119,4 +119,12 @@ public class IOEntryManager {
         
         return createOrGetRequest(requestId).getTotalEntries();
     }
+
+    public IOEntry getRequest(Long requestId) {
+        if(!requests.containsKey(requestId)) {
+            throw new IllegalArgumentException(String.format("Request with id '%d' not found.", requestId));
+        }
+
+        return createOrGetRequest(requestId).getRequest();
+    }
 }

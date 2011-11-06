@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base.extension;
+package ard.piraso.ui.base.manager;
 
 import org.apache.commons.collections.CollectionUtils;
 

@@ -54,8 +54,9 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
         dialog.setVisible(true);
         dialog.toFront();
         boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
+        
         if (!cancelled) {
-            ContextMonitorTopComponent editor = new ContextMonitorTopComponent();
+            ContextMonitorTopComponent editor = new ContextMonitorTopComponent(null);
             editor.open();
             editor.requestActive();            
         }
