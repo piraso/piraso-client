@@ -33,7 +33,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- *
+ * Table model for handling {@link IOEntry} class.
+ * 
  * @author adleon
  */
 public class IOEntryTableModel extends AbstractTableModel implements IOEntryListener, IdleTimeOutAware {
@@ -104,6 +105,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         }
     }
 
+    @Override
     public boolean isIdleTimeOut() {
         synchronized (self) {
             return CollectionUtils.isNotEmpty(entries) &&

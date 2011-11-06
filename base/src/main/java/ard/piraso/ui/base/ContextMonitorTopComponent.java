@@ -38,7 +38,6 @@ public final class ContextMonitorTopComponent extends TopComponent {
         initComponents();
         setName(NbBundle.getMessage(ContextMonitorTopComponent.class, "CTL_ContextMonitorTopComponent"));
         setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
-
     }
 
     /** This method is called from within the constructor to

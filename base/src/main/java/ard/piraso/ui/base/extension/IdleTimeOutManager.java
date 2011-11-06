@@ -98,9 +98,11 @@ public class IdleTimeOutManager implements Runnable {
     @Override
     public void run() {
         while(alive) {
-            try {
-                wait(WAIT_TIME);
-            } catch (InterruptedException ignored) {}
+            synchronized(this) {
+                try {
+                    wait(WAIT_TIME);                
+                } catch (InterruptedException ignored) {}
+            }
 
             List<IdleTimeOutAware> idles = getTimeoutList();
             if(CollectionUtils.isNotEmpty(idles)) {

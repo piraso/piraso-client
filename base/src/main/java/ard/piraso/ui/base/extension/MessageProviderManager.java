@@ -23,6 +23,8 @@ import ard.piraso.ui.api.MessageProvider;
 import org.openide.util.Lookup;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Provides messages for entries.
@@ -30,18 +32,52 @@ import java.util.Collection;
 public class MessageProviderManager {
 
     public static final MessageProviderManager INSTANCE = new MessageProviderManager();
+    
+    private Map<Class, MessageProvider> cache;
+    
+    private MessageProvider defaultProvider;
 
-    private MessageProviderManager() {}
+    private MessageProviderManager() {
+        cache = new HashMap<Class, MessageProvider>();
+        
+        defaultProvider = new DefaultProviderImpl();
+    }
 
     public String getMessage(Entry entry) {
+        if(entry == null) {
+            return null;
+        }
+        
+        if(cache.containsKey(entry.getClass())) {
+            return cache.get(entry.getClass()).toMessage(entry);
+        }
+        
         Collection<? extends MessageProvider> providers = Lookup.getDefault().lookupAll(MessageProvider.class);
 
         for(MessageProvider provider : providers) {
             if(provider.isSupported(entry)) {
+                cache.put(entry.getClass(), provider);
+                
                 return provider.toMessage(entry);
             }
         }
+        
+        cache.put(entry.getClass(), defaultProvider);
 
-        return entry.getClass().toString();
+        return defaultProvider.toMessage(entry);
+    }
+    
+    
+    private class DefaultProviderImpl implements MessageProvider {
+
+        @Override
+        public boolean isSupported(Entry entry) {
+            return true;
+        }
+
+        @Override
+        public String toMessage(Entry entry) {
+            return "DEFAULT: " + entry.getClass().toString();
+        }        
     }
 }
