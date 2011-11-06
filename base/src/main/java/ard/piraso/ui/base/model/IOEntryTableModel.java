@@ -16,10 +16,14 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base.extension;
+package ard.piraso.ui.base.model;
 
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.ui.base.extension.IdleTimeOutAware;
+import ard.piraso.ui.base.extension.IdleTimeOutManager;
+import ard.piraso.ui.base.extension.MessageProviderManager;
 import ard.piraso.ui.io.*;
 import org.apache.commons.collections.CollectionUtils;
 
@@ -29,6 +33,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -59,6 +64,10 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
     
     private final IOEntryTableModel self;
 
+    private IOEntryComboBoxModel comboBoxModel;
+
+    private List<ChangeRequestListener> listeners = Collections.synchronizedList(new LinkedList<ChangeRequestListener>());
+
     public IOEntryTableModel(IOEntryReader reader) {
         this(reader, DEFAULT_IDLE_TIMEOUT);
     }
@@ -68,8 +77,13 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         this.idleTimeOut = idleTimeOut;
         this.lastReceivedTime = System.currentTimeMillis();
 
+        comboBoxModel = new IOEntryComboBoxModel();
         reader.addListener(this);
         self = this;
+    }
+
+    public IOEntryComboBoxModel getComboBoxModel() {
+        return comboBoxModel;
     }
 
     public Long getCurrentRequestId() {
@@ -212,6 +226,29 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         return null;
     }
 
+    public void fireChangeRequestEvent(ChangeRequestEvent evt) {
+        List<ChangeRequestListener> tmp = new ArrayList<ChangeRequestListener>(listeners);
+        for(ChangeRequestListener listener : tmp) {
+            listener.changeRequest(evt);
+        }
+    }
+
+    public List<ChangeRequestListener> getListeners() {
+        return listeners;
+    }
+
+    public void addListener(ChangeRequestListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(ChangeRequestListener listener) {
+        listeners.remove(listener);
+    }
+
+    public void clearListeners() {
+        listeners.clear();
+    }
+
     private class EntryReceivedRunnable implements Runnable {
 
         private List<IOEntry> entries;
@@ -229,6 +266,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
                 if(oldRequestId != null && !entry.getId().equals(oldRequestId)) {
                     synchronized (self) {
                         currentRequestId = entry.getId();
+                        fireChangeRequestEvent(new ChangeRequestEvent(this, oldRequestId, currentRequestId));
                         fireTableDataChanged();
                     }
 
@@ -257,6 +295,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             synchronized (self) {
                 if(currentRequestId == null) {
                     currentRequestId = entries.get(0).getId();
+                    fireChangeRequestEvent(new ChangeRequestEvent(this, null, currentRequestId));
                 }
             }
 
@@ -267,6 +306,13 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         public void run() {
             if(!alive || CollectionUtils.isEmpty(entries)) {
                 return;
+            }
+
+            // ensure to add all request to combo box model
+            for(IOEntry entry : entries) {
+                if(RequestEntry.class.isInstance(entry.getEntry())) {
+                    comboBoxModel.addRequest((RequestEntry) entry.getEntry());
+                }
             }
 
             if(isAllowScrolling()) {
