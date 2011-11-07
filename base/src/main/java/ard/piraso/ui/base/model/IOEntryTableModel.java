@@ -80,6 +80,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         comboBoxModel = new IOEntryComboBoxModel();
         reader.addListener(this);
         self = this;
+
     }
 
     public IOEntryComboBoxModel getComboBoxModel() {

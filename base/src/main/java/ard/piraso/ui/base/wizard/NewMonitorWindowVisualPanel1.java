@@ -18,18 +18,65 @@
 
 package ard.piraso.ui.base.wizard;
 
-import javax.swing.*;
+import ard.piraso.ui.base.model.NewContextMonitorModel;
+import org.apache.commons.lang.StringUtils;
+import org.openide.util.NbBundle;
 
-public final class NewMonitorWindowVisualPanel1 extends JPanel {
-
+public final class NewMonitorWindowVisualPanel1 extends WizardVisualPanel<NewContextMonitorModel> {
+    
     /** Creates new form NewMonitorWindowVisualPanel1 */
     public NewMonitorWindowVisualPanel1() {
         initComponents();
     }
-
+    
     @Override
     public String getName() {
-        return "Logging URL and Monitor Address";
+        return NbBundle.getMessage(NewMonitorWindowVisualPanel1.class, "NewMonitorWindowVisualPanel1.step.name");
+    }
+    
+    @Override
+    public void initChangeEvents() {
+        addChangeListener(cboHost);
+        addChangeListener(txtOtherAddress);
+        addChangeListener(rdoMyAddress);
+        addChangeListener(rdoOtherAddress);
+    }
+    
+    @Override
+    public boolean isEntriesValid() {
+        if(cboHost.getSelectedItem() == null || 
+                StringUtils.isBlank(String.valueOf(cboHost.getSelectedItem()))) {
+            return false;
+        }
+
+        if(!rdoMyAddress.isSelected() && StringUtils.isBlank(txtOtherAddress.getText())) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    @Override
+    public void read(NewContextMonitorModel model) {
+        if(model.getLoggingUrl() != null) {
+            cboHost.setSelectedItem(model.getLoggingUrl());
+        }
+        
+        if(model.getWatchedAddr() != null) {
+            txtOtherAddress.setText(model.getWatchedAddr());
+            rdoOtherAddress.setSelected(true);
+        } else {
+            rdoMyAddress.setSelected(true);
+        }
+    }
+    
+    @Override
+    public void store(NewContextMonitorModel model) {
+        model.setLoggingUrl(String.valueOf(cboHost.getSelectedItem()));
+        
+        if(rdoOtherAddress.isSelected()) {
+            model.setWatchedAddr(txtOtherAddress.getText());
+        }
     }
 
     /** This method is called from within the constructor to
@@ -107,12 +154,13 @@ public final class NewMonitorWindowVisualPanel1 extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox cboHost;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JRadioButton rdoMyAddress;
-    private javax.swing.JRadioButton rdoOtherAddress;
-    private javax.swing.JTextField txtOtherAddress;
+    protected javax.swing.ButtonGroup buttonGroup1;
+    protected javax.swing.JComboBox cboHost;
+    protected javax.swing.JLabel jLabel1;
+    protected javax.swing.JLabel jLabel2;
+    protected javax.swing.JRadioButton rdoMyAddress;
+    protected javax.swing.JRadioButton rdoOtherAddress;
+    protected javax.swing.JTextField txtOtherAddress;
     // End of variables declaration//GEN-END:variables
+
 }

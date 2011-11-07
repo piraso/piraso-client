@@ -18,6 +18,8 @@
 
 package ard.piraso.ui.base.manager;
 
+import ard.piraso.api.Preferences;
+import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
 import ard.piraso.ui.base.provider.GeneralPreferenceProviderImpl;
 import org.openide.util.Lookup;
@@ -56,5 +58,19 @@ public final class PreferenceProviderManager {
         });
 
         return cache;
+    }
+    
+    public Preferences createPreferences() {
+        Preferences preferences = new Preferences();
+        
+        for(PreferenceProvider provider : getProviders()) {
+            for(PreferenceProperty property : provider.getPreferences()) {
+                if(property.isDefaultValue()) {
+                    preferences.addProperty(property.getName(), true);
+                }
+            }
+        }
+        
+        return preferences;
     }
 }

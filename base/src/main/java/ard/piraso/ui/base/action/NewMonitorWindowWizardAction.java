@@ -16,9 +16,15 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base.wizard;
+package ard.piraso.ui.base.action;
 
+import ard.piraso.ui.base.ContextMonitorDispatcher;
 import ard.piraso.ui.base.ContextMonitorTopComponent;
+import ard.piraso.ui.base.model.Constants;
+import ard.piraso.ui.base.model.NewContextMonitorModel;
+import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel1;
+import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel2;
+import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel3;
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
 import org.openide.awt.ActionID;
@@ -34,7 +40,7 @@ import java.text.MessageFormat;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can move the code below wherever you need, or register an action:
-@ActionID(category="File", id="ard.piraso.ui.base.wizard.NewMonitorWindowWizardAction")
+@ActionID(category="File", id="ard.piraso.ui.base.action.NewMonitorWindowWizardAction")
 @ActionRegistration(iconBase="ard/piraso/ui/base/icons/new.png", iconInMenu=true, displayName="New Web Context Monitor")
 @ActionReferences({
         @ActionReference(path="Menu/File", position=255),
@@ -47,18 +53,20 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
     public @Override
     void actionPerformed(ActionEvent e) {
         WizardDescriptor wizardDescriptor = new WizardDescriptor(getPanels());
+        
         // {0} will be replaced by WizardDesriptor.Panel.getComponent().getName()
         wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
-        wizardDescriptor.setTitle("New Web Context Monitor");
-        Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
+        wizardDescriptor.setTitle("New Web Context Monitor");        
+        wizardDescriptor.putProperty(Constants.MODEL, new NewContextMonitorModel(true));
+        
+        Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);                
         dialog.setVisible(true);
         dialog.toFront();
         boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
         
         if (!cancelled) {
-            ContextMonitorTopComponent editor = new ContextMonitorTopComponent(null);
-            editor.open();
-            editor.requestActive();            
+            NewContextMonitorModel model = (NewContextMonitorModel) wizardDescriptor.getProperty(Constants.MODEL);
+            ContextMonitorDispatcher.forward(model);
         }
     }
 
