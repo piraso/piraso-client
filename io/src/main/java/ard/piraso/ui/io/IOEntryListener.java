@@ -26,5 +26,7 @@ import java.util.EventListener;
  */
 public interface IOEntryListener extends EventListener {
     
+    public void started(IOEntryEvent evt);
+    
     public void receivedEntry(IOEntryEvent evt);
 }

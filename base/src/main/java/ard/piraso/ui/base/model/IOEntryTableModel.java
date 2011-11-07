@@ -21,8 +21,8 @@ package ard.piraso.ui.base.model;
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
-import ard.piraso.ui.base.manager.IdleTimeOutAware;
-import ard.piraso.ui.base.manager.IdleTimeOutManager;
+import ard.piraso.ui.base.manager.IdleTimeoutAware;
+import ard.piraso.ui.base.manager.IdleTimeoutManager;
 import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.io.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -42,13 +42,13 @@ import java.util.logging.Logger;
  * 
  * @author adleon
  */
-public class IOEntryTableModel extends AbstractTableModel implements IOEntryListener, IdleTimeOutAware {
+public class IOEntryTableModel extends AbstractTableModel implements IOEntryListener, IdleTimeoutAware {
 
     private static final Logger LOG = Logger.getLogger(IOEntryTableModel.class.getName());
 
     private static final long DEFAULT_IDLE_TIMEOUT = 200l;
 
-    private long idleTimeOut = DEFAULT_IDLE_TIMEOUT;
+    private long idleTimeout = DEFAULT_IDLE_TIMEOUT;
 
     private IOEntryManager manager;
 
@@ -72,9 +72,9 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         this(reader, DEFAULT_IDLE_TIMEOUT);
     }
 
-    public IOEntryTableModel(IOEntryReader reader, long idleTimeOut) {
+    public IOEntryTableModel(IOEntryReader reader, long idleTimeout) {
         this.manager = reader.getManager();
-        this.idleTimeOut = idleTimeOut;
+        this.idleTimeout = idleTimeout;
         this.lastReceivedTime = System.currentTimeMillis();
 
         comboBoxModel = new IOEntryComboBoxModel();
@@ -112,28 +112,32 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
     public void start() {
         synchronized (self) {
             alive = true;
-            IdleTimeOutManager.INSTANCE.add(this);
+            IdleTimeoutManager.INSTANCE.add(this);
         }
     }
 
     public void stop() {
         synchronized (self) {
             alive = false;
-            IdleTimeOutManager.INSTANCE.remove(this);
-            notifyAll();
+            IdleTimeoutManager.INSTANCE.remove(this);
         }
+    }
+    
+    @Override
+    public void started(IOEntryEvent evt) {
+        start();
     }
 
     @Override
-    public boolean isIdleTimeOut() {
+    public boolean isIdleTimeout() {
         synchronized (self) {
             return CollectionUtils.isNotEmpty(entries) &&
-                    System.currentTimeMillis() - lastReceivedTime >= idleTimeOut;
+                    System.currentTimeMillis() - lastReceivedTime >= idleTimeout;
         }
     }
 
     @Override
-    public void doOnTimeOut() throws InvocationTargetException, InterruptedException {
+    public void doOnTimeout() throws InvocationTargetException, InterruptedException {
         List<IOEntry> process;
 
         synchronized (self) {
@@ -158,9 +162,9 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
 
         entries.add(evt.getEntry());
 
-        if(isIdleTimeOut()) {
+        if(isIdleTimeout()) {
             try {
-                doOnTimeOut();
+                doOnTimeout();
             } catch(Exception e) {
                 LOG.warning(e.getMessage());
             }
@@ -174,7 +178,12 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 4;
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return false;
     }
 
     private String getGroup(Entry entry) {
@@ -206,17 +215,27 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         return aware.getElapseTime().prettyPrint();
     }
 
-    private Long getElapseMilliseconds(Entry entry) {
+    public Long getElapseMilliseconds(Entry entry) {
         ElapseTimeAware aware = ((ElapseTimeAware) entry);
         if(!ElapseTimeAware.class.isInstance(entry)) {
-            return null;
+            return 0l;
         }
 
         if(aware.getElapseTime() == null) {
-            return null;
+            return 0l;
         }
 
         return aware.getElapseTime().getElapseTime();
+    }
+
+    public IOEntry getEntryAt(int rowIndex) {
+        try {
+            return manager.getEntryAt(currentRequestId, rowIndex);
+        } catch (IOException e) {
+            LOG.warning(e.getMessage());
+        }
+
+        return null;
     }
 
     @Override
@@ -228,10 +247,8 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             switch(columnIndex) {
                 case 0: return ioEntry.getRowNum();
                 case 1: return entry.getLevel();
-                case 2: return getGroup(entry);
-                case 3: return getMessage(entry);
-                case 4: return getElapsePrettyPrint(entry);
-                case 5: return getElapseMilliseconds(entry);
+                case 2: return getMessage(entry);
+                case 3: return getElapsePrettyPrint(entry);
             }
         } catch (IOException e) {
             LOG.warning(e.getMessage());

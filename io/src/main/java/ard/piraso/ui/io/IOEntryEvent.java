@@ -27,6 +27,17 @@ import java.util.EventObject;
 public class IOEntryEvent extends EventObject {
     
     private IOEntry entry;
+    
+    private String id;
+    
+    private String watchedAddr;
+    
+    public IOEntryEvent(Object source, String id, String watchedAddr) {
+        super(source);
+        
+        this.id = id;
+        this.watchedAddr = watchedAddr;
+    }
 
     public IOEntryEvent(Object source, IOEntry entry) {
         super(source);
@@ -36,5 +47,13 @@ public class IOEntryEvent extends EventObject {
 
     public IOEntry getEntry() {
         return entry;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getWatchedAddr() {
+        return watchedAddr;
     }
 }

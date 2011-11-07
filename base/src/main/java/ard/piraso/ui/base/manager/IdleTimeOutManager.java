@@ -29,25 +29,25 @@ import java.util.logging.Logger;
 /**
  * Idle timeout manager.
  */
-public class IdleTimeOutManager implements Runnable {
+public class IdleTimeoutManager implements Runnable {
 
-    private static final Logger LOG = Logger.getLogger(IdleTimeOutManager.class.getName());
+    private static final Logger LOG = Logger.getLogger(IdleTimeoutManager.class.getName());
 
-    public static final IdleTimeOutManager INSTANCE = new IdleTimeOutManager();
+    public static final IdleTimeoutManager INSTANCE = new IdleTimeoutManager();
 
     private static final long WAIT_TIME = 500l;
 
-    private List<IdleTimeOutAware> list;
+    private List<IdleTimeoutAware> list;
 
-    private List<IdleTimeOutAware> queue;
+    private List<IdleTimeoutAware> queue;
 
     private ExecutorService executor;
 
     private boolean alive;
 
-    private IdleTimeOutManager() {
-        list = new ArrayList<IdleTimeOutAware>();
-        queue = new ArrayList<IdleTimeOutAware>();
+    private IdleTimeoutManager() {
+        list = new ArrayList<IdleTimeoutAware>();
+        queue = new ArrayList<IdleTimeoutAware>();
     }
 
     public void stop() {
@@ -68,25 +68,25 @@ public class IdleTimeOutManager implements Runnable {
         }
     }
 
-    public void add(IdleTimeOutAware aware) {
+    public void add(IdleTimeoutAware aware) {
         synchronized (this) {
             list.add(aware);
         }
     }
 
-    public void remove(IdleTimeOutAware aware) {
+    public void remove(IdleTimeoutAware aware) {
         synchronized (this) {
             list.remove(aware);
         }
     }
 
-    private List<IdleTimeOutAware> getTimeoutList() {
+    private List<IdleTimeoutAware> getTimeoutList() {
         synchronized (this) {
-            List<IdleTimeOutAware> tmp = new ArrayList<IdleTimeOutAware>(list);
-            List<IdleTimeOutAware> result = new ArrayList<IdleTimeOutAware>();
+            List<IdleTimeoutAware> tmp = new ArrayList<IdleTimeoutAware>(list);
+            List<IdleTimeoutAware> result = new ArrayList<IdleTimeoutAware>();
 
-            for(IdleTimeOutAware aware : tmp) {
-                if(aware.isIdleTimeOut() && !queue.contains(aware)) {
+            for(IdleTimeoutAware aware : tmp) {
+                if(aware.isIdleTimeout() && !queue.contains(aware)) {
                     result.add(aware);
                 }
             }
@@ -104,10 +104,10 @@ public class IdleTimeOutManager implements Runnable {
                 } catch (InterruptedException ignored) {}
             }
 
-            List<IdleTimeOutAware> idles = getTimeoutList();
+            List<IdleTimeoutAware> idles = getTimeoutList();
             if(CollectionUtils.isNotEmpty(idles)) {
                 synchronized (this) {
-                    for(IdleTimeOutAware aware : idles) {
+                    for(IdleTimeoutAware aware : idles) {
                         executor.submit(new DoOnIdleTimeOutRunnable(aware));
                     }
                 }
@@ -115,13 +115,13 @@ public class IdleTimeOutManager implements Runnable {
         }
     }
 
-    private void addQueue(IdleTimeOutAware aware) {
+    private void addQueue(IdleTimeoutAware aware) {
         synchronized (this) {
             queue.add(aware);
         }
     }
 
-    private void removeQueue(IdleTimeOutAware aware) {
+    private void removeQueue(IdleTimeoutAware aware) {
         synchronized (this) {
             queue.remove(aware);
         }
@@ -129,9 +129,9 @@ public class IdleTimeOutManager implements Runnable {
 
     private class DoOnIdleTimeOutRunnable implements Runnable {
 
-        private IdleTimeOutAware aware;
+        private IdleTimeoutAware aware;
 
-        private DoOnIdleTimeOutRunnable(IdleTimeOutAware aware) {
+        private DoOnIdleTimeOutRunnable(IdleTimeoutAware aware) {
             this.aware = aware;
             addQueue(aware);
         }
@@ -139,7 +139,7 @@ public class IdleTimeOutManager implements Runnable {
         @Override
         public void run() {
             try {
-                aware.doOnTimeOut();
+                aware.doOnTimeout();
             } catch (Exception e) {
                 LOG.warning(e.getMessage());
             } finally {

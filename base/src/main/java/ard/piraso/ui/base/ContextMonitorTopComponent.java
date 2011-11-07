@@ -25,22 +25,57 @@ package ard.piraso.ui.base;
 import ard.piraso.ui.base.model.IOEntryComboBoxModel;
 import ard.piraso.ui.base.model.IOEntryTableModel;
 import ard.piraso.ui.io.IOEntryReader;
+import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
+
+import javax.swing.table.TableColumn;
 
 
 /**
  * Top component which displays something.
  */
 public final class ContextMonitorTopComponent extends TopComponent {
+    private static final String ICON_PATH = "ard/piraso/ui/base/icons/remote_logger.png";
 
     public ContextMonitorTopComponent(IOEntryReader reader) {
         tableModel = new IOEntryTableModel(reader);
         comboBoxModel = tableModel.getComboBoxModel();
         
         initComponents();
+        initTable();
         setName(NbBundle.getMessage(ContextMonitorTopComponent.class, "CTL_ContextMonitorTopComponent"));
         setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
+        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
+    }
+
+    private void initTable() {
+        TableColumn numColumn = table.getColumnModel().getColumn(0);
+        TableColumn typeColumn = table.getColumnModel().getColumn(1);
+        TableColumn messageColumn = table.getColumnModel().getColumn(2);
+        TableColumn elapseColumn = table.getColumnModel().getColumn(3);
+
+        ContextMonitorTableCellRenderer renderer = new ContextMonitorTableCellRenderer();
+        numColumn.setHeaderValue("");
+        numColumn.setMaxWidth(35);
+        numColumn.setCellRenderer(renderer);
+
+        typeColumn.setHeaderValue("Type");
+        typeColumn.setMaxWidth(125);
+        typeColumn.setCellRenderer(renderer);
+
+        messageColumn.setHeaderValue("Message");
+        messageColumn.setPreferredWidth(700);
+        messageColumn.setCellRenderer(renderer);
+
+        elapseColumn.setHeaderValue("Elapse");
+        elapseColumn.setMaxWidth(100);
+        elapseColumn.setCellRenderer(renderer);
+
+        table.setShowHorizontalLines(false);
+        table.setAutoscrolls(true);
+        table.setColumnSelectionAllowed(false);
+        table.getTableHeader().setReorderingAllowed(false);
     }
 
     /** This method is called from within the constructor to
@@ -65,10 +100,11 @@ public final class ContextMonitorTopComponent extends TopComponent {
         toolbar.setRollover(true);
         toolbar.add(jSeparator1);
 
-        cboUrl.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        cboUrl.setFont(new java.awt.Font("Monospaced", 0, 12));
         cboUrl.setModel(comboBoxModel);
         toolbar.add(cboUrl);
 
+        btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/lock_pressed.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(btnLockUrl, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnLockUrl.text")); // NOI18N
         btnLockUrl.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnLockUrl.toolTipText")); // NOI18N
         btnLockUrl.setFocusable(false);
@@ -86,7 +122,7 @@ public final class ContextMonitorTopComponent extends TopComponent {
         tableScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         tableScrollPane.setFont(new java.awt.Font("Monospaced", 0, 10));
 
-        table.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        table.setFont(new java.awt.Font("Monospaced", 0, 12));
         table.setModel(tableModel);
         tableScrollPane.setViewportView(table);
 
@@ -94,7 +130,13 @@ public final class ContextMonitorTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLockUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLockUrlActionPerformed
+        if(btnLockUrl.isSelected()) {
+            btnLockUrl.setIcon(new javax.swing.ImageIcon("ard/piraso/ui/base/icons/lock.png"));
+        } else {
+            btnLockUrl.setIcon(new javax.swing.ImageIcon("ard/piraso/ui/base/icons/lock_pressed.png"));
+        }
 
+        tableModel.setAllowScrolling(btnLockUrl.isSelected());
     }//GEN-LAST:event_btnLockUrlActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

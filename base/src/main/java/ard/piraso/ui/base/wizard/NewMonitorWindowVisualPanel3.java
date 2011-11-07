@@ -19,6 +19,7 @@
 package ard.piraso.ui.base.wizard;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public final class NewMonitorWindowVisualPanel3 extends JPanel {
 
@@ -29,7 +30,7 @@ public final class NewMonitorWindowVisualPanel3 extends JPanel {
 
     @Override
     public String getName() {
-        return "Step #3";
+        return "URL Filtering";
     }
 
     /** This method is called from within the constructor to
@@ -40,17 +41,121 @@ public final class NewMonitorWindowVisualPanel3 extends JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        chkEnableFiltering = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        txtURL = new javax.swing.JTextField();
+        btnAdd = new javax.swing.JButton();
+        btnAdd1 = new javax.swing.JButton();
+        btnAdd2 = new javax.swing.JButton();
+
+        org.openide.awt.Mnemonics.setLocalizedText(chkEnableFiltering, org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel3.class, "NewMonitorWindowVisualPanel3.chkEnableFiltering.text")); // NOI18N
+        chkEnableFiltering.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkEnableFilteringActionPerformed(evt);
+            }
+        });
+
+        jScrollPane1.setEnabled(false);
+
+        table.setModel(tableModel);
+        table.setEnabled(false);
+        jScrollPane1.setViewportView(table);
+
+        txtURL.setText(org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel3.class, "NewMonitorWindowVisualPanel3.txtURL.text")); // NOI18N
+        txtURL.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        txtURL.setBounds(new java.awt.Rectangle(1, 1, 1, 1));
+        txtURL.setEnabled(false);
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnAdd, org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel3.class, "NewMonitorWindowVisualPanel3.btnAdd.text")); // NOI18N
+        btnAdd.setEnabled(false);
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnAdd1, org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel3.class, "NewMonitorWindowVisualPanel3.btnAdd1.text")); // NOI18N
+        btnAdd1.setEnabled(false);
+        btnAdd1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdd1ActionPerformed(evt);
+            }
+        });
+
+        org.openide.awt.Mnemonics.setLocalizedText(btnAdd2, org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel3.class, "NewMonitorWindowVisualPanel3.btnAdd2.text")); // NOI18N
+        btnAdd2.setEnabled(false);
+        btnAdd2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAdd2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtURL, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnAdd1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnAdd2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(chkEnableFiltering))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(chkEnableFiltering)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAdd))
+                .addGap(1, 1, 1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnAdd1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAdd2)))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+private void chkEnableFilteringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEnableFilteringActionPerformed
+        //refreshCheckFiltering();
+}//GEN-LAST:event_chkEnableFilteringActionPerformed
+
+private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        //tableModel.addRow(new Object[] {Boolean.TRUE, txtURL.getText()});
+        txtURL.setText("");
+        txtURL.requestFocus();
+}//GEN-LAST:event_btnAddActionPerformed
+
+private void btnAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd1ActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_btnAdd1ActionPerformed
+
+private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
+// TODO add your handling code here:
+}//GEN-LAST:event_btnAdd2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    protected javax.swing.JButton btnAdd;
+    protected javax.swing.JButton btnAdd1;
+    protected javax.swing.JButton btnAdd2;
+    protected javax.swing.JCheckBox chkEnableFiltering;
+    protected javax.swing.JScrollPane jScrollPane1;
+    protected javax.swing.JTable table;
+    protected DefaultTableModel tableModel = new DefaultTableModel();
+    protected javax.swing.JTextField txtURL;
     // End of variables declaration//GEN-END:variables
 }

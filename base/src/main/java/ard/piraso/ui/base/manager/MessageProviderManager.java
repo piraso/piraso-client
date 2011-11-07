@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Provides messages for entries.
  */
-public class MessageProviderManager {
+public final class MessageProviderManager {
 
     public static final MessageProviderManager INSTANCE = new MessageProviderManager();
     
