@@ -23,7 +23,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Interface that defines a idle timeout aware class.
  */
-public interface IdleTimeoutAware {
+public interface IdleTimeout1Aware {
 
     /**
      * Determines if current class is idle timeout.

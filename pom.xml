@@ -134,6 +134,6 @@
         <module>io</module>
         <module>api</module>
         <module>sql</module>
-    <module>base</module>
+        <module>base</module>
   </modules>
 </project>

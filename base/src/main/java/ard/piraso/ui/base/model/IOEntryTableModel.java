@@ -21,8 +21,8 @@ package ard.piraso.ui.base.model;
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
-import ard.piraso.ui.base.manager.IdleTimeoutAware;
-import ard.piraso.ui.base.manager.IdleTimeoutManager;
+import ard.piraso.ui.base.manager.IdleTimeout1Aware;
+import ard.piraso.ui.base.manager.IdleTimeout1Manager;
 import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.io.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -38,11 +38,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Table model for handling {@link IOEntry} class.
+ * Table model for handling {@link ard.piraso.ui.io.IOEntry} class.
  * 
  * @author adleon
  */
-public class IOEntryTableModel extends AbstractTableModel implements IOEntryListener, IdleTimeoutAware {
+public class IOEntryTableModel extends AbstractTableModel implements IOEntryListener, IdleTimeout1Aware {
 
     private static final Logger LOG = Logger.getLogger(IOEntryTableModel.class.getName());
 
@@ -113,14 +113,14 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
     public void start() {
         synchronized (self) {
             alive = true;
-            IdleTimeoutManager.INSTANCE.add(this);
+            IdleTimeout1Manager.INSTANCE.add(this);
         }
     }
 
     public void stop() {
         synchronized (self) {
             alive = false;
-            IdleTimeoutManager.INSTANCE.remove(this);
+            IdleTimeout1Manager.INSTANCE.remove(this);
         }
     }
     

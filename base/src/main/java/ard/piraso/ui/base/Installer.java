@@ -18,7 +18,7 @@
 
 package ard.piraso.ui.base;
 
-import ard.piraso.ui.base.manager.IdleTimeoutManager;
+import ard.piraso.ui.base.manager.IdleTimeout1Manager;
 import org.openide.modules.ModuleInstall;
 
 import java.util.logging.Logger;
@@ -29,13 +29,13 @@ public class Installer extends ModuleInstall {
     @Override
     public void restored() {
         LOG.info("Module Started.");
-        IdleTimeoutManager.INSTANCE.start();
+        IdleTimeout1Manager.INSTANCE.start();
     }
 
     @Override
     public boolean closing() {
         LOG.info("Module Closing.");
-        IdleTimeoutManager.INSTANCE.stop();
+        IdleTimeout1Manager.INSTANCE.stop();
 
         return true;
     }
