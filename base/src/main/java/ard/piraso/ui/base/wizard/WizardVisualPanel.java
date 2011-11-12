@@ -102,7 +102,8 @@ public abstract class WizardVisualPanel<M extends WizardModel> extends JPanel {
         listener.stateChanged(new ChangeEvent(this));
     }
     
-    public abstract void initChangeEvents();
+    public void initChangeEvents() {
+    }
     
     public abstract void read(M model);
     

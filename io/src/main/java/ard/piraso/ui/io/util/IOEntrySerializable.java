@@ -18,9 +18,9 @@
 
 package ard.piraso.ui.io.util;
 
+import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.EntryReadEvent;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
@@ -40,17 +40,17 @@ public class IOEntrySerializable {
     
     private String entryValue;
     
-    private ObjectMapper mapper;
+    private ObjectMapper mapper = JacksonUtils.createMapper();
     
     private Long rowNum;
-    
+
+    public IOEntrySerializable() {
+    }
+
     public IOEntrySerializable(EntryReadEvent evt) throws IOException {
         this.id = evt.getRequestId();
         this.date = evt.getDate();
         this.classType = evt.getEntry().getClass();
-        
-        mapper = new ObjectMapper();
-        mapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
         
         this.entryValue = mapper.writeValueAsString(evt.getEntry());
     }

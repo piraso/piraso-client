@@ -130,23 +130,23 @@ public final class NewMonitorWindowVisualPanel3 extends JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-private void chkEnableFilteringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEnableFilteringActionPerformed
-        //refreshCheckFiltering();
-}//GEN-LAST:event_chkEnableFilteringActionPerformed
+    private void chkEnableFilteringActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkEnableFilteringActionPerformed
+            //refreshCheckFiltering();
+    }//GEN-LAST:event_chkEnableFilteringActionPerformed
 
-private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        //tableModel.addRow(new Object[] {Boolean.TRUE, txtURL.getText()});
-        txtURL.setText("");
-        txtURL.requestFocus();
-}//GEN-LAST:event_btnAddActionPerformed
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+            //tableModel.addRow(new Object[] {Boolean.TRUE, txtURL.getText()});
+            txtURL.setText("");
+            txtURL.requestFocus();
+    }//GEN-LAST:event_btnAddActionPerformed
 
-private void btnAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd1ActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event_btnAdd1ActionPerformed
+    private void btnAdd1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd1ActionPerformed
+    // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdd1ActionPerformed
 
-private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
-// TODO add your handling code here:
-}//GEN-LAST:event_btnAdd2ActionPerformed
+    private void btnAdd2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdd2ActionPerformed
+    // TODO add your handling code here:
+    }//GEN-LAST:event_btnAdd2ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JButton btnAdd;

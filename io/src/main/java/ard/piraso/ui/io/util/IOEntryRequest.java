@@ -19,13 +19,13 @@
 package ard.piraso.ui.io.util;
 
 import ard.piraso.api.IDGenerator;
+import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.api.entry.ResponseEntry;
 import ard.piraso.api.io.EntryReadEvent;
 import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryVisitor;
 import ard.piraso.ui.io.IOPageEntries;
-import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.File;
@@ -62,11 +62,10 @@ public class IOEntryRequest {
         this.dir = IOEntryUtils.createRequestDirectory(parent, id);
         this.generator = new IDGenerator();
         
-        mapper = new ObjectMapper();
-        mapper.disable(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES);
+        mapper = JacksonUtils.createMapper();
         
-        LOG.log(Level.INFO, "IO Request with id '{0}' created in folder '{1}'", 
-                new Object[] {id, parent.getAbsolutePath()});
+        LOG.log(Level.INFO, String.format("IO Request with id '%d' created in folder '%s'",
+                id, parent.getAbsolutePath()));
     }
     
     public void visit(IOEntryVisitor visitor) throws IOException {
@@ -78,7 +77,7 @@ public class IOEntryRequest {
     public synchronized IOEntry addEntry(EntryReadEvent evt) throws IOException {
         IOEntrySerializable serializable = new IOEntrySerializable(evt);
         
-        serializable.setRowNum(generator.next());
+        serializable.setRowNum(generator.next() - 1);
         
         IOEntry ioEntry = new IOEntry(serializable, evt.getEntry());
         

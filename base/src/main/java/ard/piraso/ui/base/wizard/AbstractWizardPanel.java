@@ -58,6 +58,7 @@ public abstract class AbstractWizardPanel<T extends WizardVisualPanel<M>, M exte
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void readSettings(Object settings) {
         WizardDescriptor descriptor = (WizardDescriptor) settings;
         M model = (M) descriptor.getProperty(Constants.MODEL);
@@ -66,6 +67,7 @@ public abstract class AbstractWizardPanel<T extends WizardVisualPanel<M>, M exte
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void storeSettings(Object settings) {
         WizardDescriptor descriptor = (WizardDescriptor) settings;
         M model = (M) descriptor.getProperty(Constants.MODEL);

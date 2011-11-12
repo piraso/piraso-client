@@ -26,7 +26,30 @@ import org.junit.Test;
 public class IOEntryReaderTest {
     @Test
     public void testStart() throws Exception {
-
+//        Preferences pref = new Preferences();
+//        pref.addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), true);
+//        pref.addProperty("sql.connection.enabled", true);
+//
+//        HttpEntrySource source = new HttpEntrySource(pref, "http://127.0.0.1:8080/piraso/logging");
+//        IOEntryReader reader = new IOEntryReader(source);
+//
+//        reader.addListener(new IOEntryListener() {
+//            @Override
+//            public void started(IOEntryEvent evt) {
+//                System.out.println(String.format("started(id: %s, ip: %s)", evt.getId(), evt.getWatchedAddr()));
+//            }
+//
+//            @Override
+//            public void receivedEntry(IOEntryEvent evt) {
+//                try {
+//                    System.out.println("Entry: [" + evt.getEntry().getEntry().getClass().getSimpleName() + "]" + new ObjectMapper().writeValueAsString(evt.getEntry()));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        reader.start();
     }
 
     @Test

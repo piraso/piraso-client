@@ -44,11 +44,13 @@ public final class NewMonitorWindowVisualPanel1 extends WizardVisualPanel<NewCon
     
     @Override
     public boolean isEntriesValid() {
-        if(cboHost.getSelectedItem() == null || 
+        // check url logging value
+        if(cboHost.getSelectedItem() == null ||
                 StringUtils.isBlank(String.valueOf(cboHost.getSelectedItem()))) {
             return false;
         }
 
+        // check remote address
         if(!rdoMyAddress.isSelected() && StringUtils.isBlank(txtOtherAddress.getText())) {
             return false;
         }
@@ -104,10 +106,21 @@ public final class NewMonitorWindowVisualPanel1 extends WizardVisualPanel<NewCon
 
         rdoMyAddress.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(rdoMyAddress, org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel1.class, "NewMonitorWindowVisualPanel1.rdoMyAddress.text")); // NOI18N
+        rdoMyAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdoMyAddressActionPerformed(evt);
+            }
+        });
 
         org.openide.awt.Mnemonics.setLocalizedText(rdoOtherAddress, org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel1.class, "NewMonitorWindowVisualPanel1.rdoOtherAddress.text")); // NOI18N
+        rdoOtherAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdoOtherAddressActionPerformed(evt);
+            }
+        });
 
         txtOtherAddress.setText(org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel1.class, "NewMonitorWindowVisualPanel1.txtOtherAddress.text")); // NOI18N
+        txtOtherAddress.setEnabled(false);
 
         org.openide.awt.Mnemonics.setLocalizedText(jLabel2, org.openide.util.NbBundle.getMessage(NewMonitorWindowVisualPanel1.class, "NewMonitorWindowVisualPanel1.jLabel2.text")); // NOI18N
 
@@ -152,6 +165,18 @@ public final class NewMonitorWindowVisualPanel1 extends WizardVisualPanel<NewCon
                 .addGap(135, 135, 135))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void rdoOtherAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoOtherAddressActionPerformed
+        refreshAddressSelection();
+    }//GEN-LAST:event_rdoOtherAddressActionPerformed
+
+    private void rdoMyAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoMyAddressActionPerformed
+        refreshAddressSelection();
+    }//GEN-LAST:event_rdoMyAddressActionPerformed
+
+    private void refreshAddressSelection() {
+        txtOtherAddress.setEnabled(rdoOtherAddress.isSelected());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.ButtonGroup buttonGroup1;

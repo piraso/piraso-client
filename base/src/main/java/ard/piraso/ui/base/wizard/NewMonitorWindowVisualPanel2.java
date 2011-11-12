@@ -18,27 +18,56 @@
 
 package ard.piraso.ui.base.wizard;
 
+import ard.piraso.api.Preferences;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
+import ard.piraso.ui.base.model.NewContextMonitorModel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Iterator;
 import java.util.List;
 
-public final class NewMonitorWindowVisualPanel2 extends JPanel {
+public final class NewMonitorWindowVisualPanel2 extends WizardVisualPanel<NewContextMonitorModel> {
             
     /** Creates new form NewMonitorWindowVisualPanel2 */
     public NewMonitorWindowVisualPanel2() {
         initComponents();
-        initPrefenceComponents();
+        initPreferenceComponents();
+    }
+
+    @Override
+    public void read(NewContextMonitorModel model) {
+        Preferences preferences = model.getPreferences();
+
+        for(int i = 0; i < chkPreferences.length; i++) {
+            chkPreferences[i].setSelected(preferences.isEnabled(preferenceKeys[i]));
+        }
+    }
+
+    @Override
+    public void store(NewContextMonitorModel model) {
+        Preferences preferences = model.getPreferences();
+        for(int i = 0; i < chkPreferences.length; i++) {
+            if(chkPreferences[i].isSelected()) {
+                preferences.addProperty(preferenceKeys[i], Boolean.TRUE);
+            } else if(MapUtils.isNotEmpty(preferences.getBooleanProperties())) {
+                model.getPreferences().getBooleanProperties().remove(preferenceKeys[i]);
+            }
+        }
+    }
+
+    @Override
+    public boolean isEntriesValid() {
+        return true;
     }
     
-    private void initPrefenceComponents() {
+    private void initPreferenceComponents() {
         CellConstraints c = new CellConstraints();
 
         List<PreferenceProvider> preferences = PreferenceProviderManager.INSTANCE.getProviders();
@@ -50,27 +79,25 @@ public final class NewMonitorWindowVisualPanel2 extends JPanel {
         int l = 0, r = 2;
         chkPreferences = new JCheckBox[size];
         preferenceKeys = new String[size];
-        Iterator<PreferenceProvider> itrpp = preferences.iterator();
-        for(int i = 0; i < preferences.size(); i++) {
-            PreferenceProvider provider = itrpp.next();
 
-            JLabel lblHeader = new JLabel(provider.getName());
+        for (PreferenceProvider preference : preferences) {
+            JLabel lblHeader = new JLabel(preference.getName());
             Font of = lblHeader.getFont();
             lblHeader.setFont(of.deriveFont(Font.BOLD));
 
             pnlPreferences.add(lblHeader, c.xyw(2, r, 3));
             r += 2;
-            
-            Iterator<? extends PreferenceProperty> itrp = provider.getPreferences().iterator();
-            for(int j = 0; j < provider.getPreferences().size(); j++, l++) {
+
+            Iterator<? extends PreferenceProperty> itrp = preference.getPreferences().iterator();
+            for (int j = 0; j < preference.getPreferences().size(); j++, l++) {
                 PreferenceProperty prop = itrp.next();
-                
+
                 preferenceKeys[l] = prop.getName();
                 chkPreferences[l] = new JCheckBox();
-                chkPreferences[l].setText(provider.getMessage(prop.getName()));
+                chkPreferences[l].setText(preference.getMessage(prop.getName()));
                 chkPreferences[l].setSelected(prop.isDefaultValue());
 
-                pnlPreferences.add(chkPreferences[l], c.xy(4, r));                
+                pnlPreferences.add(chkPreferences[l], c.xy(4, r));
                 r += 2;
             }
         }
@@ -134,6 +161,7 @@ public final class NewMonitorWindowVisualPanel2 extends JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JScrollPane jScrollPane1;
     protected javax.swing.JPanel pnlPreferences;

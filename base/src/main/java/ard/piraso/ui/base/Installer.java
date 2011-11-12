@@ -20,7 +20,9 @@ package ard.piraso.ui.base;
 
 import ard.piraso.ui.base.manager.IdleTimeout1Manager;
 import org.openide.modules.ModuleInstall;
+import org.openide.windows.TopComponent;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 public class Installer extends ModuleInstall {
@@ -36,6 +38,15 @@ public class Installer extends ModuleInstall {
     public boolean closing() {
         LOG.info("Module Closing.");
         IdleTimeout1Manager.INSTANCE.stop();
+
+        // ensure that all context monitor are closed
+        Set<TopComponent> opened = TopComponent.getRegistry().getOpened();
+        for(TopComponent component : opened) {
+            if(ContextMonitorTopComponent.class.isInstance(component)) {
+                ContextMonitorTopComponent editor = (ContextMonitorTopComponent) component;
+                editor.componentClosed();
+            }
+        }
 
         return true;
     }

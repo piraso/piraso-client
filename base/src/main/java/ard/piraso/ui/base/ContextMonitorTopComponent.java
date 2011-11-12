@@ -38,7 +38,10 @@ import javax.swing.table.TableColumn;
 public final class ContextMonitorTopComponent extends TopComponent {
     private static final String ICON_PATH = "ard/piraso/ui/base/icons/remote_logger.png";
 
+    private IOEntryReader reader;
+
     public ContextMonitorTopComponent(IOEntryReader reader) {
+        this.reader = reader;
         tableModel = new IOEntryTableModel(reader);
         comboBoxModel = tableModel.getComboBoxModel();
         
@@ -153,15 +156,24 @@ public final class ContextMonitorTopComponent extends TopComponent {
     
     @Override
     public void componentClosed() {
+        tableModel.stop();
+        reader.stop();
     }
 
     @Override
     protected void componentOpened() {
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                reader.start();
+            }
+        };
+
+        thread.start();
     }
 
     @Override
     public int getPersistenceType() {
         return PERSISTENCE_NEVER;
     }
-
 }
