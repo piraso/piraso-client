@@ -36,7 +36,7 @@ import javax.swing.table.TableColumn;
  * Top component which displays something.
  */
 public final class ContextMonitorTopComponent extends TopComponent {
-    private static final String ICON_PATH = "ard/piraso/ui/base/icons/remote_logger.png";
+    private static final String ICON_PATH = "/ard/piraso/ui/base/icons/remote_logger.png";
 
     private IOEntryReader reader;
 
@@ -79,6 +79,10 @@ public final class ContextMonitorTopComponent extends TopComponent {
         table.setAutoscrolls(true);
         table.setColumnSelectionAllowed(false);
         table.getTableHeader().setReorderingAllowed(false);
+
+        // set table model variables.
+        tableModel.setOwningTable(table);
+        tableModel.setAllowScrolling(!btnLockUrl.isSelected());
     }
 
     /** This method is called from within the constructor to
@@ -134,12 +138,12 @@ public final class ContextMonitorTopComponent extends TopComponent {
 
     private void btnLockUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLockUrlActionPerformed
         if(btnLockUrl.isSelected()) {
-            btnLockUrl.setIcon(new javax.swing.ImageIcon("ard/piraso/ui/base/icons/lock.png"));
+            btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/lock.png")));
         } else {
-            btnLockUrl.setIcon(new javax.swing.ImageIcon("ard/piraso/ui/base/icons/lock_pressed.png"));
+            btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/lock_pressed.png")));
         }
 
-        tableModel.setAllowScrolling(btnLockUrl.isSelected());
+        tableModel.setAllowScrolling(!btnLockUrl.isSelected());
     }//GEN-LAST:event_btnLockUrlActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -156,7 +160,6 @@ public final class ContextMonitorTopComponent extends TopComponent {
     
     @Override
     public void componentClosed() {
-        tableModel.stop();
         reader.stop();
     }
 

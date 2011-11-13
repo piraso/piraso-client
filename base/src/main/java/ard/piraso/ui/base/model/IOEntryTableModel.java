@@ -21,8 +21,6 @@ package ard.piraso.ui.base.model;
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
-import ard.piraso.ui.base.manager.IdleTimeout1Aware;
-import ard.piraso.ui.base.manager.IdleTimeout1Manager;
 import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryEvent;
@@ -45,27 +43,15 @@ import java.util.logging.Logger;
  * 
  * @author adleon
  */
-public class IOEntryTableModel extends AbstractTableModel implements IOEntryListener, IdleTimeout1Aware {
+public class IOEntryTableModel extends AbstractTableModel implements IOEntryListener {
 
     private static final Logger LOG = Logger.getLogger(IOEntryTableModel.class.getName());
-
-    private static final long DEFAULT_IDLE_TIMEOUT = 200l;
-
-    private static final int DEFAULT_FLUSH_ENTRY_SIZE = 5;
-
-    private long idleTimeout = DEFAULT_IDLE_TIMEOUT;
 
     private Long currentRequestId = null;
 
     private List<IOEntry> entries = Collections.synchronizedList(new ArrayList<IOEntry>());
 
-    private long lastReceivedTime;
-
-    private int flushEntrySize;
-
-    private boolean alive;
-
-    private boolean allowScrolling;
+    private boolean allowScrolling = true;
     
     private final IOEntryTableModel self;
 
@@ -75,19 +61,23 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
 
     private List<ChangeRequestListener> listeners = Collections.synchronizedList(new LinkedList<ChangeRequestListener>());
 
+    private JTable owningTable;
+
     public IOEntryTableModel(IOEntryReader reader) {
-        this(reader, DEFAULT_IDLE_TIMEOUT, DEFAULT_FLUSH_ENTRY_SIZE);
-    }
-
-    public IOEntryTableModel(IOEntryReader reader, long idleTimeout, int flushEntrySize) {
         this.reader = reader;
-        this.idleTimeout = idleTimeout;
-        this.flushEntrySize = flushEntrySize;
-        this.lastReceivedTime = System.currentTimeMillis();
-
         comboBoxModel = new IOEntryComboBoxModel();
         reader.addListener(this);
         self = this;
+    }
+
+    public void setOwningTable(JTable owningTable) {
+        this.owningTable = owningTable;
+    }
+
+    public void autoScrollTable(int rowNum) {
+        if(owningTable != null) {
+            owningTable.scrollRectToVisible(owningTable.getCellRect(rowNum, 1, true));
+        }
     }
 
     public IOEntryComboBoxModel getComboBoxModel() {
@@ -103,7 +93,6 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             Long oldRequestId = currentRequestId;
             if((currentRequestId == null && newRequestId != null) ||
                     newRequestId != null && !newRequestId.equals(currentRequestId)) {
-                currentRequestId = newRequestId;
                 selectRequestItem(oldRequestId, newRequestId);
             }
         }
@@ -117,34 +106,10 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         this.allowScrolling = allowScrolling;
     }
 
-    public void start() {
-        synchronized (self) {
-            alive = true;
-            IdleTimeout1Manager.INSTANCE.add(this);
-        }
-    }
-
-    public void stop() {
-        synchronized (self) {
-            alive = false;
-            IdleTimeout1Manager.INSTANCE.remove(this);
-        }
-    }
-    
     @Override
     public void started(IOEntryEvent evt) {
-        start();
     }
 
-    @Override
-    public boolean isIdleTimeout() {
-        synchronized (self) {
-            return CollectionUtils.isNotEmpty(entries) &&
-                    System.currentTimeMillis() - lastReceivedTime >= idleTimeout;
-        }
-    }
-
-    @Override
     public void doOnTimeout() throws InvocationTargetException, InterruptedException {
         List<IOEntry> process;
 
@@ -163,25 +128,18 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
 
     @Override
     public void receivedEntry(IOEntryEvent evt) {
-        lastReceivedTime = System.currentTimeMillis();
-        if(!alive) {
-            return;
-        }
-
         entries.add(evt.getEntry());
 
-        //if(isIdleTimeout() && CollectionUtils.size(entries) >= flushEntrySize) {
-            try {
-                doOnTimeout();
-            } catch(Exception e) {
-                LOG.warning(e.getMessage());
-            }
-        //}
+        try {
+            doOnTimeout();
+        } catch(Exception e) {
+            LOG.warning(e.getMessage());
+        }
     }
 
     @Override
     public int getRowCount() {
-        if(reader.getManager() == null) {
+        if(reader.getManager() == null || currentRequestId == null) {
             return 0;
         } else {
             return reader.getManager().size(currentRequestId);
@@ -294,6 +252,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
     }
 
     public void selectRequestItem(Long oldValue, Long newValue) {
+        currentRequestId = newValue;
         comboBoxModel.setSelectedItem(reader.getManager().getRequest(newValue).getEntry());
         fireChangeRequestEvent(new ChangeRequestEvent(this, oldValue, newValue));
     }
@@ -314,8 +273,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             for(IOEntry entry : entries) {
                 if(oldRequestId != null && !entry.getId().equals(oldRequestId)) {
                     synchronized (self) {
-                        currentRequestId = entry.getId();
-                        selectRequestItem(oldRequestId, currentRequestId);
+                        selectRequestItem(oldRequestId, entry.getId());
                         fireTableDataChanged();
                     }
 
@@ -340,34 +298,32 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             fireTableRowsInserted(totalRow - allowedEntries.size(), totalRow);            
         }
 
-        public void noScroll() {
-            synchronized (self) {
-                if(currentRequestId == null) {
-                    currentRequestId = entries.get(0).getId();
-                    selectRequestItem(null, currentRequestId);
-                }
-            }
-
-            insertCurrentRequestEntries();
-        }
-
         @Override
         public void run() {
-            if(!alive || CollectionUtils.isEmpty(entries)) {
+            if(CollectionUtils.isEmpty(entries)) {
                 return;
             }
 
+            synchronized (self) {
+                if(currentRequestId == null) {
+                    selectRequestItem(null, entries.get(0).getId());
+                }
+            }
+
+            IOEntry last = null;
             // ensure to add all request to combo box model
             for(IOEntry entry : entries) {
                 if(RequestEntry.class.isInstance(entry.getEntry())) {
                     comboBoxModel.addRequest((RequestEntry) entry.getEntry());
                 }
+                last = entry;
             }
 
             if(isAllowScrolling()) {
                 doScroll();
+                autoScrollTable(last.getRowNum().intValue());
             } else {
-                noScroll();
+                insertCurrentRequestEntries();
             }
         }
     }
