@@ -37,13 +37,9 @@ import java.util.logging.Logger;
 public class IOEntryReader implements EntryReadListener {
     
     private static final Logger LOG = Logger.getLogger(IOEntryReader.class.getName());
-    
-    private static final int DEFAULT_PAGE_SIZE = 200;
-    
+
     private IOEntryManager manager;
-    
-    private int pageSize;
-    
+
     private IOEntrySource source;
     
     private long lastEntryTime;
@@ -51,13 +47,8 @@ public class IOEntryReader implements EntryReadListener {
     private List<IOEntryListener> listeners = Collections.synchronizedList(new LinkedList<IOEntryListener>());
 
     public IOEntryReader(IOEntrySource source) {
-        this(DEFAULT_PAGE_SIZE, source);
-    }
-    
-    public IOEntryReader(int pageSize, IOEntrySource source) {
         Validate.notNull(source, "Source should not be null.");
         
-        this.pageSize = pageSize;
         this.source = source;
     }
     
@@ -94,7 +85,7 @@ public class IOEntryReader implements EntryReadListener {
     public synchronized void readEntry(EntryReadEvent evt) {
         lastEntryTime = System.currentTimeMillis();
         if(manager == null) {
-            manager = new IOEntryManager(source.getId(), pageSize);
+            manager = new IOEntryManager(source.getId());
         }
         
         try {

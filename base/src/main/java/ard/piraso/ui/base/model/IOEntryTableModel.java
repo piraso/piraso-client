@@ -158,7 +158,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             entries.clear();
         }
 
-        SwingUtilities.invokeAndWait(new EntryReceivedRunnable(process));
+        SwingUtilities.invokeLater(new EntryReceivedRunnable(process));
     }
 
     @Override
@@ -184,7 +184,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         if(reader.getManager() == null) {
             return 0;
         } else {
-            return reader.getManager().getTotalEntries(currentRequestId);
+            return reader.getManager().size(currentRequestId);
         }
     }
 
@@ -336,7 +336,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             }
             
             // otherwise since same then this is just a simple insert on same request id
-            int totalRow = reader.getManager().getTotalEntries(currentRequestId);
+            int totalRow = reader.getManager().size(currentRequestId);
             fireTableRowsInserted(totalRow - allowedEntries.size(), totalRow);            
         }
 

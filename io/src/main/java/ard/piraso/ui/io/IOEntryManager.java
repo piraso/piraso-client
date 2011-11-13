@@ -20,14 +20,9 @@ package ard.piraso.ui.io;
 
 import ard.piraso.api.io.EntryReadEvent;
 import ard.piraso.ui.io.util.IOEntryRequest;
-import ard.piraso.ui.io.util.IOEntryUtils;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,27 +34,21 @@ public class IOEntryManager {
     private static final Logger LOG = Logger.getLogger(IOEntryManager.class.getName());
     
     private String id;
-    
-    private int pageSize;
-    
-    private File dir;
-    
+
     private Map<Long, IOEntryRequest> requests;
     
-    public IOEntryManager(String id, int pageSize) {
+    public IOEntryManager(String id) {
         this.id = id;
-        this.pageSize = pageSize;
-        this.dir = IOEntryUtils.createBaseDirectory(id);
-        this.requests = new LinkedHashMap<Long, IOEntryRequest>();
+        this.requests = Collections.synchronizedMap(new LinkedHashMap<Long, IOEntryRequest>());
         
-        LOG.log(Level.INFO, "Using baseFolder: {0}", dir.getAbsoluteFile());
+        LOG.log(Level.INFO, "IOManager created for {0}", id);
     }
     
     private IOEntryRequest createOrGetRequest(Long requestId) {
         IOEntryRequest request = requests.get(requestId);
         
         if(request == null) {
-            request = new IOEntryRequest(dir, requestId);
+            request = new IOEntryRequest(id, requestId);
             requests.put(requestId, request);
         }
         
@@ -87,22 +76,6 @@ public class IOEntryManager {
             request.visit(visitor);
         }
     }
-    
-    public IOPageEntries getPage(Long requestId, int page) throws IOException {
-        if(!requests.containsKey(requestId)) {
-            throw new IllegalArgumentException(String.format("Request with id '%d' not found.", requestId));
-        }
-        
-        return createOrGetRequest(requestId).getPage(page, pageSize);
-    }
-    
-    public int getTotalPages(Long requestId) {
-        if(!requests.containsKey(requestId)) {
-            throw new IllegalArgumentException(String.format("Request with id '%d' not found.", requestId));
-        }
-        
-        return createOrGetRequest(requestId).getTotalPages(pageSize);
-    }
 
     public IOEntry getEntryAt(Long requestId, int rowNum) throws IOException {
         if(!requests.containsKey(requestId)) {
@@ -112,12 +85,12 @@ public class IOEntryManager {
         return createOrGetRequest(requestId).get(rowNum);
     }
     
-    public int getTotalEntries(Long requestId) {
+    public int size(Long requestId) {
         if(!requests.containsKey(requestId)) {
             throw new IllegalArgumentException(String.format("Request with id '%d' not found.", requestId));
         }
         
-        return createOrGetRequest(requestId).getTotalEntries();
+        return createOrGetRequest(requestId).size();
     }
 
     public IOEntry getRequest(Long requestId) {

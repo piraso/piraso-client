@@ -19,7 +19,6 @@
 package ard.piraso.ui.base.provider;
 
 import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.MessageEntry;
 import ard.piraso.api.entry.MethodCallEntry;
 import ard.piraso.ui.api.MessageProvider;
 import org.openide.util.lookup.ServiceProvider;
@@ -32,7 +31,7 @@ public class MethodCallMessageProviderImpl implements MessageProvider {
 
     @Override
     public boolean isSupported(Entry entry) {
-        return MessageEntry.class.isInstance(entry);
+        return MethodCallEntry.class.isInstance(entry);
     }
 
     @Override

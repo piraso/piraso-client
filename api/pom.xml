@@ -70,6 +70,7 @@
                         <publicPackage>ard.piraso.client.net</publicPackage>
                         <publicPackage>ard.piraso.ui.api</publicPackage>
                         <publicPackage>org.*</publicPackage>
+                        <publicPackage>net.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>
