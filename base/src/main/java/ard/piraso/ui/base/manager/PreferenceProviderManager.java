@@ -33,20 +33,22 @@ public final class PreferenceProviderManager {
 
     public static final PreferenceProviderManager INSTANCE = new PreferenceProviderManager();
 
-    private List<PreferenceProvider> cache;
+    private List<PreferenceProvider> providerCache;
+
+    private Map<String, PreferenceProvider> nameMapCache;
 
     private PreferenceProviderManager() {
     }
 
     public List<PreferenceProvider> getProviders() {
-        if(cache != null) {
-            return cache;
+        if(providerCache != null) {
+            return providerCache;
         }
 
         Collection<? extends PreferenceProvider> providers = Lookup.getDefault().lookupAll(PreferenceProvider.class);
 
-        cache = new ArrayList<PreferenceProvider>(providers);
-        Collections.sort(cache, new Comparator<PreferenceProvider>() {
+        providerCache = new ArrayList<PreferenceProvider>(providers);
+        Collections.sort(providerCache, new Comparator<PreferenceProvider>() {
             @Override
             public int compare(PreferenceProvider t, PreferenceProvider t1) {
                 if (GeneralPreferenceProviderImpl.class.isInstance(t)) {
@@ -57,7 +59,30 @@ public final class PreferenceProviderManager {
             }
         });
 
-        return cache;
+        return providerCache;
+    }
+
+    private void initNameMapCache() {
+        if(nameMapCache != null) return;
+
+        nameMapCache = new HashMap<String, PreferenceProvider>();
+        for(PreferenceProvider provider : getProviders()) {
+            for(PreferenceProperty property : provider.getPreferences()) {
+                nameMapCache.put(property.getName(), provider);
+            }
+        }
+    }
+
+    public String getShortName(String preference) {
+        initNameMapCache();
+
+        PreferenceProvider provider = nameMapCache.get(preference);
+
+        if(provider == null) {
+            return preference;
+        }
+
+        return provider.getShortName(preference);
     }
     
     public Preferences createPreferences() {

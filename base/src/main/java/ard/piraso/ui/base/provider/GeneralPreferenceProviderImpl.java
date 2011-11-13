@@ -46,6 +46,11 @@ public class GeneralPreferenceProviderImpl implements PreferenceProvider {
     }
 
     @Override
+    public String getShortName(String name) {
+        return getMessage(name + ".short");
+    }
+
+    @Override
     public String getName() {
         return getMessage("general.name");
     }

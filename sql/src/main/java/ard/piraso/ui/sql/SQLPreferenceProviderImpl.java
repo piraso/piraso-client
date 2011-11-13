@@ -67,5 +67,10 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
     public String getMessage(String name) {
         return getMessage(name, null);
     }
+
+    @Override
+    public String getShortName(String name) {
+        return getMessage(name + ".short");
+    }
     
 }

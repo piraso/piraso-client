@@ -67,7 +67,6 @@ public final class MessageProviderManager {
         return defaultProvider.toMessage(entry);
     }
     
-    
     private class DefaultProviderImpl implements MessageProvider {
 
         @Override

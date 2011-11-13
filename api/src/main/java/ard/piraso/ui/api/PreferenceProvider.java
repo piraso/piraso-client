@@ -33,4 +33,6 @@ public interface PreferenceProvider {
     public String getMessage(String name);
     
     public String getMessage(String name, Object[] args);
+
+    public String getShortName(String name);
 }

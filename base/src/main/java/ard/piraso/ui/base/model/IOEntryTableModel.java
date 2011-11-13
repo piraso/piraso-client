@@ -22,6 +22,7 @@ import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.ui.base.manager.MessageProviderManager;
+import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryEvent;
 import ard.piraso.ui.io.IOEntryListener;
@@ -219,7 +220,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
 
             switch(columnIndex) {
                 case 0: return ioEntry.getRowNum();
-                case 1: return entry.getLevel();
+                case 1: return PreferenceProviderManager.INSTANCE.getShortName(entry.getLevel());
                 case 2: return getGroup(entry) + getMessage(entry);
                 case 3: return getElapsePrettyPrint(entry);
             }
