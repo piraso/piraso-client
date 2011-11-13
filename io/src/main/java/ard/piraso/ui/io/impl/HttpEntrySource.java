@@ -24,6 +24,7 @@ import ard.piraso.client.net.HttpPirasoEntryReader;
 import ard.piraso.ui.io.IOEntrySource;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -41,11 +42,7 @@ public class HttpEntrySource implements IOEntrySource {
     private static final Logger LOG = Logger.getLogger(HttpEntrySource.class.getName());
         
     private HttpPirasoEntryReader reader;
-    
-    private HttpClient client;
-    
-    private HttpContext context;
-    
+
     private boolean stopped;
     
     public HttpEntrySource(Preferences preferences, String uri) {
@@ -53,8 +50,12 @@ public class HttpEntrySource implements IOEntrySource {
     }
     
     public HttpEntrySource(Preferences preferences, String uri, String watchedAddr) {
-        this.client = new DefaultHttpClient();
-        this.context = new BasicHttpContext();        
+        ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager();
+        manager.setDefaultMaxPerRoute(2);
+        manager.setMaxTotal(2);
+
+        HttpClient client = new DefaultHttpClient(manager);
+        HttpContext context = new BasicHttpContext();
         this.reader = new HttpPirasoEntryReader(client, context);
         
         reader.setUri(uri);
