@@ -94,7 +94,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
 
                 if(!silent) {
                     fireTableDataChanged();
-                    autoScrollTable(0);
+                    autoScrollTable(1);
                 }
             }
         }
@@ -160,14 +160,14 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
 
     private String getGroup(Entry entry) {
         if(entry.getGroup() == null) {
-            return null;
+            return "";
         }
 
         if(CollectionUtils.isNotEmpty(entry.getGroup().getGroups())) {
-            return String.valueOf(entry.getGroup().getGroups());
+            return "[" + entry.getGroup().getGroups().iterator().next() + "] ";
         }
 
-        return null;
+        return "";
     }
 
     private String getMessage(Entry entry) {
@@ -220,7 +220,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             switch(columnIndex) {
                 case 0: return ioEntry.getRowNum();
                 case 1: return entry.getLevel();
-                case 2: return getGroup(entry) + " " + getMessage(entry);
+                case 2: return getGroup(entry) + getMessage(entry);
                 case 3: return getElapsePrettyPrint(entry);
             }
         } catch (IOException e) {

@@ -31,8 +31,8 @@ import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
 import javax.swing.table.TableColumn;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 /**
@@ -60,13 +60,21 @@ public final class ContextMonitorTopComponent extends TopComponent {
     }
 
     private void initComboBox() {
-        cboUrl.addItemListener(new ItemListener() {
+        cboUrl.addActionListener(new ActionListener() {
             @Override
-            public void itemStateChanged(ItemEvent e) {
-                RequestEntry entry = (RequestEntry) e.getItem();
+            public void actionPerformed(ActionEvent e) {
+                RequestEntry entry = (RequestEntry) comboBoxModel.getSelectedItem();
                 tableModel.setCurrentRequestId(entry.getRequestId());
             }
         });
+
+//        cboUrl.addItemListener(new ItemListener() {
+//            @Override
+//            public void itemStateChanged(ItemEvent e) {
+//                RequestEntry entry = (RequestEntry) e.getItem();
+//                tableModel.setCurrentRequestId(entry.getRequestId(), true);
+//            }
+//        });
     }
 
     private void initTable() {
