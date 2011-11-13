@@ -34,7 +34,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -59,8 +58,6 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
     
     private IOEntryReader reader;
 
-    private List<ChangeRequestListener> listeners = Collections.synchronizedList(new LinkedList<ChangeRequestListener>());
-
     private JTable owningTable;
 
     public IOEntryTableModel(IOEntryReader reader) {
@@ -84,16 +81,21 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         return comboBoxModel;
     }
 
-    public Long getCurrentRequestId() {
-        return currentRequestId;
+    public void setCurrentRequestId(Long newRequestId) {
+        setCurrentRequestId(newRequestId, false);
     }
 
-    public void setCurrentRequestId(Long newRequestId) {
+    public void setCurrentRequestId(Long newRequestId, boolean silent) {
         synchronized (self) {
             Long oldRequestId = currentRequestId;
             if((currentRequestId == null && newRequestId != null) ||
                     newRequestId != null && !newRequestId.equals(currentRequestId)) {
                 selectRequestItem(oldRequestId, newRequestId);
+
+                if(!silent) {
+                    fireTableDataChanged();
+                    autoScrollTable(0);
+                }
             }
         }
     }
@@ -218,7 +220,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
             switch(columnIndex) {
                 case 0: return ioEntry.getRowNum();
                 case 1: return entry.getLevel();
-                case 2: return getMessage(entry);
+                case 2: return getGroup(entry) + " " + getMessage(entry);
                 case 3: return getElapsePrettyPrint(entry);
             }
         } catch (IOException e) {
@@ -228,33 +230,9 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
         return null;
     }
 
-    public void fireChangeRequestEvent(ChangeRequestEvent evt) {
-        List<ChangeRequestListener> tmp = new ArrayList<ChangeRequestListener>(listeners);
-        for(ChangeRequestListener listener : tmp) {
-            listener.changeRequest(evt);
-        }
-    }
-
-    public List<ChangeRequestListener> getListeners() {
-        return listeners;
-    }
-
-    public void addListener(ChangeRequestListener listener) {
-        listeners.add(listener);
-    }
-
-    public void removeListener(ChangeRequestListener listener) {
-        listeners.remove(listener);
-    }
-
-    public void clearListeners() {
-        listeners.clear();
-    }
-
     public void selectRequestItem(Long oldValue, Long newValue) {
         currentRequestId = newValue;
         comboBoxModel.setSelectedItem(reader.getManager().getRequest(newValue).getEntry());
-        fireChangeRequestEvent(new ChangeRequestEvent(this, oldValue, newValue));
     }
 
     private class EntryReceivedRunnable implements Runnable {

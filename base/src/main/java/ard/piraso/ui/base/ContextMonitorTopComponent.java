@@ -22,6 +22,7 @@
  */
 package ard.piraso.ui.base;
 
+import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.ui.base.model.IOEntryComboBoxModel;
 import ard.piraso.ui.base.model.IOEntryTableModel;
 import ard.piraso.ui.io.IOEntryReader;
@@ -30,6 +31,8 @@ import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
 import javax.swing.table.TableColumn;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 
 /**
@@ -40,16 +43,30 @@ public final class ContextMonitorTopComponent extends TopComponent {
 
     private IOEntryReader reader;
 
+    public ContextMonitorTopComponent() {}
     public ContextMonitorTopComponent(IOEntryReader reader) {
+        setName(NbBundle.getMessage(ContextMonitorTopComponent.class, "CTL_ContextMonitorTopComponent"));
+        setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
+        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
+
         this.reader = reader;
         tableModel = new IOEntryTableModel(reader);
         comboBoxModel = tableModel.getComboBoxModel();
         
         initComponents();
         initTable();
-        setName(NbBundle.getMessage(ContextMonitorTopComponent.class, "CTL_ContextMonitorTopComponent"));
-        setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
-        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
+        initComboBox();
+        refreshUIStates();
+    }
+
+    private void initComboBox() {
+        cboUrl.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                RequestEntry entry = (RequestEntry) e.getItem();
+                tableModel.setCurrentRequestId(entry.getRequestId());
+            }
+        });
     }
 
     private void initTable() {
@@ -82,7 +99,36 @@ public final class ContextMonitorTopComponent extends TopComponent {
 
         // set table model variables.
         tableModel.setOwningTable(table);
+    }
+
+    private void refreshUIStates() {
+        if(btnLockUrl.isSelected()) {
+            btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/lock.png")));
+        } else {
+            btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/lock_pressed.png")));
+        }
+
+        cboUrl.setEnabled(btnLockUrl.isSelected());
         tableModel.setAllowScrolling(!btnLockUrl.isSelected());
+    }
+
+    @Override
+    public void componentClosed() {
+        reader.stop();
+    }
+
+    @Override
+    protected void componentOpened() {
+        new Thread(getStartRunnable()).start();
+    }
+
+    public Runnable getStartRunnable() {
+        return new Runnable() {
+            @Override
+            public void run() {
+                reader.start();
+            }
+        };
     }
 
     /** This method is called from within the constructor to
@@ -137,13 +183,7 @@ public final class ContextMonitorTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLockUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLockUrlActionPerformed
-        if(btnLockUrl.isSelected()) {
-            btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/lock.png")));
-        } else {
-            btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/lock_pressed.png")));
-        }
-
-        tableModel.setAllowScrolling(!btnLockUrl.isSelected());
+        refreshUIStates();
     }//GEN-LAST:event_btnLockUrlActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -156,24 +196,6 @@ public final class ContextMonitorTopComponent extends TopComponent {
     protected javax.swing.JScrollPane tableScrollPane;
     protected javax.swing.JToolBar toolbar;
     // End of variables declaration//GEN-END:variables
-
-    
-    @Override
-    public void componentClosed() {
-        reader.stop();
-    }
-
-    @Override
-    protected void componentOpened() {
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-                reader.start();
-            }
-        };
-
-        thread.start();
-    }
 
     @Override
     public int getPersistenceType() {
