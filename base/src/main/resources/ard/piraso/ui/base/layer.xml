@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.0//EN" "http://www.netbeans.org/dtds/filesystem-1_0.dtd">
+
 <!--
   ~ Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
   ~
@@ -17,12 +20,12 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.0//EN" "http://www.netbeans.org/dtds/filesystem-1_0.dtd">
 <filesystem>
     <folder name="Menu">
         <folder name="File">
             <file name="org-openide-actions-SaveAllAction.shadow_hidden"/>
         </folder>
+        <file name="Edit_hidden"/>
         <file name="GoTo_hidden"/>
         <file name="View_hidden"/>
     </folder>

@@ -19,6 +19,7 @@
 package ard.piraso.ui.base.cookie;
 
 import ard.piraso.ui.io.IOEntryReader;
+import org.openide.ErrorManager;
 
 /**
  *
@@ -44,7 +45,7 @@ public class IOEntryReaderStartCookie implements StartCookie {
                 try {
                     reader.start();
                 } catch(Exception e) {
-                    e.printStackTrace();
+                    ErrorManager.getDefault().notify(e);
                 }
             }
         };
