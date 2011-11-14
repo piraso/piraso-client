@@ -22,11 +22,9 @@ import ard.piraso.api.io.EntryReadEvent;
 import ard.piraso.api.io.EntryReadListener;
 import org.apache.commons.lang.Validate;
 
+import javax.swing.event.EventListenerList;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,10 +39,10 @@ public class IOEntryReader implements EntryReadListener {
     private IOEntryManager manager;
 
     private IOEntrySource source;
-    
-    private long lastEntryTime;
-    
-    private List<IOEntryListener> listeners = Collections.synchronizedList(new LinkedList<IOEntryListener>());
+
+    private IOEntryEvent startEvent;
+
+    private EventListenerList listeners = new EventListenerList();
 
     public IOEntryReader(IOEntrySource source) {
         Validate.notNull(source, "Source should not be null.");
@@ -61,29 +59,34 @@ public class IOEntryReader implements EntryReadListener {
     }
     
     public void start() {
-        source.addListener(this);
-        source.start();
+        if(!source.isAlive()) {
+            source.reset();
+        }
+
+        try {
+            if(!source.isAlive()) {
+                source.addListener(this);
+                source.start();
+            }
+        } finally {
+            fireStoppedEvent(startEvent);
+        }
     }
     
     public void stop() {
         source.stop();
     }
     
-    public boolean isStopped() {
-        return source.isStopped();
+    public boolean isAlive() {
+        return source.isAlive();
     }
 
     public IOEntryManager getManager() {
         return manager;
     }
     
-    public long getIdleTime() {
-        return System.currentTimeMillis() - lastEntryTime;
-    }
-    
     @Override
     public synchronized void readEntry(EntryReadEvent evt) {
-        lastEntryTime = System.currentTimeMillis();
         if(manager == null) {
             manager = new IOEntryManager(source.getId());
         }
@@ -96,40 +99,51 @@ public class IOEntryReader implements EntryReadListener {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
-    
 
     @Override
     public void started(EntryReadEvent evt) {
-        fireStartedEvent(new IOEntryEvent(this, evt.getId(), evt.getWatchedAddr()));
+        startEvent = new IOEntryEvent(this, evt.getId(), evt.getWatchedAddr());
+        fireStartedEvent(startEvent);
     }
     
     public void fireStartedEvent(IOEntryEvent evt) {
-        List<IOEntryListener> tmp = new ArrayList<IOEntryListener>(listeners);
-        for(IOEntryListener listener : tmp) {
+        for(IOEntryLifeCycleListener listener : Arrays.asList(listeners.getListeners(IOEntryLifeCycleListener.class))) {
+            listener.started(evt);
+        }
+        for(IOEntryLifeCycleListener listener : Arrays.asList(listeners.getListeners(IOEntryListener.class))) {
             listener.started(evt);
         }
     }
-    
+
+    public void fireStoppedEvent(IOEntryEvent evt) {
+        for(IOEntryLifeCycleListener listener : Arrays.asList(listeners.getListeners(IOEntryLifeCycleListener.class))) {
+            listener.stopped(evt);
+        }
+
+        for(IOEntryLifeCycleListener listener : Arrays.asList(listeners.getListeners(IOEntryListener.class))) {
+            listener.stopped(evt);
+        }
+    }
+
     public void fireEntryReadEvent(IOEntryEvent evt) {
-        List<IOEntryListener> tmp = new ArrayList<IOEntryListener>(listeners);
-        for(IOEntryListener listener : tmp) {
+        for(IOEntryReceivedListener listener : Arrays.asList(listeners.getListeners(IOEntryReceivedListener.class))) {
+            listener.receivedEntry(evt);
+        }
+
+        for(IOEntryReceivedListener listener : Arrays.asList(listeners.getListeners(IOEntryListener.class))) {
             listener.receivedEntry(evt);
         }
     }
-    
-    public List<IOEntryListener> getListeners() {
-        return listeners;
-    }
 
     public void addListener(IOEntryListener listener) {
-        listeners.add(listener);
+        listeners.add(IOEntryListener.class, listener);
     }
 
-    public void removeListener(IOEntryListener listener) {
-        listeners.remove(listener);
+    public void addLiveCycleListener(IOEntryLifeCycleListener listener) {
+        listeners.add(IOEntryLifeCycleListener.class, listener);
     }
 
-    public void clearListeners() {
-        listeners.clear();
+    public void addReceivedListener(IOEntryReceivedListener listener) {
+        listeners.add(IOEntryReceivedListener.class, listener);
     }
 }

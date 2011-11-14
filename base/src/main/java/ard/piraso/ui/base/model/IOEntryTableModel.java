@@ -25,8 +25,8 @@ import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryEvent;
-import ard.piraso.ui.io.IOEntryListener;
 import ard.piraso.ui.io.IOEntryReader;
+import ard.piraso.ui.io.IOEntryReceivedListener;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
@@ -43,7 +43,7 @@ import java.util.logging.Logger;
  * 
  * @author adleon
  */
-public class IOEntryTableModel extends AbstractTableModel implements IOEntryListener {
+public class IOEntryTableModel extends AbstractTableModel implements IOEntryReceivedListener {
 
     private static final Logger LOG = Logger.getLogger(IOEntryTableModel.class.getName());
 
@@ -64,7 +64,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
     public IOEntryTableModel(IOEntryReader reader) {
         this.reader = reader;
         comboBoxModel = new IOEntryComboBoxModel();
-        reader.addListener(this);
+        reader.addReceivedListener(this);
         self = this;
     }
 
@@ -107,10 +107,6 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryList
 
     public void setAllowScrolling(boolean allowScrolling) {
         this.allowScrolling = allowScrolling;
-    }
-
-    @Override
-    public void started(IOEntryEvent evt) {
     }
 
     public void doOnTimeout() throws InvocationTargetException, InterruptedException {

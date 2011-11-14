@@ -18,15 +18,9 @@
 
 package ard.piraso.ui.io;
 
-import java.util.EventListener;
-
 /**
  *
  * @author adleon
  */
-public interface IOEntryListener extends EventListener {
-    
-    public void started(IOEntryEvent evt);
-    
-    public void receivedEntry(IOEntryEvent evt);
+public interface IOEntryListener extends IOEntryReceivedListener, IOEntryLifeCycleListener {
 }

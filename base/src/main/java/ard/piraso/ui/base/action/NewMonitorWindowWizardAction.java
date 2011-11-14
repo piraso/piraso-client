@@ -19,7 +19,6 @@
 package ard.piraso.ui.base.action;
 
 import ard.piraso.ui.base.ContextMonitorDispatcher;
-import ard.piraso.ui.base.ContextMonitorTopComponent;
 import ard.piraso.ui.base.model.Constants;
 import ard.piraso.ui.base.model.NewContextMonitorModel;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel1;
@@ -41,7 +40,7 @@ import java.text.MessageFormat;
 // An example action demonstrating how the wizard could be called from within
 // your code. You can move the code below wherever you need, or register an action:
 @ActionID(category="File", id="ard.piraso.ui.base.action.NewMonitorWindowWizardAction")
-@ActionRegistration(iconBase="ard/piraso/ui/base/icons/new.png", iconInMenu=true, displayName="New Web Context Monitor")
+@ActionRegistration(iconBase="ard/piraso/ui/base/icons/new.png", iconInMenu=true, displayName="New Context Monitor")
 @ActionReferences({
         @ActionReference(path="Menu/File", position=255),
         @ActionReference(path="Toolbars/File", position=255)
@@ -56,7 +55,7 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
         
         // {0} will be replaced by WizardDesriptor.Panel.getComponent().getName()
         wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
-        wizardDescriptor.setTitle("New Web Context Monitor");        
+        wizardDescriptor.setTitle("New Context Monitor");        
         wizardDescriptor.putProperty(Constants.MODEL, new NewContextMonitorModel(true));
         
         Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);                

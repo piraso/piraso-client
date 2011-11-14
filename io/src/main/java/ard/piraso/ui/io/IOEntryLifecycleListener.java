@@ -18,26 +18,14 @@
 
 package ard.piraso.ui.io;
 
-import ard.piraso.api.io.EntryReadListener;
+import java.util.EventListener;
 
 /**
- *
- * @author adleon
+ * Defines an interface for {@link IOEntry} life cycle listener.
  */
-public interface IOEntrySource {
-    
-    public void start();
-    
-    public void stop();
-    
-    public String getId();
-    
-    public String getWatchedAddr();
+public interface IOEntryLifeCycleListener extends EventListener {
 
-    public boolean isAlive();
+    public void started(IOEntryEvent evt);
 
-    public void reset();
-
-    public void addListener(EntryReadListener listener);
-
+    public void stopped(IOEntryEvent evt);
 }

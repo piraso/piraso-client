@@ -16,10 +16,6 @@
  * limitations under the License.
  */
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package ard.piraso.ui.base;
 
 import ard.piraso.api.entry.RequestEntry;
@@ -28,6 +24,8 @@ import ard.piraso.ui.base.model.IOEntryTableModel;
 import ard.piraso.ui.io.IOEntryReader;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
 
 import javax.swing.table.TableColumn;
@@ -41,17 +39,19 @@ import java.awt.event.ActionListener;
 public final class ContextMonitorTopComponent extends TopComponent {
     private static final String ICON_PATH = "/ard/piraso/ui/base/icons/remote_logger.png";
 
-    private IOEntryReader reader;
+    private IOEntryReaderActionProvider actionProvider;
 
-    public ContextMonitorTopComponent() {}
     public ContextMonitorTopComponent(IOEntryReader reader) {
         setName(NbBundle.getMessage(ContextMonitorTopComponent.class, "CTL_ContextMonitorTopComponent"));
         setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
         setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 
-        this.reader = reader;
-        tableModel = new IOEntryTableModel(reader);
-        comboBoxModel = tableModel.getComboBoxModel();
+        InstanceContent content = new InstanceContent();
+        associateLookup(new AbstractLookup(content));
+        
+        this.actionProvider = new IOEntryReaderActionProvider(reader, content);
+        this.tableModel = new IOEntryTableModel(reader);
+        this.comboBoxModel = tableModel.getComboBoxModel();
         
         initComponents();
         initTable();
@@ -67,14 +67,6 @@ public final class ContextMonitorTopComponent extends TopComponent {
                 tableModel.setCurrentRequestId(entry.getRequestId());
             }
         });
-
-//        cboUrl.addItemListener(new ItemListener() {
-//            @Override
-//            public void itemStateChanged(ItemEvent e) {
-//                RequestEntry entry = (RequestEntry) e.getItem();
-//                tableModel.setCurrentRequestId(entry.getRequestId(), true);
-//            }
-//        });
     }
 
     private void initTable() {
@@ -122,21 +114,17 @@ public final class ContextMonitorTopComponent extends TopComponent {
 
     @Override
     public void componentClosed() {
-        reader.stop();
+        actionProvider.getStopCookie().stop();
     }
 
     @Override
     protected void componentOpened() {
-        new Thread(getStartRunnable()).start();
+        actionProvider.getStartCookie().start();
     }
-
-    public Runnable getStartRunnable() {
-        return new Runnable() {
-            @Override
-            public void run() {
-                reader.start();
-            }
-        };
+    
+    @Override
+    public int getPersistenceType() {
+        return PERSISTENCE_NEVER;
     }
 
     /** This method is called from within the constructor to
@@ -204,9 +192,4 @@ public final class ContextMonitorTopComponent extends TopComponent {
     protected javax.swing.JScrollPane tableScrollPane;
     protected javax.swing.JToolBar toolbar;
     // End of variables declaration//GEN-END:variables
-
-    @Override
-    public int getPersistenceType() {
-        return PERSISTENCE_NEVER;
-    }
 }

@@ -29,7 +29,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -40,16 +39,30 @@ import java.util.logging.Logger;
 public class HttpEntrySource implements IOEntrySource {
     
     private static final Logger LOG = Logger.getLogger(HttpEntrySource.class.getName());
-        
+
     private HttpPirasoEntryReader reader;
 
-    private boolean stopped;
-    
+    private boolean alive;
+
+    private Preferences preferences;
+
+    private String uri;
+
+    private String watchedAddr;
+
     public HttpEntrySource(Preferences preferences, String uri) {
         this(preferences, uri, null);
     }
     
     public HttpEntrySource(Preferences preferences, String uri, String watchedAddr) {
+        this.preferences = preferences;
+        this.uri = uri;
+        this.watchedAddr = watchedAddr;
+    }
+
+    private void initReader() {
+        alive = false;
+
         ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager();
         manager.setDefaultMaxPerRoute(2);
         manager.setMaxTotal(2);
@@ -57,32 +70,53 @@ public class HttpEntrySource implements IOEntrySource {
         HttpClient client = new DefaultHttpClient(manager);
         HttpContext context = new BasicHttpContext();
         this.reader = new HttpPirasoEntryReader(client, context);
-        
+
         reader.setUri(uri);
         reader.getStartHandler().setPreferences(preferences);
-        
+
         if(watchedAddr != null) {
             reader.getStartHandler().setWatchedAddr(watchedAddr);
         }
     }
 
     @Override
+    public void reset() {
+        initReader();
+    }
+
+    @Override
     public void start() {
         try {
-            reader.start();
+            if(reader == null && !alive) {
+                initReader();
+            }
+
+            if(!alive) {
+                LOG.info("Starting Context Monitor for URL : " + uri);
+                alive = true;
+                reader.start();
+            }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
-            stopped = true;
+            LOG.info("Stopped Context Monitor for URL : " + uri);
+            alive = false;
         }
     }
 
     @Override
     public void stop() {
         try {
-            reader.stop();
+            if(alive) {
+                LOG.info("Stopping Context Monitor for URL : " + uri);
+                reader.stop();
+            } else {
+                LOG.info("Not stopped since already not active URL : " + uri);
+            }
         } catch (IOException ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
+        } finally {
+             alive = false;
         }
     }
 
@@ -92,32 +126,21 @@ public class HttpEntrySource implements IOEntrySource {
     }
 
     @Override
-    public boolean isStopped() {
-        return stopped;
-    }
-
-    @Override
-    public List<EntryReadListener> getListeners() {
-        return reader.getStartHandler().getListeners();
+    public boolean isAlive() {
+        return alive;
     }
 
     @Override
     public void addListener(EntryReadListener listener) {
         reader.getStartHandler().addListener(listener);
     }
-
-    @Override
-    public void removeListener(EntryReadListener listener) {
-        reader.getStartHandler().removeListener(listener);
-    }
-
-    @Override
-    public void clearListeners() {
-        reader.getStartHandler().clearListeners();
-    }  
     
     @Override
     public String getWatchedAddr() {
+        if(reader == null) {
+            return null;
+        }
+
         return reader.getStartHandler().getWatchedAddr();
     }
 }

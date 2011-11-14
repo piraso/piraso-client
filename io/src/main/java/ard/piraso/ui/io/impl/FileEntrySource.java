@@ -21,12 +21,12 @@ package ard.piraso.ui.io.impl;
 import ard.piraso.api.io.EntryReadListener;
 import ard.piraso.api.io.PirasoEntryReader;
 import ard.piraso.ui.io.IOEntrySource;
+import org.apache.commons.lang.Validate;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
@@ -40,26 +40,61 @@ public class FileEntrySource implements IOEntrySource {
         
     private PirasoEntryReader reader;
     
-    private boolean stopped;
-    
-    public FileEntrySource(File source) throws FileNotFoundException, IOException {
-        reader = new PirasoEntryReader(new GZIPInputStream(new FileInputStream(source)));
+    private boolean alive;
+
+    private File source;
+
+    public FileEntrySource(File source) throws FileNotFoundException {
+        Validate.notNull(source, "source should not be null.");
+        this.source = source;
+
+        if(!source.isFile()) {
+            throw new FileNotFoundException(String.format("File %s not found.", source.getAbsolutePath()));
+        }
+    }
+
+    @Override
+    public void reset() {
+        try {
+            alive = false;
+            reader = new PirasoEntryReader(new GZIPInputStream(new FileInputStream(source)));
+        } catch (IOException e) {
+            throw new IllegalStateException(e.getMessage(), e);
+        }
     }
 
     @Override
     public void start() {
         try {
-            reader.start();
+            if(reader == null || !alive) {
+                reset();
+            }
+
+            if(!alive) {
+                LOG.info("Starting Context Monitor for File : " + source.getAbsolutePath());
+                alive = true;
+                reader.start();
+            }
         } catch (Exception ex) {
             LOG.log(Level.SEVERE, ex.getMessage(), ex);
         } finally {
-            stopped = true;
+            LOG.info("Stopped Context Monitor for URL : " + source.getAbsolutePath());
+            alive = false;
         }
     }
 
     @Override
     public void stop() {
-        reader.stop();
+        try {
+            if(alive) {
+                LOG.info("Starting Context Monitor for File : " + source.getAbsolutePath());
+                reader.stop();
+            } else {
+                LOG.warning("Not stopped since not alive. File: " + source.getAbsolutePath());
+            }
+        } finally {
+            alive = false;
+        }
     }
 
     @Override
@@ -68,13 +103,8 @@ public class FileEntrySource implements IOEntrySource {
     }
 
     @Override
-    public boolean isStopped() {
-        return stopped;
-    }
-
-    @Override
-    public List<EntryReadListener> getListeners() {
-        return reader.getListeners();
+    public boolean isAlive() {
+        return alive;
     }
 
     @Override
@@ -83,17 +113,11 @@ public class FileEntrySource implements IOEntrySource {
     }
 
     @Override
-    public void removeListener(EntryReadListener listener) {
-        reader.removeListener(listener);
-    }
-
-    @Override
-    public void clearListeners() {
-        reader.clearListeners();
-    }
-
-    @Override
     public String getWatchedAddr() {
+        if(reader == null) {
+            return null;
+        }
+
         return reader.getWatchedAddr();
     }
 
