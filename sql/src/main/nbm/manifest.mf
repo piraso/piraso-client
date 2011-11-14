@@ -1,3 +1,4 @@
 Manifest-Version: 1.0
 OpenIDE-Module-Localizing-Bundle: ard/piraso/ui/sql/Bundle.properties
 OpenIDE-Module-Layer: ard/piraso/ui/sql/layer.xml
+OpenIDE-Module-Requires: org.openide.windows.WindowManager

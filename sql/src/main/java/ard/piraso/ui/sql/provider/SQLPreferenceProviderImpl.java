@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.sql;
+package ard.piraso.ui.sql.provider;
 
 import ard.piraso.api.sql.SQLPreferenceEnum;
 import ard.piraso.ui.api.PreferenceProperty;
