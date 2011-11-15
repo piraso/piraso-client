@@ -24,12 +24,10 @@ import ard.piraso.ui.io.IOEntryReader;
  *
  * @author adeleon
  */
-public class IOEntryReaderStopCookie implements StopCookie {
-    
-    private IOEntryReader reader;
-    
+public class IOEntryReaderStopCookie  extends AbstractIOEntryReaderCookie implements StopCookie {
+
     public IOEntryReaderStopCookie(IOEntryReader reader) {
-        this.reader = reader;
+        super(reader);
     }
     
     @Override

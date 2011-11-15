@@ -18,12 +18,30 @@
 
 package ard.piraso.ui.base.cookie;
 
-import org.openide.nodes.Node;
+import ard.piraso.ui.io.IOEntryReader;
+import org.openide.cookies.SaveCookie;
+import org.openide.windows.TopComponent;
+
+import java.io.IOException;
 
 /**
- *
- * @author alvin
+ * Saves the {@link ard.piraso.ui.io.IOEntryReader}.
  */
-public interface StartCookie extends Node.Cookie {
-    public void start();
+public class IOEntryReaderSaveCookie extends AbstractIOEntryReaderCookie implements SaveCookie {
+
+    private TopComponent component;
+
+    private String name;
+
+    public IOEntryReaderSaveCookie(IOEntryReader reader, TopComponent component) {
+        super(reader);
+
+        this.component = component;
+        this.name = component.getName();
+    }
+
+    @Override
+    public void save() throws IOException {
+
+    }
 }

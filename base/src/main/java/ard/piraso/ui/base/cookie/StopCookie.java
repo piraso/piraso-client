@@ -18,11 +18,13 @@
 
 package ard.piraso.ui.base.cookie;
 
+import org.openide.nodes.Node;
+
 /**
  *
  * @author alvin
  */
-public interface StopCookie {
+public interface StopCookie extends Node.Cookie {
     
     /**
      * Stop cookie

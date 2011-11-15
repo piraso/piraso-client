@@ -25,12 +25,10 @@ import org.openide.ErrorManager;
  *
  * @author adeleon
  */
-public class IOEntryReaderStartCookie implements StartCookie {
-    
-    private IOEntryReader reader;
-    
+public class IOEntryReaderStartCookie extends AbstractIOEntryReaderCookie implements StartCookie {
+
     public IOEntryReaderStartCookie(IOEntryReader reader) {
-        this.reader = reader;
+        super(reader);
     }
 
     @Override

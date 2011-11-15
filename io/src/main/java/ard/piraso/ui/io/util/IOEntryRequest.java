@@ -32,8 +32,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Represents a single request of {@link IOEntry} received from a source.
  *
- * @author adleon
+ * @author alvinrdeleon
  */
 public class IOEntryRequest {
     
@@ -81,6 +82,8 @@ public class IOEntryRequest {
             request = ioEntry;
         } else if(ResponseEntry.class.isInstance(evt.getEntry())) {
             response = ioEntry;
+
+            LOG.log(Level.INFO, String.format("Request[%s]: Response received completed.", id));
         }
         
         cache.put(serializable);

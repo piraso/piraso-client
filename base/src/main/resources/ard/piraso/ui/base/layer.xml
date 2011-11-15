@@ -23,6 +23,8 @@
 <filesystem>
     <folder name="Menu">
         <folder name="File">
+            <file name="org-openide-actions-PageSetupAction.shadow_hidden"/>
+            <file name="org-openide-actions-PrintAction.shadow_hidden"/>
             <file name="org-openide-actions-SaveAllAction.shadow_hidden"/>
         </folder>
         <file name="Edit_hidden"/>
@@ -33,5 +35,7 @@
         <folder name="File">
             <file name="org-openide-actions-SaveAllAction.shadow_hidden"/>
         </folder>
+        <file name="Clipboard_hidden"/>
+        <file name="UndoRedo_hidden"/>
     </folder>
 </filesystem>
