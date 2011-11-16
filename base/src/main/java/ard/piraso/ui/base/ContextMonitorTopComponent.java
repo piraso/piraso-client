@@ -18,7 +18,9 @@
 
 package ard.piraso.ui.base;
 
+import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.ui.base.manager.EntryViewProviderManager;
 import ard.piraso.ui.base.model.IOEntryComboBoxModel;
 import ard.piraso.ui.base.model.IOEntryTableModel;
 import ard.piraso.ui.io.IOEntryReader;
@@ -28,18 +30,21 @@ import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
 
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 /**
  * Top component which displays something.
  */
-public final class ContextMonitorTopComponent extends TopComponent {
+public final class ContextMonitorTopComponent extends TopComponent implements ListSelectionListener {
     private static final String ICON_PATH = "/ard/piraso/ui/base/icons/remote_logger.png";
 
     private IOEntryReaderActionProvider actionProvider;
+
+    private SingleClassInstanceContent<Entry> entryContent;
 
     public ContextMonitorTopComponent(IOEntryReader reader) {
         setName(NbBundle.getMessage(ContextMonitorTopComponent.class, "CTL_ContextMonitorTopComponent"));
@@ -48,7 +53,8 @@ public final class ContextMonitorTopComponent extends TopComponent {
 
         InstanceContent content = new InstanceContent();
         associateLookup(new AbstractLookup(content));
-        
+
+        this.entryContent = new SingleClassInstanceContent<Entry>(content);
         this.actionProvider = new IOEntryReaderActionProvider(reader, content);
         this.tableModel = new IOEntryTableModel(reader);
         this.comboBoxModel = tableModel.getComboBoxModel();
@@ -96,9 +102,24 @@ public final class ContextMonitorTopComponent extends TopComponent {
         table.setAutoscrolls(true);
         table.setColumnSelectionAllowed(false);
         table.getTableHeader().setReorderingAllowed(false);
-
-        // set table model variables.
+        table.getSelectionModel().addListSelectionListener(this);
         tableModel.setOwningTable(table);
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        if(e.getValueIsAdjusting()) return;
+        if(e.getSource() != table.getSelectionModel()) return;
+        if(table.getSelectedRow() <= 0) return;
+
+        Entry entry = tableModel.getEntryAt(table.getSelectedRow()).getEntry();
+        Class<? extends TopComponent> viewClass = EntryViewProviderManager.INSTANCE.getViewClass(entry);
+
+        entryContent.add(entry);
+
+        if(viewClass != null) {
+            WindowUtils.selectWindow(viewClass);
+        }
     }
 
     private void refreshUIStates() {
@@ -115,6 +136,7 @@ public final class ContextMonitorTopComponent extends TopComponent {
     @Override
     public void componentClosed() {
         actionProvider.getStopCookie().stop();
+        entryContent.clear();
     }
 
     @Override

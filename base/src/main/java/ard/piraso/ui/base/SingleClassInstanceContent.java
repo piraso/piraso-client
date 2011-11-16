@@ -18,30 +18,34 @@
 
 package ard.piraso.ui.base;
 
-import org.openide.windows.TopComponent;
-
-import java.util.Set;
+import org.openide.util.lookup.InstanceContent;
 
 /**
- * Contains window utilities
- *
- * @author alvinrdeleon
+ * Ensures that only one instance of the given class is added to content at a given time.
  */
-public final class WindowUtils {
-    
-    private WindowUtils() {}
-    
-    /**
-     * Request visibility for the given top component.
-     * 
-     * @param clazz the class to give visibility to
-     */
-    public static void selectWindow(Class<? extends TopComponent> clazz) {
-        Set<TopComponent> opened = TopComponent.getRegistry().getOpened();
+public class SingleClassInstanceContent<T> {
 
-        for(TopComponent component : opened) {
-            if(clazz.isInstance(component)) {
-                component.requestVisible();
+    private InstanceContent content;
+
+    private T currentContent;
+
+    public SingleClassInstanceContent(InstanceContent content) {
+        this.content = content;
+    }
+
+    public void add(T newContent) {
+        synchronized (this) {
+            clear();
+
+            this.currentContent = newContent;
+            content.add(newContent);
+        }
+    }
+
+    public void clear() {
+        synchronized (this) {
+            if(currentContent != null) {
+                content.remove(currentContent);
             }
         }
     }

@@ -16,33 +16,16 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.api;
 
+import ard.piraso.api.entry.Entry;
 import org.openide.windows.TopComponent;
 
-import java.util.Set;
-
 /**
- * Contains window utilities
- *
- * @author alvinrdeleon
+ * Defines an interface that provide an Entry view for the selected entry
+ * from a context monitor window.
  */
-public final class WindowUtils {
-    
-    private WindowUtils() {}
-    
-    /**
-     * Request visibility for the given top component.
-     * 
-     * @param clazz the class to give visibility to
-     */
-    public static void selectWindow(Class<? extends TopComponent> clazz) {
-        Set<TopComponent> opened = TopComponent.getRegistry().getOpened();
+public interface EntryViewProvider {
 
-        for(TopComponent component : opened) {
-            if(clazz.isInstance(component)) {
-                component.requestVisible();
-            }
-        }
-    }
+    public Class<? extends TopComponent> getViewClass(Entry entry);
 }

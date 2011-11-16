@@ -18,6 +18,8 @@
 
 package ard.piraso.ui.sql;
 
+import SQLinForm_200.SQLForm;
+import ard.piraso.api.sql.SQLDataViewEntry;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -40,6 +42,29 @@ public final class SQLViewTopComponent extends TopComponent {
         setName(NbBundle.getMessage(SQLViewTopComponent.class, "CTL_SQLViewTopComponent"));
         setToolTipText(NbBundle.getMessage(SQLViewTopComponent.class, "HINT_SQLViewTopComponent"));
 
+    }
+
+    private String getSQL() {
+        SQLDataViewEntry entry = new SQLDataViewEntry();
+
+        return null;
+    }
+
+    private SQLForm createSQLInForm() {
+        SQLForm form = new SQLForm();
+        form.setAlignmentKeyword(true);
+        form.setAlignmentOperator(true);
+        form.setLowerCase(true);
+        form.setSuppressEmptyLine(true);
+        form.setSuppressLinebreak(true);
+        form.setSuppressSpace(true);
+        form.setIndentJoin(true);
+        form.setSuppressEmptyLine(true);
+        form.setSuppressLinebreak(true);
+        form.setSuppressSpace(true);
+        form.setLineBreak(true, false, true, false, false, false);
+
+        return form;
     }
 
     /** This method is called from within the constructor to
