@@ -1,9 +1,9 @@
 Piraso Client
 
-This is the Piraso client created using Netbeans Platform.
+This is the Piraso client source code. This is created using Netbeans Platform.
 
 https://github.com/alvinrdeleon/piraso/wiki
-
+http://netbeans.org/features/platform/
 
 
 Quick Start to build and run:
