@@ -25,6 +25,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <url>https://github.com/alvinrdeleon/piraso/wiki</url>
+
     <name>piraso-client - parent</name>
 
     <repositories>
@@ -37,6 +39,11 @@
             <id>snapshot-repo</id>
             <name>alvinrdeleon github mvn-snapshot-repo</name>
             <url>https://raw.github.com/alvinrdeleon/piraso-mvn-repo/master/snapshots/</url>
+        </repository>
+        <repository>
+            <id>releases-repo</id>
+            <name>alvinrdeleon github mvn-releases-repo</name>
+            <url>https://raw.github.com/alvinrdeleon/piraso-mvn-repo/master/releases/</url>
         </repository>
         <repository>
             <id>mvnsearch</id>
