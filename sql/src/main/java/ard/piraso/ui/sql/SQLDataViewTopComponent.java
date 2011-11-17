@@ -29,7 +29,7 @@ import org.openide.windows.TopComponent;
  */
 @ConvertAsProperties(dtd = "-//ard.piraso.ui.sql//SQLDataView//EN", autostore = false)
 @ActionID(category = "Window", id = "ard.piraso.ui.sql.SQLDataViewTopComponent")
-@ActionReference(path = "Menu/Window" /*, position = 333 */)
+@ActionReference(path = "Menu/Window", position = 334)
 @TopComponent.Description(preferredID = "SQLDataViewTopComponent", iconBase="ard/piraso/ui/sql/icons/database.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = true)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_SQLDataViewAction",preferredID = "SQLDataViewTopComponent")

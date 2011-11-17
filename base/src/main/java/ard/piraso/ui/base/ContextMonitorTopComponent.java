@@ -20,6 +20,8 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.ui.api.util.SingleClassInstanceContent;
+import ard.piraso.ui.api.util.WindowUtils;
 import ard.piraso.ui.base.manager.EntryViewProviderManager;
 import ard.piraso.ui.base.model.IOEntryComboBoxModel;
 import ard.piraso.ui.base.model.IOEntryTableModel;

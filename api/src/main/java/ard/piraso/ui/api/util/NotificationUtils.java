@@ -16,33 +16,29 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.api.util;
 
-import org.openide.windows.TopComponent;
+import org.openide.awt.NotificationDisplayer;
 
-import java.util.Set;
+import javax.swing.*;
+import java.awt.event.ActionListener;
 
 /**
- * Contains window utilities
- *
- * @author alvinrdeleon
+ * Notification utils
  */
-public final class WindowUtils {
-    
-    private WindowUtils() {}
-    
-    /**
-     * Request visibility for the given top component.
-     * 
-     * @param clazz the class to give visibility to
-     */
-    public static void selectWindow(Class<? extends TopComponent> clazz) {
-        Set<TopComponent> opened = TopComponent.getRegistry().getOpened();
+public class NotificationUtils {
 
-        for(TopComponent component : opened) {
-            if(clazz.isInstance(component)) {
-                component.requestVisible();
-            }
-        }
+    private static ImageIcon INFO = new ImageIcon(NotificationUtils.class.getResource("/ard/piraso/ui/api/icons/info.png"));
+
+    public static void info(String str) {
+        info("Notification", str);
+    }
+
+    public static void info(String title, String str) {
+        info(title, str, null);
+    }
+
+    public static void info(String title, String str, ActionListener listener) {
+        NotificationDisplayer.getDefault().notify(title, INFO, str, listener);
     }
 }

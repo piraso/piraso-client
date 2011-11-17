@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.api.util;
 
 import org.openide.util.lookup.InstanceContent;
 
