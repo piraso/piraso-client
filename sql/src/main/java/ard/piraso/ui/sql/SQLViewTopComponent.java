@@ -19,6 +19,7 @@
 package ard.piraso.ui.sql;
 
 import SQLinForm_200.SQLForm;
+import ard.piraso.api.entry.ObjectEntryUtils;
 import ard.piraso.api.sql.SQLParameterEntry;
 import ard.piraso.api.sql.SQLViewEntry;
 import ard.piraso.ui.api.extension.AlignableTableCellRendererImpl;
@@ -110,7 +111,11 @@ public final class SQLViewTopComponent extends TopComponent implements LookupLis
                 
                 for(Integer index : indices) {
                     SQLParameterEntry parameter = currentEntry.getParameters().get(index);
-                    Object[] row = {index, parameter.getMethodName(), parameter.getParameterClassNames()[1], parameter.getArguments()[1].getStrValue()};
+                    Object[] row = {
+                        index, 
+                        parameter.getMethodName(), 
+                        parameter.getParameterClassNames()[1], 
+                        ObjectEntryUtils.toString(parameter.getArguments()[1])};
 
                     tableModel.addRow(row);
                 }

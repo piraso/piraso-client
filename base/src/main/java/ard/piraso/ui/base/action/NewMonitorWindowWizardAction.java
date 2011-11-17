@@ -56,7 +56,11 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
         // {0} will be replaced by WizardDesriptor.Panel.getComponent().getName()
         wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
         wizardDescriptor.setTitle("New Context Monitor");        
-        wizardDescriptor.putProperty(Constants.MODEL, new NewContextMonitorModel(true));
+        
+        NewContextMonitorModel model = new NewContextMonitorModel(true);
+        model.setLoggingUrl("http://127.0.0.1:8080/piraso/logging");
+        
+        wizardDescriptor.putProperty(Constants.MODEL, model);
         
         Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);                
         dialog.setVisible(true);
@@ -64,7 +68,6 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
         boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
         
         if (!cancelled) {
-            NewContextMonitorModel model = (NewContextMonitorModel) wizardDescriptor.getProperty(Constants.MODEL);
             ContextMonitorDispatcher.forward(model);
         }
     }
