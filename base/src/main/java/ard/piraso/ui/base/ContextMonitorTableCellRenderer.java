@@ -22,6 +22,7 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MethodCallEntry;
 import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.api.entry.ResponseEntry;
+import ard.piraso.api.sql.SQLDataViewEntry;
 import ard.piraso.api.sql.SQLPreferenceEnum;
 import ard.piraso.ui.base.model.IOEntryTableModel;
 
@@ -84,6 +85,10 @@ public class ContextMonitorTableCellRenderer extends JLabel implements TableCell
 //            setBackground(new Color(176,197,227));
         } else if (SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName().equals(entry.getLevel())) {
             setBackground(new Color(224, 232, 241));
+
+            if (SQLDataViewEntry.class.isInstance(entry)) {
+                setFont(getFont().deriveFont(Font.BOLD));
+            }
         }
 
         if (isSelected) {

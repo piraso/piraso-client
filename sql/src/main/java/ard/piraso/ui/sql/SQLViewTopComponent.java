@@ -22,23 +22,22 @@ import SQLinForm_200.SQLForm;
 import ard.piraso.api.entry.ObjectEntryUtils;
 import ard.piraso.api.sql.SQLParameterEntry;
 import ard.piraso.api.sql.SQLViewEntry;
+import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.extension.AlignableTableCellRendererImpl;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.util.*;
+import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -51,13 +50,10 @@ import java.util.List;
 @TopComponent.Description(preferredID = "SQLViewTopComponent", iconBase="ard/piraso/ui/sql/icons/sql.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = true)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_SQLViewAction", preferredID = "SQLViewTopComponent")
-public final class SQLViewTopComponent extends TopComponent implements LookupListener {
-
-    private Lookup.Result result = null;
-    
-    private SQLViewEntry currentEntry;
+public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQLViewEntry> {
 
     public SQLViewTopComponent() {
+        super(SQLViewEntry.class);
         initComponents();
         initScrollPane();
         initTable();
@@ -89,19 +85,22 @@ public final class SQLViewTopComponent extends TopComponent implements LookupLis
         valueColumn.setHeaderValue("Value");
         valueColumn.setPreferredWidth(200);
     }
-    
-    private void refresh() {
+
+    @Override
+    protected void refreshView() {
+        btnCopy.setEnabled(currentEntry != null);
+        
         if(currentEntry != null) {
             String sql = btnReplaceParameters.isSelected() ? currentEntry.getParameterReplacedSql() : 
                     currentEntry.getSql();
             
-            if(StringUtils.isNotEmpty(sql)) {            
+            if(StringUtils.isNotEmpty(sql)) {
                 if(btnFormat.isSelected()) {
-                    SQLForm form = createSQLInForm();                
+                    SQLForm form = createSQLInForm();
                     txtSQL.setDocument(form.formatSQL(sql));
                 } else {
                     txtSQL.setText(sql);
-                }            
+                }
             }
             
             tableModel.setRowCount(0);
@@ -128,31 +127,7 @@ public final class SQLViewTopComponent extends TopComponent implements LookupLis
         txtSQL.setEditable(false);
         txtSQL.select(0, 0);        
     }
-    
-    @Override
-    public void componentOpened() {
-        result = Utilities.actionsGlobalContext().lookupResult(SQLViewEntry.class);
-        result.addLookupListener(this);
-    }
 
-    @Override
-    public void componentClosed() {
-        result.removeLookupListener(this);
-        result = null;
-    }
-    
-    @Override
-    @SuppressWarnings("unchecked")
-    public void resultChanged(LookupEvent evt) {
-        Lookup.Result<SQLViewEntry> r = (Lookup.Result<SQLViewEntry>) evt.getSource();
-        Collection<? extends SQLViewEntry> entries = r.allInstances();
-        
-        if(CollectionUtils.isNotEmpty(entries)) {
-            currentEntry = entries.iterator().next();
-            refresh();
-        }
-    }
-    
     private SQLForm createSQLInForm() {
         SQLForm form = new SQLForm();
         form.setAlignmentKeyword(true);
@@ -246,6 +221,7 @@ public final class SQLViewTopComponent extends TopComponent implements LookupLis
         org.openide.awt.Mnemonics.setLocalizedText(btnCopy, org.openide.util.NbBundle.getMessage(SQLViewTopComponent.class, "SQLViewTopComponent.btnCopy.text")); // NOI18N
         btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(SQLViewTopComponent.class, "SQLViewTopComponent.btnCopy.toolTipText")); // NOI18N
         btnCopy.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        btnCopy.setEnabled(false);
         btnCopy.setFocusable(false);
         btnCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -262,15 +238,15 @@ public final class SQLViewTopComponent extends TopComponent implements LookupLis
 
     private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
         ClipboardUtils.copy(txtSQL.getText());
-        NotificationUtils.info("Notification", "SQL copied to clipboard.");
+        NotificationUtils.info("SQL is now copied to clipboard.");
     }//GEN-LAST:event_btnCopyActionPerformed
 
     private void btnReplaceParametersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReplaceParametersActionPerformed
-        refresh();
+        refreshView();
     }//GEN-LAST:event_btnReplaceParametersActionPerformed
 
     private void btnFormatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFormatActionPerformed
-        refresh();
+        refreshView();
     }//GEN-LAST:event_btnFormatActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -18,11 +18,23 @@
 
 package ard.piraso.ui.sql;
 
+import ard.piraso.api.sql.SQLDataViewEntry;
+import ard.piraso.api.sql.SQLParameterUtils;
+import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
+import ard.piraso.ui.api.util.ClipboardUtils;
+import ard.piraso.ui.api.util.NotificationUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.openide.ErrorManager;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
+
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Vector;
 
 /**
  * Top component which displays something.
@@ -33,13 +45,67 @@ import org.openide.windows.TopComponent;
 @TopComponent.Description(preferredID = "SQLDataViewTopComponent", iconBase="ard/piraso/ui/sql/icons/database.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = true)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_SQLDataViewAction",preferredID = "SQLDataViewTopComponent")
-public final class SQLDataViewTopComponent extends TopComponent {
+public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent<SQLDataViewEntry> {
+    public static final int TABLE_COLUMN_TOLERANCE_SIZE = 7;
 
     public SQLDataViewTopComponent() {
+        super(SQLDataViewEntry.class);
         initComponents();
         setName(NbBundle.getMessage(SQLDataViewTopComponent.class, "CTL_SQLDataViewTopComponent"));
         setToolTipText(NbBundle.getMessage(SQLDataViewTopComponent.class, "HINT_SQLDataViewTopComponent"));
+    }
+    
+    private void initTables() {
+        TableColumn method1Column = jTable2.getColumnModel().getColumn(0);
+        TableColumn cColumn = jTable2.getColumnModel().getColumn(1);
 
+        method1Column.setHeaderValue("Column Name/ID");
+        method1Column.setPreferredWidth(150);
+        method1Column.setMaxWidth(200);
+        cColumn.setHeaderValue("Type");
+        cColumn.setPreferredWidth(225);
+
+        if(table1Model.getColumnCount() == 2) { // Column Name, Value pair
+            TableColumn columnName = jTable1.getColumnModel().getColumn(0);
+            TableColumn columnValue = jTable1.getColumnModel().getColumn(1);
+
+            SQLDataTableCellRenderer renderer = new SQLDataTableCellRenderer();
+            columnName.setPreferredWidth(200);
+            columnName.setCellRenderer(renderer);
+            columnValue.setPreferredWidth(800);
+            columnValue.setCellRenderer(renderer);
+        }
+    }
+
+    void writeProperties(java.util.Properties p) {
+        p.setProperty("deviderLocation", String.valueOf(jSplitPane1.getDividerLocation()));
+    }
+
+    void readProperties(java.util.Properties p) {
+        jSplitPane1.setDividerLocation(Integer.parseInt(p.getProperty("deviderLocation", "500")));
+    }
+
+    @Override
+    protected void refreshView() {
+        btnCopy.setEnabled(currentEntry != null);
+
+        table2Model.setRowCount(0);
+        table1Model.setRowCount(0);
+        if(currentEntry != null) {
+            table2Model = new DefaultTableModel(
+                    SQLParameterUtils.createColumnDefinition(currentEntry),
+                    new Vector<String>(Arrays.asList("", ""))
+            );            
+            table1Model = new DefaultTableModel(
+                    SQLParameterUtils.createDataValues(currentEntry, TABLE_COLUMN_TOLERANCE_SIZE),
+                    SQLParameterUtils.createHeaders(currentEntry, TABLE_COLUMN_TOLERANCE_SIZE)
+            );
+
+            jTable2.setModel(table2Model);
+            jTable1.setModel(table1Model);
+
+            initTables();
+        }
     }
 
     /** This method is called from within the constructor to
@@ -50,39 +116,83 @@ public final class SQLDataViewTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnCopy = new javax.swing.JButton();
+
+        setLayout(new java.awt.BorderLayout());
+
+        jTable2.setFont(new java.awt.Font("Monospaced", 0, 12));
+        jTable2.setModel(table2Model);
+        jScrollPane1.setViewportView(jTable2);
+
+        jSplitPane1.setLeftComponent(jScrollPane1);
+
+        jTable1.setFont(new java.awt.Font("Monospaced", 0, 12));
+        jTable1.setModel(table1Model);
+        jScrollPane2.setViewportView(jTable1);
+
+        jSplitPane1.setRightComponent(jScrollPane2);
+
+        add(jSplitPane1, java.awt.BorderLayout.CENTER);
+
+        jToolBar1.setBackground(new java.awt.Color(226, 226, 226));
+        jToolBar1.setFloatable(false);
+        jToolBar1.setOrientation(1);
+        jToolBar1.setRollover(true);
+
+        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/sql/icons/copy.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCopy, org.openide.util.NbBundle.getMessage(SQLDataViewTopComponent.class, "SQLDataViewTopComponent.btnCopy.text")); // NOI18N
+        btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(SQLDataViewTopComponent.class, "SQLDataViewTopComponent.btnCopy.toolTipText")); // NOI18N
+        btnCopy.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        btnCopy.setEnabled(false);
+        btnCopy.setFocusable(false);
+        btnCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopyActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnCopy);
+
+        add(jToolBar1, java.awt.BorderLayout.WEST);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
+        if(currentEntry != null) {
+            try {
+                ClipboardUtils.copy(currentEntry.getCSVString());
+                NotificationUtils.info("SQL Data CSV is now copied to clipboard.");
+            } catch (IOException e) {
+                ErrorManager.getDefault().notify(e);
+            }
+        }
+    }//GEN-LAST:event_btnCopyActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCopy;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JTable jTable1;
+    private DefaultTableModel table1Model = new javax.swing.table.DefaultTableModel(
+        new Object [][] {
+            {null, null, null, null},
+            {null, null, null, null},
+            {null, null, null, null},
+            {null, null, null, null}
+        },
+        new String [] {
+            "Title 1", "Title 2", "Title 3", "Title 4"
+        }
+    );
+    private javax.swing.JTable jTable2;
+    private DefaultTableModel table2Model = new DefaultTableModel(0, 2);
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
-    @Override
-    public void componentOpened() {
-        // TODO add custom code on component opening
-    }
-
-    @Override
-    public void componentClosed() {
-        // TODO add custom code on component closing
-    }
-
-    void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "1.0");
-        // TODO store your settings
-    }
-
-    void readProperties(java.util.Properties p) {
-        String version = p.getProperty("version");
-        // TODO read your settings according to their version
-    }
 }
