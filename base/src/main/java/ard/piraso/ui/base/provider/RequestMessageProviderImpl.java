@@ -38,7 +38,7 @@ public class RequestMessageProviderImpl implements MessageProvider {
     public String toMessage(Entry entry) {
         RequestEntry request = (RequestEntry) entry;
 
-        return "REQUEST: " + request.getUri();
+        return "REQUEST: " + request.getPath();
     }
 }
 
