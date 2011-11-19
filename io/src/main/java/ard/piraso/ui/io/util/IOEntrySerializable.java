@@ -21,7 +21,7 @@ package ard.piraso.ui.io.util;
 import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.EntryReadEvent;
-import org.codehaus.jackson.map.ObjectMapper;
+import ard.piraso.api.io.PirasoEntryLoaderRegistry;
 
 import java.io.IOException;
 import java.util.Date;
@@ -32,16 +32,14 @@ import java.util.Date;
  */
 public class IOEntrySerializable {
    
-    private Class classType;
+    private String classType;
         
     private Long id;
     
     private Date date;
     
     private String entryValue;
-    
-    private ObjectMapper mapper = JacksonUtils.createMapper();
-    
+
     private Long rowNum;
 
     public IOEntrySerializable() {
@@ -50,9 +48,9 @@ public class IOEntrySerializable {
     public IOEntrySerializable(EntryReadEvent evt) throws IOException {
         this.id = evt.getRequestId();
         this.date = evt.getDate();
-        this.classType = evt.getEntry().getClass();
+        this.classType = evt.getEntry().getClass().getName();
         
-        this.entryValue = mapper.writeValueAsString(evt.getEntry());
+        this.entryValue = JacksonUtils.createMapper().writeValueAsString(evt.getEntry());
     }
 
     public Long getRowNum() {
@@ -63,11 +61,11 @@ public class IOEntrySerializable {
         this.rowNum = rowNum;
     }
 
-    public Class getClassType() {
+    public String getClassType() {
         return classType;
     }
 
-    public void setClassType(Class classType) {
+    public void setClassType(String classType) {
         this.classType = classType;
     }
 
@@ -96,6 +94,6 @@ public class IOEntrySerializable {
     }
     
     public Entry toEntry() throws IOException {
-        return (Entry) mapper.readValue(entryValue, classType);
+        return PirasoEntryLoaderRegistry.INSTANCE.loadEntry(classType, entryValue);
     }
 }

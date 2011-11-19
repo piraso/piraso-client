@@ -18,10 +18,14 @@
 
 package ard.piraso.ui.base;
 
+import ard.piraso.api.io.PirasoEntryLoaderRegistry;
+import ard.piraso.ui.api.PirasoEntryLoaderProvider;
 import ard.piraso.ui.base.manager.IdleTimeout1Manager;
 import org.openide.modules.ModuleInstall;
+import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -32,6 +36,13 @@ public class Installer extends ModuleInstall {
     public void restored() {
         LOG.info("Module Started.");
         IdleTimeout1Manager.INSTANCE.start();
+
+        // register all piraso entry loader
+        Collection<? extends PirasoEntryLoaderProvider> providers = Lookup.getDefault().lookupAll(PirasoEntryLoaderProvider.class);
+        for(PirasoEntryLoaderProvider provider : providers) {
+            LOG.info("Added loader by: " + provider.getClass().getName());
+            PirasoEntryLoaderRegistry.INSTANCE.addEntryLoader(provider.getLoader());
+        }
     }
 
     @Override

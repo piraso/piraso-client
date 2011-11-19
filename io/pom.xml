@@ -57,10 +57,5 @@
           <artifactId>slf4j-api</artifactId>
           <version>1.6.4</version>
         </dependency>
-        <dependency>
-            <groupId>ard.piraso</groupId>
-            <artifactId>context-logger-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>

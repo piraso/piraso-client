@@ -75,6 +75,11 @@
             <artifactId>SQLinForm</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>ard.piraso</groupId>
+            <artifactId>sql-context-logger-api</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -85,7 +90,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publicPackages>
-                        <publicPackage>ard.piraso.ui.sql</publicPackage>
+                        <publicPackage>ard.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

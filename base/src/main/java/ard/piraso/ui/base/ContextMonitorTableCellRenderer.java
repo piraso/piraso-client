@@ -20,10 +20,7 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MethodCallEntry;
-import ard.piraso.api.entry.RequestEntry;
-import ard.piraso.api.entry.ResponseEntry;
-import ard.piraso.api.sql.SQLDataViewEntry;
-import ard.piraso.api.sql.SQLPreferenceEnum;
+import ard.piraso.ui.base.manager.EntryRowRenderingProviderManager;
 import ard.piraso.ui.base.model.IOEntryTableModel;
 
 import javax.swing.*;
@@ -72,24 +69,8 @@ public class ContextMonitorTableCellRenderer extends JLabel implements TableCell
             setHorizontalAlignment(LEFT);
         }
 
-        if (RequestEntry.class.isInstance(entry) || ResponseEntry.class.isInstance(entry)) {
-            setBackground(new Color(255, 180, 66));
-            setFont(getFont().deriveFont(Font.BOLD));
-        } else if (SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName().equals(entry.getLevel())) {
-            setForeground(Color.BLUE);
-            setFont(getFont().deriveFont(Font.BOLD));
-        } else if (SQLPreferenceEnum.VIEW_SQL_ENABLED.getPropertyName().equals(entry.getLevel())) {
-            setBackground(new Color(189, 230, 170));
-            setFont(getFont().deriveFont(Font.BOLD));
-//        } else if (wrapper.key.getType() == LogEntryEnum.SQL_EXPLAIN_PLAN) {
-//            setBackground(new Color(176,197,227));
-        } else if (SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName().equals(entry.getLevel())) {
-            setBackground(new Color(224, 232, 241));
-
-            if (SQLDataViewEntry.class.isInstance(entry)) {
-                setFont(getFont().deriveFont(Font.BOLD));
-            }
-        }
+        // start rendering table cell.
+        EntryRowRenderingProviderManager.INSTANCE.render(this, entry);
 
         if (isSelected) {
             setBackground(table.getSelectionBackground());
