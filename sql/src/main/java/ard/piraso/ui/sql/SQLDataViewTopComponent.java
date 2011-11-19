@@ -22,6 +22,7 @@ import ard.piraso.api.sql.SQLDataViewEntry;
 import ard.piraso.api.sql.SQLParameterUtils;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.util.ClipboardUtils;
+import ard.piraso.ui.api.util.JTableUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.ErrorManager;
@@ -105,6 +106,7 @@ public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent
             jTable1.setModel(table1Model);
 
             initTables();
+            JTableUtils.scrollToFirstRow(jTable1, jTable2);
         }
     }
 

@@ -21,6 +21,7 @@ package ard.piraso.ui.base.model;
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.ui.api.util.JTableUtils;
 import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.io.IOEntry;
@@ -74,7 +75,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
 
     public void autoScrollTable(int rowNum) {
         if(owningTable != null) {
-            owningTable.scrollRectToVisible(owningTable.getCellRect(rowNum, 1, true));
+            JTableUtils.scrollTo(owningTable, rowNum);
         }
     }
 

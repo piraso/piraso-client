@@ -25,6 +25,7 @@ import ard.piraso.api.sql.SQLViewEntry;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.extension.AlignableTableCellRendererImpl;
 import ard.piraso.ui.api.util.ClipboardUtils;
+import ard.piraso.ui.api.util.JTableUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
@@ -123,7 +124,8 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
             tableModel.setRowCount(0);
             txtSQL.setText("");            
         }
-        
+
+        JTableUtils.scrollToFirstRow(table);
         txtSQL.setEditable(false);
         txtSQL.select(0, 0);        
     }

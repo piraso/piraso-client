@@ -72,5 +72,4 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
     public String getShortName(String name) {
         return getMessage(name + ".short");
     }
-    
 }
