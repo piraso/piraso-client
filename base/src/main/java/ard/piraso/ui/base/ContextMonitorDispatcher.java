@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ard.piraso.ui.base;
 
 import ard.piraso.ui.base.model.NewContextMonitorModel;
@@ -44,6 +45,6 @@ public final class ContextMonitorDispatcher {
         ContextMonitorTopComponent editor = new ContextMonitorTopComponent(reader);
         
         editor.open();
-        editor.requestActive();            
+        editor.requestActive();
     }
 }

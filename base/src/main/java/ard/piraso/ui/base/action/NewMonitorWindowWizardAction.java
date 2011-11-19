@@ -62,7 +62,7 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
         
         wizardDescriptor.putProperty(Constants.MODEL, model);
         
-        Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);                
+        Dialog dialog = DialogDisplayer.getDefault().createDialog(wizardDescriptor);
         dialog.setVisible(true);
         dialog.toFront();
         boolean cancelled = wizardDescriptor.getValue() != WizardDescriptor.FINISH_OPTION;
@@ -75,6 +75,8 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
     /**
      * Initialize panels representing individual wizard's steps and sets
      * various properties for them influencing wizard appearance.
+     *
+     * @return the panels
      */
     private WizardDescriptor.Panel[] getPanels() {
         if (panels == null) {
@@ -94,8 +96,7 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
                 if (c instanceof JComponent) { // assume Swing components
                     JComponent jc = (JComponent) c;
                     // Sets step number of a component
-                    // TODO if using org.openide.dialogs >= 7.8, can use WizardDescriptor.PROP_*:
-                    jc.putClientProperty("WizardPanel_contentSelectedIndex", new Integer(i));
+                    jc.putClientProperty("WizardPanel_contentSelectedIndex", i);
                     // Sets steps names for a panel
                     jc.putClientProperty("WizardPanel_contentData", steps);
                     // Turn on subtitle creation on each step
