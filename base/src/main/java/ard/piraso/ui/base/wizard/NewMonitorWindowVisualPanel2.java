@@ -21,6 +21,7 @@ package ard.piraso.ui.base.wizard;
 import ard.piraso.api.Preferences;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
+import ard.piraso.ui.api.extension.WizardVisualPanel;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.base.model.NewContextMonitorModel;
 import com.jgoodies.forms.layout.CellConstraints;

@@ -19,8 +19,8 @@
 package ard.piraso.ui.base.model;
 
 import ard.piraso.api.Preferences;
+import ard.piraso.ui.api.extension.WizardModel;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
-import ard.piraso.ui.base.wizard.WizardModel;
 
 /**
  *

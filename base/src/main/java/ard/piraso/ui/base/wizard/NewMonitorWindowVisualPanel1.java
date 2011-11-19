@@ -18,6 +18,7 @@
 
 package ard.piraso.ui.base.wizard;
 
+import ard.piraso.ui.api.extension.WizardVisualPanel;
 import ard.piraso.ui.base.model.NewContextMonitorModel;
 import org.apache.commons.lang.StringUtils;
 import org.openide.util.NbBundle;

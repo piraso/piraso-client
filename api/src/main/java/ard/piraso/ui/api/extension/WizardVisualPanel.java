@@ -20,7 +20,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package ard.piraso.ui.base.wizard;
+package ard.piraso.ui.api.extension;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;

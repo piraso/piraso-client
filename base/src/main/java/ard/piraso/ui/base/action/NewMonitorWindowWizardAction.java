@@ -18,8 +18,8 @@
 
 package ard.piraso.ui.base.action;
 
+import ard.piraso.ui.api.extension.Constants;
 import ard.piraso.ui.base.ContextMonitorDispatcher;
-import ard.piraso.ui.base.model.Constants;
 import ard.piraso.ui.base.model.NewContextMonitorModel;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel1;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel2;

@@ -18,6 +18,7 @@
 
 package ard.piraso.ui.base.wizard;
 
+import ard.piraso.ui.api.extension.AbstractWizardPanel;
 import ard.piraso.ui.base.model.NewContextMonitorModel;
 
 

@@ -16,9 +16,8 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base.wizard;
+package ard.piraso.ui.api.extension;
 
-import ard.piraso.ui.base.model.Constants;
 import org.openide.WizardDescriptor;
 import org.openide.util.HelpCtx;
 
