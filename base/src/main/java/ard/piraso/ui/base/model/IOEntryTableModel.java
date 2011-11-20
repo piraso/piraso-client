@@ -217,7 +217,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
 
             switch(columnIndex) {
                 case 0: return ioEntry.getRowNum();
-                case 1: return PreferenceProviderManager.INSTANCE.getShortName(entry.getLevel());
+                case 1: return PreferenceProviderManager.INSTANCE.getShortName(entry);
                 case 2: return getGroup(entry) + getMessage(entry);
                 case 3: return getElapsePrettyPrint(entry);
             }

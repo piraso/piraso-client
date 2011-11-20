@@ -48,17 +48,22 @@
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>piraso-client-branding</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${piraso.client.branding.version}</version>
         </dependency>
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>piraso-client-base</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${piraso.client.base.version}</version>
         </dependency>
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>piraso-client-sql</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${piraso.client.sql.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ard.piraso</groupId>
+            <artifactId>piraso-client-log4j</artifactId>
+            <version>${piraso.client.log4j.version}</version>
         </dependency>
     </dependencies>
 

@@ -18,7 +18,7 @@
 
 package ard.piraso.ui.base;
 
-import ard.piraso.ui.base.model.NewContextMonitorModel;
+import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.io.IOEntryReader;
 import ard.piraso.ui.io.IOEntrySource;
 import ard.piraso.ui.io.impl.FileEntrySource;

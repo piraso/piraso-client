@@ -18,9 +18,10 @@
 
 package ard.piraso.ui.base.action;
 
+import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.extension.Constants;
 import ard.piraso.ui.base.ContextMonitorDispatcher;
-import ard.piraso.ui.base.model.NewContextMonitorModel;
+import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel1;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel2;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel3;
@@ -57,7 +58,8 @@ public final class NewMonitorWindowWizardAction implements ActionListener {
         wizardDescriptor.setTitleFormat(new MessageFormat("{0}"));
         wizardDescriptor.setTitle("New Context Monitor");        
         
-        NewContextMonitorModel model = new NewContextMonitorModel(true);
+        NewContextMonitorModel model = new NewContextMonitorModel();
+        model.setPreferences(PreferenceProviderManager.INSTANCE.createPreferences());
         model.setLoggingUrl("http://127.0.0.1:8080/piraso/logging");
         
         wizardDescriptor.putProperty(Constants.MODEL, model);

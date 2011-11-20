@@ -16,21 +16,30 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.api;
+package ard.piraso.ui.log4j.provider;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.log4j.Log4jEntry;
+import ard.piraso.ui.api.MessageProvider;
+import org.openide.util.lookup.ServiceProvider;
 
 /**
- *
- * @author adleon
+ * Provide log4J message provider.
  */
-public interface PreferenceProperty {
-    
-    public String getName();
+@ServiceProvider(service=MessageProvider.class)
+public class Log4jMessageProviderImpl implements MessageProvider {
+    @Override
+    public boolean isSupported(Entry entry) {
+        return Log4jEntry.class.isInstance(entry);
+    }
 
-    public Class getType();
+    @Override
+    public String toMessage(Entry entry) {
+        Log4jEntry log4j = (Log4jEntry) entry;
 
-    public boolean isDefaultValue();
+        StringBuilder buf = new StringBuilder();
+        buf.append(log4j.getMessage());
 
-    public boolean isApplicable(Entry entry);
+        return buf.toString();
+    }
 }

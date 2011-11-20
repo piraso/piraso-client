@@ -18,6 +18,8 @@
 
 package ard.piraso.ui.api;
 
+import ard.piraso.api.entry.Entry;
+
 import java.util.List;
 
 /**
@@ -34,5 +36,5 @@ public interface PreferenceProvider {
     
     public String getMessage(String name, Object[] args);
 
-    public String getShortName(String name);
+    public String getShortName(Entry entry, PreferenceProperty property);
 }

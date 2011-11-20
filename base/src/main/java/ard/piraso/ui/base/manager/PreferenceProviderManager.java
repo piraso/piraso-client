@@ -19,6 +19,7 @@
 package ard.piraso.ui.base.manager;
 
 import ard.piraso.api.Preferences;
+import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
 import ard.piraso.ui.base.provider.GeneralPreferenceProviderImpl;
@@ -34,8 +35,6 @@ public final class PreferenceProviderManager {
     public static final PreferenceProviderManager INSTANCE = new PreferenceProviderManager();
 
     private List<PreferenceProvider> providerCache;
-
-    private Map<String, PreferenceProvider> nameMapCache;
 
     private PreferenceProviderManager() {
     }
@@ -62,27 +61,16 @@ public final class PreferenceProviderManager {
         return providerCache;
     }
 
-    private void initNameMapCache() {
-        if(nameMapCache != null) return;
-
-        nameMapCache = new HashMap<String, PreferenceProvider>();
+    public String getShortName(Entry entry) {
         for(PreferenceProvider provider : getProviders()) {
             for(PreferenceProperty property : provider.getPreferences()) {
-                nameMapCache.put(property.getName(), provider);
+                if(property.isApplicable(entry)) {
+                    return provider.getShortName(entry, property);
+                }
             }
         }
-    }
 
-    public String getShortName(String preference) {
-        initNameMapCache();
-
-        PreferenceProvider provider = nameMapCache.get(preference);
-
-        if(provider == null) {
-            return preference;
-        }
-
-        return provider.getShortName(preference);
+        return null;
     }
     
     public Preferences createPreferences() {

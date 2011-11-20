@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.0//EN" "http://www.netbeans.org/dtds/filesystem-1_0.dtd">
+
 <!--
   ~ Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
   ~
@@ -17,7 +20,12 @@
   ~ limitations under the License.
   -->
 
-<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.0//EN" "http://www.netbeans.org/dtds/filesystem-1_0.dtd">
 <filesystem>
- 
+    <folder name="context-monitor">
+        <file name="profile">
+            <attr name="sql.performance" stringvalue="{&quot;preferences&quot;:{&quot;booleanProperties&quot;:{&quot;sql.view.enabled&quot;:true,&quot;sql.prepared.statement.enabled&quot;:true,&quot;sql.connection.enabled&quot;:true,&quot;general.scoped.enabled&quot;:true},&quot;integerProperties&quot;:null,&quot;urlPatterns&quot;:null},&quot;watchedAddr&quot;:null,&quot;loggingUrl&quot;:&quot;http://127.0.0.1/piraso/logging&quot;,&quot;desc&quot;:&quot;Profile for checking SQL Queries performance.&quot;}"/>
+            <attr name="sql.data" stringvalue="{&quot;preferences&quot;:{&quot;booleanProperties&quot;:{&quot;sql.view.enabled&quot;:true,&quot;sql.prepared.statement.enabled&quot;:true,&quot;sql.connection.enabled&quot;:true,&quot;general.scoped.enabled&quot;:true,&quot;sql.resultset.enabled&quot;:true},&quot;integerProperties&quot;:null,&quot;urlPatterns&quot;:null},&quot;watchedAddr&quot;:null,&quot;loggingUrl&quot;:&quot;http://127.0.0.1/piraso/logging&quot;,&quot;desc&quot;:&quot;Profile for checking SQL Queries and retrieved Data.&quot;}"/>
+            <attr name="sql.debug" stringvalue="{&quot;preferences&quot;:{&quot;booleanProperties&quot;:{&quot;sql.view.enabled&quot;:true,&quot;sql.connection.method.call.enabled&quot;:true,&quot;sql.prepared.statement.enabled&quot;:true,&quot;sql.connection.enabled&quot;:true,&quot;general.stack.trace.enabled&quot;:true,&quot;general.scoped.enabled&quot;:true,&quot;sql.resultset.enabled&quot;:true,&quot;sql.prepared.statement.method.call.enabled&quot;:true},&quot;integerProperties&quot;:null,&quot;urlPatterns&quot;:null},&quot;watchedAddr&quot;:null,&quot;loggingUrl&quot;:&quot;http://127.0.0.1/piraso/logging&quot;,&quot;desc&quot;:&quot;Profile for checking and debugging JDBC calls.&quot;}"/>
+        </file>
+    </folder>
 </filesystem>

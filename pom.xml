@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   ~ Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
   ~
@@ -16,9 +17,9 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  
+<project xmlns="http://maven.apache.org/POM/4.0.0" 
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -90,24 +91,39 @@
     </distributionManagement>
 
     <properties>
-        <junit.version>4.8.1</junit.version>
+        <brandingToken>piraso_client</brandingToken>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        
+        <opencsv.version>2.0</opencsv.version>
+        <junit.version>4.8.1</junit.version>
+        <mokito.version>1.8.4</mokito.version>
+        <junit.dep.version>4.5</junit.dep.version>
         <netbeans.version>RELEASE701</netbeans.version>
-        <brandingToken>piraso_client</brandingToken>
+
+        <piraso.client.branding.version>1.0-SNAPSHOT</piraso.client.branding.version>
+        <piraso.client.base.version>1.0-SNAPSHOT</piraso.client.base.version>
+        <piraso.client.sql.version>1.0-SNAPSHOT</piraso.client.sql.version>
+        <piraso.client.log4j.version>1.0-SNAPSHOT</piraso.client.log4j.version>
+        <piraso.clieant.api.version>1.0-SNAPSHOT</piraso.clieant.api.version>
+        
+        <context.logger.api.version>1.0-SNAPSHOT</context.logger.api.version>
+        <context.logger.api.version>1.0-SNAPSHOT</context.logger.api.version>
+        <context.logger.api.test.version>1.0-SNAPSHOT</context.logger.api.test.version>
+        <log4j.context.logger.api.version>1.0-SNAPSHOT</log4j.context.logger.api.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-            <version>1.8.4</version>
+            <version>${mokito.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit-dep</artifactId>
-            <version>4.5</version>
+            <version>${junit.dep.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -119,12 +135,19 @@
         <dependency>
             <groupId>net.sf.opencsv</groupId>
             <artifactId>opencsv</artifactId>
-            <version>2.0</version>
+            <version>${opencsv.version}</version>
         </dependency>
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>context-logger-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${context.logger.api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ard.piraso</groupId>
+            <artifactId>context-logger-api</artifactId>
+            <version>${context.logger.api.test.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -178,5 +201,6 @@
         <module>api</module>
         <module>sql</module>
         <module>base</module>
-  </modules>
+        <module>log4j</module>
+   </modules>
 </project>

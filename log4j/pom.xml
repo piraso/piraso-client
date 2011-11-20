@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <!--
   ~ Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
   ~
@@ -18,7 +19,7 @@
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -42,38 +43,23 @@
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-util-lookup</artifactId>
-            <version>${netbeans.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util</artifactId>
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-windows</artifactId>
-            <version>${netbeans.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-openide-awt</artifactId>
-            <version>${netbeans.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.netbeans.api</groupId>
-            <artifactId>org-netbeans-modules-settings</artifactId>
+            <artifactId>org-openide-filesystems</artifactId>
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>piraso-client-api</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${piraso.clieant.api.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.sqlinform</groupId>
-            <artifactId>SQLinForm</artifactId>
-            <version>1.0</version>
+            <groupId>ard.piraso</groupId>
+            <artifactId>log4j-context-logger-api</artifactId>
+            <version>${log4j.context.logger.api.version}</version>
         </dependency>
     </dependencies>
 
@@ -83,11 +69,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
-                <configuration>
-                    <publicPackages>
-                        <publicPackage>ard.piraso.ui.log4j</publicPackage>
-                    </publicPackages>
-                </configuration>
             </plugin>
 
             <plugin>

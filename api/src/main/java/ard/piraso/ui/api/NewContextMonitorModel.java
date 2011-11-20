@@ -16,11 +16,12 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base.model;
+package ard.piraso.ui.api;
 
 import ard.piraso.api.Preferences;
 import ard.piraso.ui.api.extension.WizardModel;
-import ard.piraso.ui.base.manager.PreferenceProviderManager;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  *
@@ -32,15 +33,15 @@ public class NewContextMonitorModel implements WizardModel {
     private String watchedAddr;
     
     private String loggingUrl;
-    
-    public NewContextMonitorModel() {
-        this(false);
+
+    private String desc;
+
+    public String getDesc() {
+        return desc;
     }
-    
-    public NewContextMonitorModel(boolean defaultValues) {
-        if(defaultValues) {
-            preferences = PreferenceProviderManager.INSTANCE.createPreferences();
-        }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
     public String getLoggingUrl() {
@@ -65,5 +66,15 @@ public class NewContextMonitorModel implements WizardModel {
 
     public void setWatchedAddr(String watchedAddr) {
         this.watchedAddr = watchedAddr;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return EqualsBuilder.reflectionEquals(this, o);
+    }
+
+    @Override
+    public int hashCode() {
+        return HashCodeBuilder.reflectionHashCode(this);
     }
 }

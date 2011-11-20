@@ -18,7 +18,9 @@
 
 package ard.piraso.ui.sql.provider;
 
+import ard.piraso.api.entry.Entry;
 import ard.piraso.api.sql.SQLPreferenceEnum;
+import ard.piraso.ui.api.PPFactory;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
 import org.openide.util.NbBundle;
@@ -41,10 +43,10 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
         for(SQLPreferenceEnum flag : SQLPreferenceEnum.values()) {
             PreferenceProperty property;
             if(flag.isLevel()) {
-                property = new PreferenceProperty(flag.getPropertyName(), Boolean.class, 
+                property = PPFactory.createNC(flag.getPropertyName(), Boolean.class,
                         SQLPreferenceEnum.CONNECTION_ENABLED == flag || SQLPreferenceEnum.PREPARED_STATEMENT_ENABLED == flag);                
             } else {
-                property = new PreferenceProperty(flag.getPropertyName(), Integer.class);
+                property = PPFactory.createNC(flag.getPropertyName(), Integer.class);
             }
             
             properties.add(property);
@@ -59,6 +61,11 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
     }
 
     @Override
+    public String getShortName(Entry entry, PreferenceProperty property) {
+        return getMessage(entry.getLevel() + ".short");
+    }
+
+    @Override
     public String getName() {
         return getMessage("sql.name");
     }
@@ -66,10 +73,5 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
     @Override
     public String getMessage(String name) {
         return getMessage(name, null);
-    }
-
-    @Override
-    public String getShortName(String name) {
-        return getMessage(name + ".short");
     }
 }

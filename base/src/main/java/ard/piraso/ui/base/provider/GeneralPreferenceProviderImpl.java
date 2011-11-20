@@ -19,6 +19,8 @@
 package ard.piraso.ui.base.provider;
 
 import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.api.entry.Entry;
+import ard.piraso.ui.api.PPFactory;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
 import org.openide.util.NbBundle;
@@ -34,8 +36,8 @@ public class GeneralPreferenceProviderImpl implements PreferenceProvider {
     public List<PreferenceProperty> getPreferences() {
         List<PreferenceProperty> preferences = new ArrayList<PreferenceProperty>(2);
         
-        preferences.add(new PreferenceProperty(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), Boolean.class));
-        preferences.add(new PreferenceProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), Boolean.class, true));
+        preferences.add(PPFactory.createNC(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), Boolean.class));
+        preferences.add(PPFactory.createNC(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), Boolean.class, true));
         
         return preferences;
     }
@@ -46,8 +48,8 @@ public class GeneralPreferenceProviderImpl implements PreferenceProvider {
     }
 
     @Override
-    public String getShortName(String name) {
-        return getMessage(name + ".short");
+    public String getShortName(Entry entry, PreferenceProperty property) {
+        return getMessage(entry.getLevel() + ".short");
     }
 
     @Override
