@@ -3,6 +3,7 @@ package ard.piraso.ui.log4j.provider;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.log4j.Log4jEntry;
 import ard.piraso.api.log4j.Log4jPreferenceEnum;
+import ard.piraso.ui.api.NCPreferenceProperty;
 import ard.piraso.ui.api.PPFactory;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
@@ -22,26 +23,50 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
     private Map<String, String> mapping;
 
     @Override
+    public Integer getOrder() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public String getName() {
         return getMessage("log4j.name");
     }
 
     @Override
-    public List<PreferenceProperty> getPreferences() {
+    public List<? extends PreferenceProperty> getPreferences() {
         FileObject log4jFolder = FileUtil.getConfigRoot().getFileObject("log4j");
         FileObject preferences = log4jFolder.getFileObject("preferences");
         
         mapping = new HashMap<String, String>();
         List<PreferenceProperty> result = new LinkedList<PreferenceProperty>();
 
-        result.add(PPFactory.createEntry(Log4jEntry.class, Log4jPreferenceEnum.LOG4J_ENABLED.getPropertyName(), Boolean.class));
+        PreferenceProperty log4jEnabled = PPFactory.createEntry(Log4jEntry.class, Log4jPreferenceEnum.LOG4J_ENABLED.getPropertyName(), Boolean.class);
+        result.add(log4jEnabled);
 
         Enumeration<String> attributes = preferences.getAttributes();
         while(attributes.hasMoreElements()) {
             String regex = attributes.nextElement();
             
-            mapping.put("log4j." + regex, String.valueOf(preferences.getAttribute(regex)));
-            result.add(PPFactory.createEntry(Log4jEntry.class, "log4j." + regex, Boolean.class));
+            mapping.put("log4j." + regex, String.valueOf(preferences.getAttribute(regex)) + " (All Levels)");
+            NCPreferenceProperty pp = PPFactory.createEntry(Log4jEntry.class, "log4j." + regex, Boolean.class);
+            pp.setParent(true);
+            pp.addDependents(log4jEnabled);
+            result.add(pp);
+
+            List<NCPreferenceProperty> levels = new ArrayList<NCPreferenceProperty>(6);
+            for(String level : new String[] {"fatal", "error", "warn", "info", "debug", "trace"}) {
+                mapping.put("log4j." + regex + "." + level.toUpperCase(), getMessage("log4j." + level));
+
+                NCPreferenceProperty pplevel = PPFactory.createEntry(Log4jEntry.class, "log4j." + regex + "." + level.toUpperCase(), Boolean.class);
+                pplevel.addDependents(log4jEnabled);
+                pplevel.setChild(true);
+                pplevel.addDependents(levels.toArray(new NCPreferenceProperty[levels.size()]));
+
+                levels.add(pplevel);
+                pp.addDependents(pplevel);
+
+                result.add(pplevel);
+            }
         }
         
         return result;
@@ -52,7 +77,7 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
         if(mapping.containsKey(name)) {
             return mapping.get(name);
         } else {
-            return name;
+            return getMessage(name, null);
         }
     }
 

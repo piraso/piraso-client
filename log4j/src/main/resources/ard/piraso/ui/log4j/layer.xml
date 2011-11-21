@@ -23,12 +23,9 @@
 <filesystem>
     <folder name="log4j">
         <file name="preferences">
-            <attr name="ard.*" stringvalue="Logger that starts with 'ard'."/>
-            <attr name="ipi.*" stringvalue="Logger that starts with 'ipi'."/>
-            <attr name="piraso.*" stringvalue="Logger that starts with 'piraso'."/>
-            <attr name="com.*" stringvalue="Logger that starts with 'com'."/>
-            <attr name="org.*" stringvalue="Logger that starts with 'org'."/>
-            <attr name="org\\.springframework.*" stringvalue="Logger that starts with 'org.springframework'."/>
+            <attr name="com.*" stringvalue="'com.*' Logger"/>
+            <attr name="org.*" stringvalue="'org.*' Logger"/>
+            <attr name="org\\.springframework.*" stringvalue="'org.springframework.*' Logger"/>
         </file>
     </folder>
 </filesystem>

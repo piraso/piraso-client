@@ -43,7 +43,7 @@
             <Property name="opaque" type="boolean" value="false"/>
           </Properties>
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="protected JCheckBox[] chkPreferences;&#xa;protected String[] preferenceKeys;"/>
+            <AuxValue name="JavaCodeGenerator_DeclarationPost" type="java.lang.String" value="protected JCheckBox[] chkPreferences;&#xa;protected PreferenceProperty[] preferenceKeys;"/>
             <AuxValue name="JavaCodeGenerator_LayoutCodePre" type="java.lang.String" value="pnlPreferences.setLayout(createLayout());"/>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="4"/>
           </AuxValues>

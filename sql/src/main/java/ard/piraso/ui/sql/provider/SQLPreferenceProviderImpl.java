@@ -20,13 +20,13 @@ package ard.piraso.ui.sql.provider;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.sql.SQLPreferenceEnum;
-import ard.piraso.ui.api.PPFactory;
+import ard.piraso.ui.api.NCPreferenceProperty;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,22 +37,23 @@ import java.util.List;
 public class SQLPreferenceProviderImpl implements PreferenceProvider {
 
     @Override
-    public List<PreferenceProperty> getPreferences() {
-        List<PreferenceProperty> properties = new ArrayList<PreferenceProperty>(SQLPreferenceEnum.values().length);
-        
-        for(SQLPreferenceEnum flag : SQLPreferenceEnum.values()) {
-            PreferenceProperty property;
-            if(flag.isLevel()) {
-                property = PPFactory.createNC(flag.getPropertyName(), Boolean.class,
-                        SQLPreferenceEnum.CONNECTION_ENABLED == flag || SQLPreferenceEnum.PREPARED_STATEMENT_ENABLED == flag);                
-            } else {
-                property = PPFactory.createNC(flag.getPropertyName(), Integer.class);
-            }
-            
-            properties.add(property);
-        }
-        
-        return properties;
+    public List<? extends PreferenceProperty> getPreferences() {
+        NCPreferenceProperty conn = new NCPreferenceProperty(SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName(), Boolean.class, true);
+        NCPreferenceProperty connMC = new NCPreferenceProperty(SQLPreferenceEnum.CONNECTION_METHOD_CALL_ENABLED.getPropertyName(), Boolean.class);
+        NCPreferenceProperty prepared = new NCPreferenceProperty(SQLPreferenceEnum.PREPARED_STATEMENT_ENABLED.getPropertyName(), Boolean.class, true);
+        NCPreferenceProperty viewSQL = new NCPreferenceProperty(SQLPreferenceEnum.VIEW_SQL_ENABLED.getPropertyName(), Boolean.class);
+        NCPreferenceProperty preparedMC = new NCPreferenceProperty(SQLPreferenceEnum.PREPARED_STATEMENT_METHOD_CALL_ENABLED.getPropertyName(), Boolean.class);
+        NCPreferenceProperty resultSet = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName(), Boolean.class);
+        NCPreferenceProperty resultSetMC = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED.getPropertyName(), Boolean.class);
+
+        connMC.addDependents(conn);
+        prepared.addDependents(conn);
+        viewSQL.addDependents(conn, prepared);
+        preparedMC.addDependents(conn, prepared);
+        resultSet.addDependents(conn, prepared);
+        resultSetMC.addDependents(resultSet, prepared, conn);
+
+        return Arrays.asList(conn, connMC, prepared, viewSQL, preparedMC, resultSet, resultSetMC);
     }
 
     @Override
@@ -63,6 +64,11 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
     @Override
     public String getShortName(Entry entry, PreferenceProperty property) {
         return getMessage(entry.getLevel() + ".short");
+    }
+
+    @Override
+    public Integer getOrder() {
+        return 2;
     }
 
     @Override

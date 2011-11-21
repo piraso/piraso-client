@@ -33,7 +33,7 @@ import java.util.List;
 public class GeneralPreferenceProviderImpl implements PreferenceProvider {
 
     @Override
-    public List<PreferenceProperty> getPreferences() {
+    public List<? extends PreferenceProperty> getPreferences() {
         List<PreferenceProperty> preferences = new ArrayList<PreferenceProperty>(2);
         
         preferences.add(PPFactory.createNC(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), Boolean.class));
@@ -50,6 +50,11 @@ public class GeneralPreferenceProviderImpl implements PreferenceProvider {
     @Override
     public String getShortName(Entry entry, PreferenceProperty property) {
         return getMessage(entry.getLevel() + ".short");
+    }
+
+    @Override
+    public Integer getOrder() {
+        return 0;
     }
 
     @Override

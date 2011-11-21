@@ -27,10 +27,12 @@ import java.util.List;
  * @author adleon
  */
 public interface PreferenceProvider {
-    
+
+    public Integer getOrder();
+
     public String getName();
     
-    public List<PreferenceProperty> getPreferences();
+    public List<? extends PreferenceProperty> getPreferences();
     
     public String getMessage(String name);
     

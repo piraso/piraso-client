@@ -20,6 +20,8 @@ package ard.piraso.ui.api;
 
 import ard.piraso.api.entry.Entry;
 
+import java.util.List;
+
 /**
  *
  * @author adleon
@@ -33,4 +35,10 @@ public interface PreferenceProperty {
     public boolean isDefaultValue();
 
     public boolean isApplicable(Entry entry);
+
+    public boolean isParent();
+
+    public boolean isChild();
+
+    public List<PreferenceProperty> getDependents();
 }

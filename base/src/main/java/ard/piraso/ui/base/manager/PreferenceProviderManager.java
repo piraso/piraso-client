@@ -22,7 +22,6 @@ import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
-import ard.piraso.ui.base.provider.GeneralPreferenceProviderImpl;
 import org.openide.util.Lookup;
 
 import java.util.*;
@@ -50,11 +49,7 @@ public final class PreferenceProviderManager {
         Collections.sort(providerCache, new Comparator<PreferenceProvider>() {
             @Override
             public int compare(PreferenceProvider t, PreferenceProvider t1) {
-                if (GeneralPreferenceProviderImpl.class.isInstance(t)) {
-                    return -1;
-                } else {
-                    return 1;
-                }
+                return t.getOrder().compareTo(t1.getOrder());
             }
         });
 
