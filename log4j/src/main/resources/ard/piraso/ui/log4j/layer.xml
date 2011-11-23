@@ -25,6 +25,10 @@
         <file name="preferences">
             <attr name="com.*" stringvalue="'com.*' Logger"/>
             <attr name="org.*" stringvalue="'org.*' Logger"/>
+            <attr name="permLead.*" stringvalue="'permLead' Logger"/>
+            <attr name="action.*" stringvalue="'action' Logger"/>
+            <attr name="adsense.*" stringvalue="'adsense' Logger"/>
+            <attr name="adsenseAction.*" stringvalue="'adsenseAction' Logger"/>
             <attr name="org\\.springframework.*" stringvalue="'org.springframework.*' Logger"/>
         </file>
     </folder>

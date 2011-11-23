@@ -39,6 +39,7 @@ public class ProfileTest extends AbstractJacksonTest {
 
         assertEquals(expected, actual);
 
+        System.out.println("JSON: " + str);
         System.out.println("REPLACE: " + str.replaceAll("\"", "&quot;"));
     }
 }

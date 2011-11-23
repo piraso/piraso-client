@@ -54,7 +54,7 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
             result.add(pp);
 
             List<NCPreferenceProperty> levels = new ArrayList<NCPreferenceProperty>(6);
-            for(String level : new String[] {"fatal", "error", "warn", "info", "debug", "trace"}) {
+            for(String level : new String[] {"fatal", "error", "warn", "info", "debug", "trace", "all"}) {
                 mapping.put("log4j." + regex + "." + level.toUpperCase(), getMessage("log4j." + level));
 
                 NCPreferenceProperty pplevel = PPFactory.createEntry(Log4jEntry.class, "log4j." + regex + "." + level.toUpperCase(), Boolean.class);
