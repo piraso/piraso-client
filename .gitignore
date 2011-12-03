@@ -3,3 +3,5 @@ target
 *.iws
 *.ipr
 .DS_Store
+.idea
+.piraso
