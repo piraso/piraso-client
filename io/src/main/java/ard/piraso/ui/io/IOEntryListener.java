@@ -22,5 +22,5 @@ package ard.piraso.ui.io;
  *
  * @author adleon
  */
-public interface IOEntryListener extends IOEntryReceivedListener, IOEntryLifeCycleListener {
+public interface IOEntryListener extends IOEntryReceivedListener, IOEntryLifecycleListener {
 }

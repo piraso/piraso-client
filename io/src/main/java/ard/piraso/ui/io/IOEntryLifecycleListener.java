@@ -23,7 +23,7 @@ import java.util.EventListener;
 /**
  * Defines an interface for {@link IOEntry} life cycle listener.
  */
-public interface IOEntryLifeCycleListener extends EventListener {
+public interface IOEntryLifecycleListener extends EventListener {
 
     public void started(IOEntryEvent evt);
 

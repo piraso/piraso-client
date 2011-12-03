@@ -22,7 +22,7 @@ import ard.piraso.ui.base.cookie.IOEntryReaderStopCookie;
 import ard.piraso.ui.base.cookie.StartCookie;
 import ard.piraso.ui.base.cookie.StopCookie;
 import ard.piraso.ui.io.IOEntryEvent;
-import ard.piraso.ui.io.IOEntryLifeCycleListener;
+import ard.piraso.ui.io.IOEntryLifecycleListener;
 import ard.piraso.ui.io.IOEntryReader;
 import org.openide.util.lookup.InstanceContent;
 
@@ -51,7 +51,7 @@ public class IOEntryReaderActionProvider {
     }
     
     private void initEvents() {
-        reader.addLiveCycleListener(new IOEntryLifeCycleListener() {
+        reader.addLiveCycleListener(new IOEntryLifecycleListener() {
             @Override
             public void started(IOEntryEvent evt) {
                 content.remove(startCookie);

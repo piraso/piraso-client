@@ -107,20 +107,20 @@ public class IOEntryReader implements EntryReadListener {
     }
     
     public void fireStartedEvent(IOEntryEvent evt) {
-        for(IOEntryLifeCycleListener listener : Arrays.asList(listeners.getListeners(IOEntryLifeCycleListener.class))) {
+        for(IOEntryLifecycleListener listener : Arrays.asList(listeners.getListeners(IOEntryLifecycleListener.class))) {
             listener.started(evt);
         }
-        for(IOEntryLifeCycleListener listener : Arrays.asList(listeners.getListeners(IOEntryListener.class))) {
+        for(IOEntryLifecycleListener listener : Arrays.asList(listeners.getListeners(IOEntryListener.class))) {
             listener.started(evt);
         }
     }
 
     public void fireStoppedEvent(IOEntryEvent evt) {
-        for(IOEntryLifeCycleListener listener : Arrays.asList(listeners.getListeners(IOEntryLifeCycleListener.class))) {
+        for(IOEntryLifecycleListener listener : Arrays.asList(listeners.getListeners(IOEntryLifecycleListener.class))) {
             listener.stopped(evt);
         }
 
-        for(IOEntryLifeCycleListener listener : Arrays.asList(listeners.getListeners(IOEntryListener.class))) {
+        for(IOEntryLifecycleListener listener : Arrays.asList(listeners.getListeners(IOEntryListener.class))) {
             listener.stopped(evt);
         }
     }
@@ -139,8 +139,8 @@ public class IOEntryReader implements EntryReadListener {
         listeners.add(IOEntryListener.class, listener);
     }
 
-    public void addLiveCycleListener(IOEntryLifeCycleListener listener) {
-        listeners.add(IOEntryLifeCycleListener.class, listener);
+    public void addLiveCycleListener(IOEntryLifecycleListener listener) {
+        listeners.add(IOEntryLifecycleListener.class, listener);
     }
 
     public void addReceivedListener(IOEntryReceivedListener listener) {
