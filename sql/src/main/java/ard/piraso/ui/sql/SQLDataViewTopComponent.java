@@ -42,7 +42,7 @@ import java.util.Vector;
  */
 @ConvertAsProperties(dtd = "-//ard.piraso.ui.sql//SQLDataView//EN", autostore = false)
 @ActionID(category = "Window", id = "ard.piraso.ui.sql.SQLDataViewTopComponent")
-@ActionReference(path = "Menu/Window", position = 334)
+@ActionReference(path = "Menu/Window", position = 335)
 @TopComponent.Description(preferredID = "SQLDataViewTopComponent", iconBase="ard/piraso/ui/sql/icons/database.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = true)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_SQLDataViewAction",preferredID = "SQLDataViewTopComponent")
@@ -124,6 +124,7 @@ public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
+        btnProperties = new javax.swing.JToggleButton();
         btnCopy = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
@@ -146,6 +147,20 @@ public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent
         jToolBar1.setFloatable(false);
         jToolBar1.setOrientation(1);
         jToolBar1.setRollover(true);
+
+        btnProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/sql/icons/properties.png"))); // NOI18N
+        btnProperties.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(btnProperties, org.openide.util.NbBundle.getMessage(SQLDataViewTopComponent.class, "SQLDataViewTopComponent.btnProperties.text")); // NOI18N
+        btnProperties.setToolTipText(org.openide.util.NbBundle.getMessage(SQLDataViewTopComponent.class, "SQLDataViewTopComponent.btnProperties.toolTipText")); // NOI18N
+        btnProperties.setFocusable(false);
+        btnProperties.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnProperties.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnProperties.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPropertiesActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnProperties);
 
         btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/sql/icons/copy.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(btnCopy, org.openide.util.NbBundle.getMessage(SQLDataViewTopComponent.class, "SQLDataViewTopComponent.btnCopy.text")); // NOI18N
@@ -176,8 +191,24 @@ public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent
         }
     }//GEN-LAST:event_btnCopyActionPerformed
 
+    private void btnPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropertiesActionPerformed
+        if(btnProperties.isSelected()) {
+            remove(jScrollPane2);
+            add(jSplitPane1, java.awt.BorderLayout.CENTER);
+            jSplitPane1.setRightComponent(jScrollPane2);
+            jSplitPane1.setLeftComponent(jScrollPane1);
+        } else {
+            remove(jSplitPane1);
+            add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        }
+        
+        repaint();
+        revalidate();
+    }//GEN-LAST:event_btnPropertiesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopy;
+    private javax.swing.JToggleButton btnProperties;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSplitPane jSplitPane1;

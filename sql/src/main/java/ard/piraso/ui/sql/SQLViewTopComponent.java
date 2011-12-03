@@ -38,6 +38,7 @@ import org.openide.windows.TopComponent;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,7 +47,7 @@ import java.util.List;
  * Top component which displays something.
  */
 @ActionID(category = "Window", id = "ard.piraso.ui.sql.SQLViewTopComponent")
-@ActionReference(path = "Menu/Window", position = 333)
+@ActionReference(path = "Menu/Window", position = 334)
 @ConvertAsProperties(dtd = "-//ard.piraso.ui.sql//SQLView//EN", autostore = false)
 @TopComponent.Description(preferredID = "SQLViewTopComponent", iconBase="ard/piraso/ui/sql/icons/sql.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = true)
@@ -63,8 +64,15 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
     }
     
     private void initScrollPane() {
-        jSplitPane1.setLeftComponent(scrollTable);
-        jSplitPane1.setRightComponent(scrollSQLPane);
+        if(btnProperties.isSelected()) {
+            remove(scrollSQLPane);
+            add(jSplitPane1, BorderLayout.CENTER);
+            jSplitPane1.setLeftComponent(scrollTable);
+            jSplitPane1.setRightComponent(scrollSQLPane);
+        } else {
+            remove(jSplitPane1);
+            add(scrollSQLPane, BorderLayout.CENTER);
+        }         
     }
     
     private void initTable() {
@@ -150,12 +158,14 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
     void writeProperties(java.util.Properties p) {
         p.setProperty("replaceParameters", String.valueOf(btnReplaceParameters.isSelected()));
         p.setProperty("formatted", String.valueOf(btnFormat.isSelected()));
+        p.setProperty("properties", String.valueOf(btnProperties.isSelected()));
         p.setProperty("deviderLocation", String.valueOf(jSplitPane1.getDividerLocation()));
     }
 
     void readProperties(java.util.Properties p) {
         btnReplaceParameters.setSelected(Boolean.parseBoolean(p.getProperty("replaceParameters", "false")));
         btnFormat.setSelected(Boolean.parseBoolean(p.getProperty("formatted", "true")));
+        btnProperties.setSelected(Boolean.parseBoolean(p.getProperty("properties", "true")));
         jSplitPane1.setDividerLocation(Integer.parseInt(p.getProperty("deviderLocation", "500")));
     }
 
@@ -172,6 +182,7 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         scrollTable = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
+        btnProperties = new javax.swing.JToggleButton();
         btnReplaceParameters = new javax.swing.JToggleButton();
         btnFormat = new javax.swing.JToggleButton();
         btnCopy = new javax.swing.JButton();
@@ -191,6 +202,20 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         jToolBar1.setFloatable(false);
         jToolBar1.setOrientation(1);
         jToolBar1.setRollover(true);
+
+        btnProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/sql/icons/properties.png"))); // NOI18N
+        btnProperties.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(btnProperties, org.openide.util.NbBundle.getMessage(SQLViewTopComponent.class, "SQLViewTopComponent.btnProperties.text")); // NOI18N
+        btnProperties.setToolTipText(org.openide.util.NbBundle.getMessage(SQLViewTopComponent.class, "SQLViewTopComponent.btnProperties.toolTipText")); // NOI18N
+        btnProperties.setFocusable(false);
+        btnProperties.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnProperties.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnProperties.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPropertiesActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnProperties);
 
         btnReplaceParameters.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/sql/icons/replace_variables.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(btnReplaceParameters, org.openide.util.NbBundle.getMessage(SQLViewTopComponent.class, "SQLViewTopComponent.btnReplaceParameters.text")); // NOI18N
@@ -251,9 +276,16 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         refreshView();
     }//GEN-LAST:event_btnFormatActionPerformed
 
+    private void btnPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropertiesActionPerformed
+        initScrollPane();
+        repaint();
+        revalidate();
+    }//GEN-LAST:event_btnPropertiesActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCopy;
     private javax.swing.JToggleButton btnFormat;
+    private javax.swing.JToggleButton btnProperties;
     private javax.swing.JToggleButton btnReplaceParameters;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JToolBar jToolBar1;
