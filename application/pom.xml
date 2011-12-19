@@ -72,6 +72,9 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
+                <configuration>
+                    <etcConfFile>${project.basedir}/piraso_client.conf</etcConfFile>
+                </configuration>
             </plugin>
         </plugins>
     </build>
