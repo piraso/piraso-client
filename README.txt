@@ -5,7 +5,7 @@ This is the Piraso client source code. This is created using Netbeans Platform.
 https://github.com/alvinrdeleon/piraso/wiki
 
 
-Quick Start
+== Quick Start ==
 
 Here are the instructions to build and run:
 
@@ -18,6 +18,6 @@ Here are the instructions to build and run:
     > mvn nbm:run-platform
 
 
-References
+== References==
 
 http://netbeans.org/features/platform/
