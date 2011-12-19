@@ -19,17 +19,26 @@
 package ard.piraso.ui.base;
 
 import ard.piraso.api.entry.MethodCallEntry;
+import ard.piraso.api.entry.ObjectEntry;
+import ard.piraso.api.entry.ObjectEntryUtils;
 import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
+import ard.piraso.ui.api.util.ClipboardUtils;
+import ard.piraso.ui.api.util.NotificationUtils;
 import ard.piraso.ui.base.manager.EntryTabViewProviderManager;
+import org.apache.commons.collections.CollectionUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.openide.ErrorManager;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
+import javax.swing.text.BadLocationException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 
 /**
  * Top component which displays something.
@@ -38,7 +47,7 @@ import java.util.List;
 @ActionReference(path = "Menu/Window", position = 333)
 @ConvertAsProperties(dtd = "-//ard.piraso.ui.base//MethodView//EN", autostore = false)
 @TopComponent.Description(preferredID = "MethodViewTopComponent", iconBase="ard/piraso/ui/base/icons/method.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "output", openAtStartup = false)
+@TopComponent.Registration(mode = "output", openAtStartup = true)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_MethodViewAction", preferredID = "MethodViewTopComponent")
 public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<MethodCallEntry> {
 
@@ -52,10 +61,52 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
     @Override
     protected void refreshView() {
         List<EntryTabView> components = new ArrayList<EntryTabView>();
-        
+
+        jTabbedPane.removeAll();
+
         if(currentEntry != null) {
             components.add(new EntryTabView(jPanel1, "Method"));
             components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(currentEntry));
+        }
+
+        refreshMethodView();
+        
+        if(CollectionUtils.isNotEmpty(components)) {
+            for(EntryTabView tabView : components) {
+                jTabbedPane.addTab(tabView.getTitle(), tabView.getComponent());
+            }
+        }
+
+        repaint();
+        revalidate();
+    }
+
+    private void refreshMethodView() {
+        try {
+            txtMethod.setText("");
+            btnCopy.setEnabled(currentEntry != null);
+
+            if(btnCopy.isEnabled()) {
+                insertHeaderCode(txtMethod, currentEntry.getGenericString());
+                insertText(txtMethod, "\n");
+                
+                if(currentEntry.getArguments() != null && currentEntry.getArguments().length > 0) {
+                    for(int i = 0; i < currentEntry.getArguments().length; i++) {
+                        ObjectEntry argument = currentEntry.getArguments()[i];
+                        insertBoldCode(txtMethod, String.format("\nARGUMENT[%d]: ", i));
+                        insertCode(txtMethod, ObjectEntryUtils.toString(argument));
+                    }
+                }
+
+                if(!currentEntry.getReturnClassName().equals("java.lang.Void")) {
+                    insertBoldCode(txtMethod, "\nRETURN: ");
+                    insertCode(txtMethod, ObjectEntryUtils.toString(currentEntry.getReturnedValue()));
+                }
+            }
+
+            start(txtMethod);
+        } catch (BadLocationException e) {
+            ErrorManager.getDefault().notify(e);
         }
     }
     
@@ -78,22 +129,59 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtMethod = new javax.swing.JTextPane();
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnCopy = new javax.swing.JButton();
+        jTabbedPane = new javax.swing.JTabbedPane();
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        txtMethod.setEditable(false);
+        txtMethod.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         jScrollPane1.setViewportView(txtMethod);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
+        jToolBar1.setBackground(new java.awt.Color(226, 226, 226));
+        jToolBar1.setFloatable(false);
+        jToolBar1.setOrientation(1);
+        jToolBar1.setRollover(true);
+
+        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/copy.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCopy, org.openide.util.NbBundle.getMessage(MethodViewTopComponent.class, "MethodViewTopComponent.btnCopy.text")); // NOI18N
+        btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(MethodViewTopComponent.class, "MethodViewTopComponent.btnCopy.toolTipText")); // NOI18N
+        btnCopy.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        btnCopy.setEnabled(false);
+        btnCopy.setFocusable(false);
+        btnCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopyActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnCopy);
+
+        jPanel1.add(jToolBar1, java.awt.BorderLayout.WEST);
+
         setLayout(new java.awt.BorderLayout());
-        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
+        add(jTabbedPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
+        if (currentEntry != null) {
+            ClipboardUtils.copy(txtMethod.getText());
+            NotificationUtils.info("Method text is now copied to clipboard.");
+        }
+    }//GEN-LAST:event_btnCopyActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCopy;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTextPane txtMethod;
     // End of variables declaration//GEN-END:variables
 

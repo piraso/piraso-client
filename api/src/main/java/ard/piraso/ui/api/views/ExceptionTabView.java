@@ -19,8 +19,38 @@
 
 package ard.piraso.ui.api.views;
 
+import ard.piraso.api.entry.ThrowableAwareEntry;
+import org.openide.ErrorManager;
+
+import javax.swing.text.BadLocationException;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static ard.piraso.ui.api.util.JTextPaneUtils.insertCode;
+import static ard.piraso.ui.api.util.JTextPaneUtils.start;
+
 /**
  *
  * @author adeleon
  */
-public class ExceptionTabView extends StackTraceTabView {}
+public class ExceptionTabView extends FilteredTextTabView<ThrowableAwareEntry> {
+    
+    public ExceptionTabView(ThrowableAwareEntry entry) {
+        super(entry, "Exception information is now copied to clipboard.");
+        
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        entry.getThrown().printStackTrace(new PrintStream(out, true));
+
+        try {
+            insertCode(txtEditor, out.toString());
+
+            start(txtEditor);
+        } catch (BadLocationException e) {
+            ErrorManager.getDefault().notify(e);
+        }
+    }
+    
+    @Override
+    protected void btnFilterClickHandle() {
+    }
+}
