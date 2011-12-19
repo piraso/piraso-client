@@ -3,10 +3,11 @@ Piraso Client
 This is the Piraso client source code. This is created using Netbeans Platform.
 
 https://github.com/alvinrdeleon/piraso/wiki
-http://netbeans.org/features/platform/
 
 
-Quick Start to build and run:
+Quick Start
+
+Here are the instructions to build and run:
 
 1. Install Maven 2 and JDK 6
 
@@ -15,3 +16,8 @@ Quick Start to build and run:
 
 3. To run go to ${piraso-client.home}/application
     > mvn nbm:run-platform
+
+
+References
+
+http://netbeans.org/features/platform/
