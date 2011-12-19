@@ -1,9 +1,11 @@
 /*
- * Copyright 2011 adeleon.
+ * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The Piraso licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -15,11 +17,25 @@
  */
 package ard.piraso.ui.log4j;
 
+import ard.piraso.api.log4j.Log4jEntry;
+import ard.piraso.ui.api.EntryTabView;
+import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
+import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
+import ard.piraso.ui.api.util.ClipboardUtils;
+import ard.piraso.ui.api.util.NotificationUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
+import org.openide.ErrorManager;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
+
+import javax.swing.text.BadLocationException;
+import java.util.ArrayList;
+import java.util.List;
+
+import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 
 /**
  * Top component which displays something.
@@ -28,15 +44,62 @@ import org.openide.windows.TopComponent;
 @ActionReference(path = "Menu/Window", position = 336)
 @ConvertAsProperties(dtd = "-//ard.piraso.ui.log4j//Log4jView//EN", autostore = false)
 @TopComponent.Description(preferredID = "Log4jViewTopComponent", iconBase="ard/piraso/ui/log4j/icons/log4j.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "output", openAtStartup = false)
+@TopComponent.Registration(mode = "output", openAtStartup = true)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_Log4jViewAction", preferredID = "Log4jViewTopComponent")
-public final class Log4jViewTopComponent extends TopComponent {
+public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<Log4jEntry> {
 
     public Log4jViewTopComponent() {
+        super(Log4jEntry.class);
         initComponents();
         setName(NbBundle.getMessage(Log4jViewTopComponent.class, "CTL_Log4jViewTopComponent"));
         setToolTipText(NbBundle.getMessage(Log4jViewTopComponent.class, "HINT_Log4jViewTopComponent"));
+    }
 
+    @Override
+    protected void refreshView() {
+        List<EntryTabView> components = new ArrayList<EntryTabView>();
+
+        jTabbedPane.removeAll();
+
+        if(currentEntry != null) {
+            components.add(new EntryTabView(jPanel1, "Message"));
+            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(currentEntry));
+        }
+
+        refreshLog4jView();
+
+        if(CollectionUtils.isNotEmpty(components)) {
+            for(EntryTabView tabView : components) {
+                jTabbedPane.addTab(tabView.getTitle(), tabView.getComponent());
+            }
+        }
+
+        repaint();
+        revalidate();
+    }
+
+    private void refreshLog4jView() {
+        try {
+            txtMessage.setText("");
+            btnCopy.setEnabled(currentEntry != null);
+
+            if(btnCopy.isEnabled()) {
+                insertBoldCode(txtMessage, "LEVEL: ");
+                insertText(txtMessage, currentEntry.getLogLevel());
+
+                if(CollectionUtils.isNotEmpty(currentEntry.getGroup().getGroups())) {
+                    insertBoldCode(txtMessage, "\nCATEGORY: ");
+                    insertText(txtMessage, currentEntry.getGroup().getGroups().iterator().next());
+                }
+
+                insertBoldCode(txtMessage, "\nMESSAGE: ");
+                insertText(txtMessage, currentEntry.getMessage());
+            }
+
+            start(txtMessage);
+        } catch (BadLocationException e) {
+            ErrorManager.getDefault().notify(e);
+        }
     }
 
     /** This method is called from within the constructor to
@@ -47,39 +110,70 @@ public final class Log4jViewTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtMessage = new javax.swing.JTextPane();
+        jToolBar1 = new javax.swing.JToolBar();
+        btnCopy = new javax.swing.JButton();
+        jTabbedPane = new javax.swing.JTabbedPane();
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        txtMessage.setEditable(false);
+        txtMessage.setFont(new java.awt.Font("Monospaced", 0, 14));
+        jScrollPane1.setViewportView(txtMessage);
+
+        jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        jToolBar1.setBackground(new java.awt.Color(226, 226, 226));
+        jToolBar1.setFloatable(false);
+        jToolBar1.setOrientation(1);
+        jToolBar1.setRollover(true);
+
+        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/log4j/icons/copy.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCopy, org.openide.util.NbBundle.getMessage(Log4jViewTopComponent.class, "Log4jViewTopComponent.btnCopy.text")); // NOI18N
+        btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(Log4jViewTopComponent.class, "Log4jViewTopComponent.btnCopy.toolTipText")); // NOI18N
+        btnCopy.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        btnCopy.setEnabled(false);
+        btnCopy.setFocusable(false);
+        btnCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCopyActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btnCopy);
+
+        jPanel1.add(jToolBar1, java.awt.BorderLayout.WEST);
+
+        setLayout(new java.awt.BorderLayout());
+        add(jTabbedPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    // End of variables declaration//GEN-END:variables
-    @Override
-    public void componentOpened() {
-        // TODO add custom code on component opening
-    }
+    private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
+        if (currentEntry != null) {
+            ClipboardUtils.copy(txtMessage.getText());
+            NotificationUtils.info("Log message information is now copied to clipboard.");
+        }
+    }//GEN-LAST:event_btnCopyActionPerformed
 
-    @Override
-    public void componentClosed() {
-        // TODO add custom code on component closing
-    }
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCopy;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JTextPane txtMessage;
+    // End of variables declaration//GEN-END:variables
 
     void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
         p.setProperty("version", "1.0");
-        // TODO store your settings
     }
 
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
-        // TODO read your settings according to their version
     }
 }

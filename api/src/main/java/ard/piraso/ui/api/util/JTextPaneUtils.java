@@ -41,7 +41,7 @@ public final class JTextPaneUtils {
     public static SimpleAttributeSet CODE_RED = new SimpleAttributeSet();
 
     static {
-        setupCode(CODE_HEADER, Color.BLUE, true, 14);
+        setupCode(CODE_HEADER, Color.BLACK, true, 14);
         setupCode(CODE_BOLD, Color.BLACK, true, 13);
         setupCode(CODE, Color.BLACK, false, 13);
         setupCode(CODE_BLUE, Color.BLUE, false, 13);

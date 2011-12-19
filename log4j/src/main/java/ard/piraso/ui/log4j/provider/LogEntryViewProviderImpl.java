@@ -16,24 +16,26 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base.manager;
+package ard.piraso.ui.log4j.provider;
 
-import java.lang.reflect.InvocationTargetException;
+import ard.piraso.api.entry.Entry;
+import ard.piraso.api.log4j.Log4jEntry;
+import ard.piraso.ui.api.EntryViewProvider;
+import ard.piraso.ui.log4j.Log4jViewTopComponent;
+import org.openide.util.lookup.ServiceProvider;
+import org.openide.windows.TopComponent;
 
 /**
- * Interface that defines a idle timeout aware class.
+ * Provides the view for {@link ard.piraso.api.log4j.Log4jEntry} entry types.
  */
-public interface IdleTimeout1Aware {
+@ServiceProvider(service=EntryViewProvider.class)
+public class LogEntryViewProviderImpl implements EntryViewProvider {
+    @Override
+    public Class<? extends TopComponent> getViewClass(Entry entry) {
+        if(Log4jEntry.class.isInstance(entry)) {
+            return Log4jViewTopComponent.class;
+        }
 
-    /**
-     * Determines if current class is idle timeout.
-     *
-     * @return {@code true} if timeout, {@code false} otherwise.
-     */
-    public boolean isIdleTimeout();
-
-    /**
-     * Action to do on timeout.
-     */
-    public void doOnTimeout() throws InvocationTargetException, InterruptedException;
+        return null;
+    }
 }

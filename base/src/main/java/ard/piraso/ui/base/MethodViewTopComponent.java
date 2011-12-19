@@ -23,9 +23,9 @@ import ard.piraso.api.entry.ObjectEntry;
 import ard.piraso.api.entry.ObjectEntryUtils;
 import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
+import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
-import ard.piraso.ui.base.manager.EntryTabViewProviderManager;
 import org.apache.commons.collections.CollectionUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.ErrorManager;
@@ -98,7 +98,8 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
                     }
                 }
 
-                if(!currentEntry.getReturnClassName().equals("java.lang.Void")) {
+                if(!currentEntry.getReturnClassName().equals("void")) {
+                    System.out.println("currentEntry.getReturnClassName(): " + currentEntry.getReturnClassName());
                     insertBoldCode(txtMethod, "\nRETURN: ");
                     insertCode(txtMethod, ObjectEntryUtils.toString(currentEntry.getReturnedValue()));
                 }
@@ -138,7 +139,7 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
         jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txtMethod.setEditable(false);
-        txtMethod.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
+        txtMethod.setFont(new java.awt.Font("Monospaced", 0, 14));
         jScrollPane1.setViewportView(txtMethod);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);

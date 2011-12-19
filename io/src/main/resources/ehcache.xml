@@ -23,7 +23,10 @@
 
     <diskStore path="user.dir/.piraso/cache"/>
 
-    <defaultCache eternal="true" overflowToDisk="true"/>
+    <defaultCache maxElementsInMemory="5000"
+                  memoryStoreEvictionPolicy="LFU"
+                  eternal="true"
+                  overflowToDisk="true" />
 
     <cache name="ard.piraso.ui.io.util.IOEntrySerializable"
            maxElementsInMemory="5000"
