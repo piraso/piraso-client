@@ -18,6 +18,6 @@ Here are the instructions to build and run:
     > mvn nbm:run-platform
 
 
-== References==
+== References ==
 
 http://netbeans.org/features/platform/
