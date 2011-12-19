@@ -20,7 +20,6 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.io.PirasoEntryLoaderRegistry;
 import ard.piraso.ui.api.PirasoEntryLoaderProvider;
-import ard.piraso.ui.base.manager.IdleTimeout1Manager;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
@@ -35,8 +34,10 @@ public class Installer extends ModuleInstall {
     @Override
     public void restored() {
         LOG.info("Module Started.");
-        IdleTimeout1Manager.INSTANCE.start();
+        registerEntryLoaders();
+    }
 
+    private void registerEntryLoaders() {
         // register all piraso entry loader
         Collection<? extends PirasoEntryLoaderProvider> providers = Lookup.getDefault().lookupAll(PirasoEntryLoaderProvider.class);
         for(PirasoEntryLoaderProvider provider : providers) {
@@ -48,7 +49,6 @@ public class Installer extends ModuleInstall {
     @Override
     public boolean closing() {
         LOG.info("Module Closing.");
-        IdleTimeout1Manager.INSTANCE.stop();
 
         // ensure that all context monitor are closed
         Set<TopComponent> opened = TopComponent.getRegistry().getOpened();

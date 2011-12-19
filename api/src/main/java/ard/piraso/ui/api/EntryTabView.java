@@ -16,23 +16,29 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base.formatter;
+package ard.piraso.ui.api;
 
-import antlr.RecognitionException;
-import antlr.TokenStreamException;
-import com.sdicons.json.model.JSONValue;
-import com.sdicons.json.parser.JSONParser;
-
-import java.io.StringReader;
+import javax.swing.*;
 
 /**
- * Json string formatter
+ *
+ * @author adeleon
  */
-public class JsonFormatter {
-    public static String prettyPrint(String json) throws TokenStreamException, RecognitionException {
-        final JSONParser lParser = new JSONParser(new StringReader(json));
-        final JSONValue lMyObject = lParser.nextValue();
+public class EntryTabView {
+    private JComponent component;
+    
+    private String title;
 
-        return lMyObject.render(true);
+    public EntryTabView(JComponent component, String title) {
+        this.component = component;
+        this.title = title;
+    }
+
+    public JComponent getComponent() {
+        return component;
+    }
+
+    public String getTitle() {
+        return title;
     }
 }

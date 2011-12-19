@@ -1,9 +1,11 @@
 /*
- * Copyright 2011 adeleon.
+ * Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The Piraso licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -13,13 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ard.piraso.ui.base;
 
+import ard.piraso.api.entry.MethodCallEntry;
+import ard.piraso.ui.api.EntryTabView;
+import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
+import ard.piraso.ui.base.manager.EntryTabViewProviderManager;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Top component which displays something.
@@ -30,13 +40,31 @@ import org.openide.windows.TopComponent;
 @TopComponent.Description(preferredID = "MethodViewTopComponent", iconBase="ard/piraso/ui/base/icons/method.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = false)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_MethodViewAction", preferredID = "MethodViewTopComponent")
-public final class MethodViewTopComponent extends TopComponent {
+public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<MethodCallEntry> {
 
     public MethodViewTopComponent() {
+        super(MethodCallEntry.class);
         initComponents();
         setName(NbBundle.getMessage(MethodViewTopComponent.class, "CTL_MethodViewTopComponent"));
         setToolTipText(NbBundle.getMessage(MethodViewTopComponent.class, "HINT_MethodViewTopComponent"));
+    }
 
+    @Override
+    protected void refreshView() {
+        List<EntryTabView> components = new ArrayList<EntryTabView>();
+        
+        if(currentEntry != null) {
+            components.add(new EntryTabView(jPanel1, "Method"));
+            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(currentEntry));
+        }
+    }
+    
+    void writeProperties(java.util.Properties p) {
+        p.setProperty("version", "1.0");
+    }
+
+    void readProperties(java.util.Properties p) {
+        String version = p.getProperty("version");
     }
 
     /** This method is called from within the constructor to
@@ -47,39 +75,26 @@ public final class MethodViewTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        txtMethod = new javax.swing.JTextPane();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        jScrollPane1.setViewportView(txtMethod);
+
+        jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        setLayout(new java.awt.BorderLayout());
+        add(jTabbedPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTextPane txtMethod;
     // End of variables declaration//GEN-END:variables
-    @Override
-    public void componentOpened() {
-        // TODO add custom code on component opening
-    }
 
-    @Override
-    public void componentClosed() {
-        // TODO add custom code on component closing
-    }
-
-    void writeProperties(java.util.Properties p) {
-        // better to version settings since initial version as advocated at
-        // http://wiki.apidesign.org/wiki/PropertyFiles
-        p.setProperty("version", "1.0");
-        // TODO store your settings
-    }
-
-    void readProperties(java.util.Properties p) {
-        String version = p.getProperty("version");
-        // TODO read your settings according to their version
-    }
 }
