@@ -66,7 +66,7 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
 
         if(currentEntry != null) {
             components.add(new EntryTabView(jPanel1, "Method"));
-            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(currentEntry));
+            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(MethodViewTopComponent.class, currentEntry));
         }
 
         refreshMethodView();

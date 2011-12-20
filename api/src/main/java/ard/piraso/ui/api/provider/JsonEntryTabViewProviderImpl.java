@@ -19,7 +19,6 @@
 package ard.piraso.ui.api.provider;
 
 import ard.piraso.api.entry.Entry;
-import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.EntryTabViewProvider;
 import ard.piraso.ui.api.views.JsonTabView;
 import org.openide.util.lookup.ServiceProvider;
@@ -28,9 +27,19 @@ import org.openide.util.lookup.ServiceProvider;
  * json tab view
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
-public class JsonEntryTabViewProviderImpl implements EntryTabViewProvider {
-    @Override
-    public EntryTabView getTabView(Entry entry) {
-        return new EntryTabView(new JsonTabView(entry), "JSON");
+public class JsonEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<JsonTabView> {
+    public JsonEntryTabViewProviderImpl() {
+        super("JSON");
     }
+
+    @Override
+    protected boolean isSupported(Entry entry) {
+        return true;
+    }
+
+    @Override
+    protected JsonTabView createView(Entry entry) {
+        return new JsonTabView(entry);
+    }
+
 }

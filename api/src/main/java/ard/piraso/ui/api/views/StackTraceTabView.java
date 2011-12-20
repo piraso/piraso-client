@@ -18,6 +18,7 @@
 
 package ard.piraso.ui.api.views;
 
+import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.StackTraceAwareEntry;
 import ard.piraso.api.entry.StackTraceElementEntry;
 import org.openide.ErrorManager;
@@ -37,10 +38,16 @@ public class StackTraceTabView extends FilteredTextTabView<StackTraceAwareEntry>
      */
     public StackTraceTabView(StackTraceAwareEntry entry) {
         super(entry, "Stack trace is now copied to clipboard.");
+    }
 
+    @Override
+    public void refreshView(Entry entry) {
+        StackTraceAwareEntry stackTraceAwareEntry = (StackTraceAwareEntry) entry;
         try {
+            btnCopy.setEnabled(true);
+            txtEditor.setText("");
             insertBoldCode(txtEditor, "STACK TRACE:");
-            for(StackTraceElementEntry st : entry.getStackTrace()) {
+            for(StackTraceElementEntry st : stackTraceAwareEntry.getStackTrace()) {
                 insertCode(txtEditor, "\n    " + st.toString());
             }
 

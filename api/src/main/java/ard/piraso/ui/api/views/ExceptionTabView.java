@@ -19,6 +19,7 @@
 
 package ard.piraso.ui.api.views;
 
+import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.ThrowableAwareEntry;
 import org.openide.ErrorManager;
 
@@ -37,11 +38,16 @@ public class ExceptionTabView extends FilteredTextTabView<ThrowableAwareEntry> {
     
     public ExceptionTabView(ThrowableAwareEntry entry) {
         super(entry, "Exception information is now copied to clipboard.");
-        
+    }
+
+    @Override
+    public void refreshView(Entry entry) {
+        ThrowableAwareEntry throwableAwareEntry = (ThrowableAwareEntry) entry;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        entry.getThrown().printStackTrace(new PrintStream(out, true));
+        throwableAwareEntry.getThrown().printStackTrace(new PrintStream(out, true));
 
         try {
+            txtEditor.setText("");
             insertCode(txtEditor, out.toString());
 
             start(txtEditor);
@@ -50,7 +56,7 @@ public class ExceptionTabView extends FilteredTextTabView<ThrowableAwareEntry> {
             ErrorManager.getDefault().notify(e);
         }
     }
-    
+
     @Override
     protected void btnFilterClickHandle() {
     }

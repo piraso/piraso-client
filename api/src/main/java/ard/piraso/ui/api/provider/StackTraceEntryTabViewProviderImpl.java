@@ -20,7 +20,6 @@ package ard.piraso.ui.api.provider;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.StackTraceAwareEntry;
-import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.EntryTabViewProvider;
 import ard.piraso.ui.api.views.StackTraceTabView;
 import org.openide.util.lookup.ServiceProvider;
@@ -29,20 +28,25 @@ import org.openide.util.lookup.ServiceProvider;
  * Stack Trace entry provider.
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
-public class StackTraceEntryTabViewProviderImpl implements EntryTabViewProvider {
+public class StackTraceEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<StackTraceTabView> {
+
+    public StackTraceEntryTabViewProviderImpl() {
+        super("Stack Trace");
+    }
 
     @Override
-    public EntryTabView getTabView(Entry entry) {
+    protected boolean isSupported(Entry entry) {
         if(!StackTraceAwareEntry.class.isInstance(entry)) {
-            return null;
+            return false;
         }
 
         StackTraceAwareEntry st = (StackTraceAwareEntry) entry;
+        return st.getStackTrace() != null;
+    }
 
-        if(st.getStackTrace() == null) {
-            return null;
-        }
-
-        return new EntryTabView(new StackTraceTabView(st), "Stack Trace");
+    @Override
+    protected StackTraceTabView createView(Entry entry) {
+        StackTraceAwareEntry st = (StackTraceAwareEntry) entry;
+        return new StackTraceTabView(st);
     }
 }

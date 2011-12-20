@@ -18,6 +18,7 @@
 
 package ard.piraso.ui.api.views;
 
+import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 
@@ -39,8 +40,9 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
         initComponents();
         
         this.copyMessage = copyMessage;
-    }    
-    
+        refreshView((Entry) entry);
+    }
+
     protected abstract void btnFilterClickHandle();
 
     /** This method is called from within the constructor to

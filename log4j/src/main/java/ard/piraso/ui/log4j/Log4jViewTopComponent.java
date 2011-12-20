@@ -64,7 +64,7 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
 
         if(currentEntry != null) {
             components.add(new EntryTabView(jPanel1, "Message"));
-            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(currentEntry));
+            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(Log4jViewTopComponent.class, currentEntry));
         }
 
         refreshLog4jView();

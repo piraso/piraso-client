@@ -22,8 +22,6 @@ import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.ui.api.util.JTableUtils;
-import ard.piraso.ui.base.manager.MessageProviderManager;
-import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryEvent;
 import ard.piraso.ui.io.IOEntryReader;
@@ -32,7 +30,6 @@ import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -62,11 +59,14 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
 
     private JTable owningTable;
 
+    private IOEntryFastCache cache;
+
     public IOEntryTableModel(IOEntryReader reader) {
         this.reader = reader;
         comboBoxModel = new IOEntryComboBoxModel();
         reader.addReceivedListener(this);
         self = this;
+        cache = new IOEntryFastCache(reader);
     }
 
     public void setOwningTable(JTable owningTable) {
@@ -93,6 +93,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
             if((currentRequestId == null && newRequestId != null) ||
                     newRequestId != null && !newRequestId.equals(currentRequestId)) {
                 selectRequestItem(oldRequestId, newRequestId);
+                cache.setCurrentRequestId(currentRequestId);
 
                 if(!silent) {
                     fireTableDataChanged();
@@ -156,35 +157,6 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
         return false;
     }
 
-    private String getGroup(Entry entry) {
-        if(entry.getGroup() == null) {
-            return "";
-        }
-
-        if(CollectionUtils.isNotEmpty(entry.getGroup().getGroups())) {
-            return "[" + entry.getGroup().getGroups().iterator().next() + "] ";
-        }
-
-        return "";
-    }
-
-    private String getMessage(Entry entry) {
-        return MessageProviderManager.INSTANCE.getMessage(entry);
-    }
-
-    private String getElapsePrettyPrint(Entry entry) {
-        if(!ElapseTimeAware.class.isInstance(entry)) {
-            return null;
-        }
-
-        ElapseTimeAware aware = ((ElapseTimeAware) entry);
-        if(aware.getElapseTime() == null) {
-            return null;
-        }
-
-        return aware.getElapseTime().prettyPrint();
-    }
-
     public Long getElapseMilliseconds(Entry entry) {
         if(!ElapseTimeAware.class.isInstance(entry)) {
             return 0l;
@@ -200,29 +172,22 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
     }
 
     public IOEntry getEntryAt(int rowIndex) {
-        try {
-            return reader.getManager().getEntryAt(currentRequestId, rowIndex);
-        } catch (IOException e) {
-            LOG.warning(e.getMessage());
-        }
-
-        return null;
+        return cache.getEntryAt(rowIndex);
     }
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        try {
-            IOEntry ioEntry = reader.getManager().getEntryAt(currentRequestId, rowIndex);
-            Entry entry = ioEntry.getEntry();
+        IOEntryFastCache.Element el = cache.getElementAt(rowIndex);
 
-            switch(columnIndex) {
-                case 0: return ioEntry.getRowNum();
-                case 1: return PreferenceProviderManager.INSTANCE.getShortName(entry);
-                case 2: return getGroup(entry) + getMessage(entry);
-                case 3: return getElapsePrettyPrint(entry);
-            }
-        } catch (IOException e) {
-            LOG.warning(e.getMessage());
+        if(el == null) {
+            return null;
+        }
+
+        switch(columnIndex) {
+            case 0: return el.rowNum;
+            case 1: return el.shortName;
+            case 2: return el.message;
+            case 3: return el.elapse;
         }
 
         return null;
@@ -231,6 +196,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
     public void selectRequestItem(Long oldValue, Long newValue) {
         currentRequestId = newValue;
         comboBoxModel.setSelectedItem(reader.getManager().getRequest(newValue).getEntry());
+        cache.setCurrentRequestId(currentRequestId);
     }
 
     private class EntryReceivedRunnable implements Runnable {
@@ -266,6 +232,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
             for(IOEntry entry : entries) {
                 if(entry.getId().equals(currentRequestId)) {
                     allowedEntries.add(entry);
+                    cache.addElement(currentRequestId, entry);
                 }
             }
             
@@ -297,7 +264,10 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
 
             if(isAllowScrolling()) {
                 doScroll();
-                autoScrollTable(last.getRowNum().intValue());
+
+                if(last != null) {
+                    autoScrollTable(last.getRowNum().intValue());
+                }
             } else {
                 insertCurrentRequestEntries();
             }

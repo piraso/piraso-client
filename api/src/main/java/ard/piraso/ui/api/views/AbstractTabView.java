@@ -18,6 +18,8 @@
 
 package ard.piraso.ui.api.views;
 
+import ard.piraso.api.entry.Entry;
+
 import javax.swing.*;
 
 /**
@@ -30,4 +32,6 @@ public abstract class AbstractTabView<T> extends JPanel {
     protected AbstractTabView(T entry) {
         this.entry = entry;
     }
+
+    public abstract void refreshView(Entry entry);
 }

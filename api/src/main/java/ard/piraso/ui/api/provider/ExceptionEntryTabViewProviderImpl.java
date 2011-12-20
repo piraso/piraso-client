@@ -20,7 +20,6 @@ package ard.piraso.ui.api.provider;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.ThrowableAwareEntry;
-import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.EntryTabViewProvider;
 import ard.piraso.ui.api.views.ExceptionTabView;
 import org.openide.util.lookup.ServiceProvider;
@@ -29,20 +28,27 @@ import org.openide.util.lookup.ServiceProvider;
  * Exception entry provider.
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
-public class ExceptionEntryTabViewProviderImpl implements EntryTabViewProvider {
+public class ExceptionEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<ExceptionTabView> {
+
+    public ExceptionEntryTabViewProviderImpl() {
+        super("Exception");
+    }
 
     @Override
-    public EntryTabView getTabView(Entry entry) {
+    protected boolean isSupported(Entry entry) {
         if(!ThrowableAwareEntry.class.isInstance(entry)) {
-            return null;
+            return false;
         }
 
         ThrowableAwareEntry throwable = (ThrowableAwareEntry) entry;
+        return throwable.getThrown() != null;
 
-        if(throwable.getThrown() == null) {
-            return null;
-        }
+    }
 
-        return new EntryTabView(new ExceptionTabView(throwable), "Exception");
+    @Override
+    protected ExceptionTabView createView(Entry entry) {
+        ThrowableAwareEntry throwable = (ThrowableAwareEntry) entry;
+
+        return new ExceptionTabView(throwable);
     }
 }

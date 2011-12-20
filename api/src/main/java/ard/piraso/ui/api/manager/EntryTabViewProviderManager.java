@@ -35,13 +35,13 @@ public class EntryTabViewProviderManager {
 
     private EntryTabViewProviderManager() {}
 
-    public List<EntryTabView> getTabView(Entry entry) {
+    public List<EntryTabView> getTabView(Class owner, Entry entry) {
         Collection<? extends EntryTabViewProvider> providers = Lookup.getDefault().lookupAll(EntryTabViewProvider.class);
         
         List<EntryTabView> views = new LinkedList<EntryTabView>();
 
         for(EntryTabViewProvider provider : providers) {
-            EntryTabView view = provider.getTabView(entry);
+            EntryTabView view = provider.getTabView(owner, entry);
 
             if(view != null) {
                 views.add(view);

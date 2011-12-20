@@ -27,5 +27,5 @@ import ard.piraso.api.entry.Entry;
  */
 public interface EntryTabViewProvider {
     
-    public EntryTabView getTabView(Entry entry);
+    public EntryTabView getTabView(Class owner, Entry entry);
 }

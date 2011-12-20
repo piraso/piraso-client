@@ -39,10 +39,15 @@ public class JsonTabView extends FilteredTextTabView<Entry> {
      */
     public JsonTabView(Entry entry) {
         super(entry, "JSON is now copied to clipboard.");
+    }
 
+    @Override
+    public void refreshView(Entry entry) {
         btnFilter.setVisible(false);
         btnCopy.setEnabled(true);
+
         try {
+            txtEditor.setText("");
             insertCode(txtEditor, JsonFormatter.prettyPrint(MAPPER.writeValueAsString(entry)));
         } catch (Exception e) {
             btnCopy.setEnabled(false);
