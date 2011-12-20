@@ -15,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ard.piraso.ui.log4j;
 
 import ard.piraso.api.log4j.Log4jEntry;
@@ -85,15 +86,15 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
 
             if(btnCopy.isEnabled()) {
                 insertBoldCode(txtMessage, "LEVEL: ");
-                insertText(txtMessage, currentEntry.getLogLevel());
+                insertCode(txtMessage, currentEntry.getLogLevel());
 
                 if(CollectionUtils.isNotEmpty(currentEntry.getGroup().getGroups())) {
                     insertBoldCode(txtMessage, "\nCATEGORY: ");
-                    insertText(txtMessage, currentEntry.getGroup().getGroups().iterator().next());
+                    insertCode(txtMessage, currentEntry.getGroup().getGroups().iterator().next());
                 }
 
                 insertBoldCode(txtMessage, "\nMESSAGE: ");
-                insertText(txtMessage, currentEntry.getMessage());
+                insertCode(txtMessage, currentEntry.getMessage());
             }
 
             start(txtMessage);
@@ -119,10 +120,7 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
         txtMessage.setEditable(false);
-        txtMessage.setFont(new java.awt.Font("Monospaced", 0, 14));
         jScrollPane1.setViewportView(txtMessage);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);

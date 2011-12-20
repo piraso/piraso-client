@@ -18,34 +18,33 @@
 
 package ard.piraso.ui.api.views;
 
-import ard.piraso.api.entry.StackTraceAwareEntry;
-import ard.piraso.api.entry.StackTraceElementEntry;
+import ard.piraso.api.JacksonUtils;
+import ard.piraso.api.entry.Entry;
+import ard.piraso.ui.api.formatter.JsonFormatter;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.openide.ErrorManager;
 
-import javax.swing.text.BadLocationException;
-
-import static ard.piraso.ui.api.util.JTextPaneUtils.*;
-
+import static ard.piraso.ui.api.util.JTextPaneUtils.insertCode;
 /**
- * @author adeleon
+ * For json view.
  */
-public class StackTraceTabView extends FilteredTextTabView<StackTraceAwareEntry> {
+public class JsonTabView extends FilteredTextTabView<Entry> {
+    
+    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    
     /**
      * Creates new form StackTraceTabView
      *
-     * @param entry the entry
+     * @param entry       the entry
      */
-    public StackTraceTabView(StackTraceAwareEntry entry) {
-        super(entry, "Stack trace is now copied to clipboard.");
+    public JsonTabView(Entry entry) {
+        super(entry, "JSON is now copied to clipboard.");
 
+        btnFilter.setVisible(false);
+        btnCopy.setEnabled(true);
         try {
-            insertBoldCode(txtEditor, "STACK TRACE:");
-            for(StackTraceElementEntry st : entry.getStackTrace()) {
-                insertCode(txtEditor, "\n    " + st.toString());
-            }
-
-            start(txtEditor);
-        } catch (BadLocationException e) {
+            insertCode(txtEditor, JsonFormatter.prettyPrint(MAPPER.writeValueAsString(entry)));
+        } catch (Exception e) {
             btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);
         }
@@ -53,6 +52,5 @@ public class StackTraceTabView extends FilteredTextTabView<StackTraceAwareEntry>
 
     @Override
     protected void btnFilterClickHandle() {
-
     }
 }

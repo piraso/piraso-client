@@ -88,7 +88,7 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
 
             if(btnCopy.isEnabled()) {
                 insertHeaderCode(txtMethod, currentEntry.getGenericString());
-                insertText(txtMethod, "\n");
+                insertCode(txtMethod, "\n");
                 
                 if(currentEntry.getArguments() != null && currentEntry.getArguments().length > 0) {
                     for(int i = 0; i < currentEntry.getArguments().length; i++) {
@@ -99,7 +99,6 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
                 }
 
                 if(!currentEntry.getReturnClassName().equals("void")) {
-                    System.out.println("currentEntry.getReturnClassName(): " + currentEntry.getReturnClassName());
                     insertBoldCode(txtMethod, "\nRETURN: ");
                     insertCode(txtMethod, ObjectEntryUtils.toString(currentEntry.getReturnedValue()));
                 }
@@ -136,10 +135,7 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
-        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
         txtMethod.setEditable(false);
-        txtMethod.setFont(new java.awt.Font("Monospaced", 0, 14));
         jScrollPane1.setViewportView(txtMethod);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);

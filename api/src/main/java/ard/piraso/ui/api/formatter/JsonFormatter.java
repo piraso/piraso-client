@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base.formatter;
+package ard.piraso.ui.api.formatter;
 
 import antlr.RecognitionException;
 import antlr.TokenStreamException;

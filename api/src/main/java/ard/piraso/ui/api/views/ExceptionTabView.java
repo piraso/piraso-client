@@ -46,6 +46,7 @@ public class ExceptionTabView extends FilteredTextTabView<ThrowableAwareEntry> {
 
             start(txtEditor);
         } catch (BadLocationException e) {
+            btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);
         }
     }

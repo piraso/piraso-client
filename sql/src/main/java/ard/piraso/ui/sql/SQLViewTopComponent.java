@@ -72,7 +72,7 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         } else {
             remove(jSplitPane1);
             add(scrollSQLPane, BorderLayout.CENTER);
-        }         
+        }
     }
     
     private void initTable() {

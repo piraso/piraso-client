@@ -16,10 +16,12 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.api;
+package ard.piraso.ui.api.provider;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.StackTraceAwareEntry;
+import ard.piraso.ui.api.EntryTabView;
+import ard.piraso.ui.api.EntryTabViewProvider;
 import ard.piraso.ui.api.views.StackTraceTabView;
 import org.openide.util.lookup.ServiceProvider;
 

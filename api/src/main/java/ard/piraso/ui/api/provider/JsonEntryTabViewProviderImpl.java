@@ -16,31 +16,21 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.api;
+package ard.piraso.ui.api.provider;
 
 import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.ThrowableAwareEntry;
-import ard.piraso.ui.api.views.ExceptionTabView;
+import ard.piraso.ui.api.EntryTabView;
+import ard.piraso.ui.api.EntryTabViewProvider;
+import ard.piraso.ui.api.views.JsonTabView;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * Exception entry provider.
+ * json tab view
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
-public class ExceptionEntryTabViewProviderImpl implements EntryTabViewProvider {
-
+public class JsonEntryTabViewProviderImpl implements EntryTabViewProvider {
     @Override
     public EntryTabView getTabView(Entry entry) {
-        if(!ThrowableAwareEntry.class.isInstance(entry)) {
-            return null;
-        }
-
-        ThrowableAwareEntry throwable = (ThrowableAwareEntry) entry;
-
-        if(throwable.getThrown() == null) {
-            return null;
-        }
-
-        return new EntryTabView(new ExceptionTabView(throwable), "Exception");
+        return new EntryTabView(new JsonTabView(entry), "JSON");
     }
 }
