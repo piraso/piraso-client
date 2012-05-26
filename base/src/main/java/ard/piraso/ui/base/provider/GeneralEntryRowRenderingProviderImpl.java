@@ -22,10 +22,10 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.api.entry.ResponseEntry;
 import ard.piraso.ui.api.EntryRowRenderingProvider;
+import java.awt.Color;
+import java.awt.Font;
+import javax.swing.JLabel;
 import org.openide.util.lookup.ServiceProvider;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * Provides rendering to general entry types.

@@ -19,10 +19,9 @@
 package ard.piraso.ui.base.cookie;
 
 import ard.piraso.ui.io.IOEntryReader;
+import java.io.IOException;
 import org.openide.cookies.SaveCookie;
 import org.openide.windows.TopComponent;
-
-import java.io.IOException;
 
 /**
  * Saves the {@link ard.piraso.ui.io.IOEntryReader}.

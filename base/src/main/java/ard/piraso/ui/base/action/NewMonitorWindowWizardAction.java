@@ -25,18 +25,18 @@ import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel1;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel2;
 import ard.piraso.ui.base.wizard.NewMonitorWindowWizardPanel3;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.MessageFormat;
+import javax.swing.JComponent;
 import org.openide.DialogDisplayer;
 import org.openide.WizardDescriptor;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.MessageFormat;
 
 // An example action demonstrating how the wizard could be called from within
 // your code. You can move the code below wherever you need, or register an action:

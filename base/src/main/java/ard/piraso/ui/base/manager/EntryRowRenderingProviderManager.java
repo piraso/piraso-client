@@ -20,10 +20,9 @@ package ard.piraso.ui.base.manager;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.EntryRowRenderingProvider;
-import org.openide.util.Lookup;
-
-import javax.swing.*;
 import java.util.Collection;
+import javax.swing.JLabel;
+import org.openide.util.Lookup;
 
 /**
  * Provides cell rendering to entry rows.

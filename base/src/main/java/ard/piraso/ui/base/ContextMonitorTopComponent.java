@@ -26,17 +26,16 @@ import ard.piraso.ui.base.manager.EntryViewProviderManager;
 import ard.piraso.ui.base.model.IOEntryComboBoxModel;
 import ard.piraso.ui.base.model.IOEntryTableModel;
 import ard.piraso.ui.io.IOEntryReader;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableColumn;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
-
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.table.TableColumn;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Top component which displays something.

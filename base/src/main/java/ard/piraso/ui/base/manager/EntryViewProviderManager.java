@@ -20,10 +20,9 @@ package ard.piraso.ui.base.manager;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.EntryViewProvider;
+import java.util.Collection;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
-
-import java.util.Collection;
 
 /**
  * Manages all {@link EntryViewProvider} service providers.
