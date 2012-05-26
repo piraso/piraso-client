@@ -21,10 +21,9 @@ package ard.piraso.ui.log4j.provider;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.log4j.Log4jEntry;
 import ard.piraso.ui.api.EntryRowRenderingProvider;
+import java.awt.Color;
+import javax.swing.JLabel;
 import org.openide.util.lookup.ServiceProvider;
-
-import javax.swing.*;
-import java.awt.*;
 
 /**
  * Provides rendering to general entry types.

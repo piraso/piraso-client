@@ -23,20 +23,20 @@ import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
+import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 import ard.piraso.ui.api.util.NotificationUtils;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.text.BadLocationException;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.ErrorManager;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
-
-import javax.swing.text.BadLocationException;
-import java.util.ArrayList;
-import java.util.List;
-
-import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 
 /**
  * Top component which displays something.
@@ -48,6 +48,8 @@ import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 @TopComponent.Registration(mode = "output", openAtStartup = true)
 @TopComponent.OpenActionRegistration(displayName = "#CTL_Log4jViewAction", preferredID = "Log4jViewTopComponent")
 public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<Log4jEntry> {
+    
+    private final static SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
     public Log4jViewTopComponent() {
         super(Log4jEntry.class);
@@ -92,9 +94,25 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
                     insertBoldCode(txtMessage, "\nCATEGORY: ");
                     insertCode(txtMessage, currentEntry.getGroup().getGroups().iterator().next());
                 }
+                
+                insertBoldCode(txtMessage, "\nTIME: ");
+                insertCode(txtMessage, FORMATTER.format(currentEntry.getTime()));
 
+                insertBoldCode(txtMessage, "\nTHREAD: ");
+                insertCode(txtMessage, String.format("id: %d, name: %s, priority: %d", currentEntry.getThreadId(), currentEntry.getThreadName(), currentEntry.getThreadPriority()));
+                
+                if(StringUtils.isNotBlank(currentEntry.getNdc())) {
+                    insertBoldCode(txtMessage, "\nNDC: ");
+                    insertCode(txtMessage, currentEntry.getNdc());
+                }
+                
+                if(currentEntry.getMdc() != null && !StringUtils.equalsIgnoreCase(currentEntry.getMdc(), "null")) {
+                    insertBoldCode(txtMessage, "\nMDC: ");
+                    insertCode(txtMessage, currentEntry.getMdc());
+                }
+                
                 insertBoldCode(txtMessage, "\nMESSAGE: ");
-                insertCode(txtMessage, currentEntry.getMessage());
+                insertCode(txtMessage, currentEntry.getMessage());                
             }
 
             start(txtMessage);

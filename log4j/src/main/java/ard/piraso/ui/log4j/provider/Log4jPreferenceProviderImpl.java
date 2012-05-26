@@ -7,12 +7,11 @@ import ard.piraso.ui.api.NCPreferenceProperty;
 import ard.piraso.ui.api.PPFactory;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
+import java.util.*;
 import org.openide.filesystems.FileObject;
 import org.openide.filesystems.FileUtil;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
-
-import java.util.*;
 
 /**
  * Provides log4j preferences.

@@ -99,7 +99,7 @@
         <junit.version>4.8.1</junit.version>
         <mokito.version>1.8.4</mokito.version>
         <junit.dep.version>4.5</junit.dep.version>
-        <netbeans.version>RELEASE701</netbeans.version>
+        <netbeans.version>RELEASE712</netbeans.version>
 
         <piraso.client.branding.version>1.0-SNAPSHOT</piraso.client.branding.version>
         <piraso.client.base.version>1.0-SNAPSHOT</piraso.client.base.version>
