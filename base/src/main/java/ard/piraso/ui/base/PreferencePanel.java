@@ -97,11 +97,22 @@ public class PreferencePanel extends javax.swing.JPanel {
     }
 
     private void select(int i) {
+        select(i, false);
+    }
+
+    private void select(int i, boolean skipOptional) {
         chkPreferences[i].setSelected(true);
 
         if(CollectionUtils.isNotEmpty(preferenceKeys[i].getDependents())) {
             for(PreferenceProperty property : preferenceKeys[i].getDependents()) {
-                select(getIndex(property));
+                select(getIndex(property), true);
+            }
+        }
+
+        // check all optional dependents
+        if(!skipOptional && CollectionUtils.isNotEmpty(preferenceKeys[i].getOptionalDependents())) {
+            for(PreferenceProperty property : preferenceKeys[i].getOptionalDependents()) {
+                chkPreferences[getIndex(property)].setSelected(true);
             }
         }
     }
@@ -112,6 +123,21 @@ public class PreferencePanel extends javax.swing.JPanel {
         for(PreferenceProperty property : preferenceKeys) {
             if(property.getDependents().contains(preferenceKeys[i])) {
                 deselect(getIndex(property));
+            }
+
+            if(property.getOptionalDependents().contains(preferenceKeys[i])) {
+                boolean allUnchecked = true;
+
+                for(PreferenceProperty op : property.getOptionalDependents()) {
+                    if(chkPreferences[getIndex(op)].isSelected()) {
+                        allUnchecked = false;
+                        break;
+                    }
+                }
+
+                if(allUnchecked) {
+                    chkPreferences[getIndex(property)].setSelected(false);
+                }
             }
         }
     }

@@ -41,4 +41,6 @@ public interface PreferenceProperty {
     public boolean isChild();
 
     public List<PreferenceProperty> getDependents();
+
+    public List<PreferenceProperty> getOptionalDependents();
 }

@@ -22,6 +22,8 @@ public class NCPreferenceProperty implements PreferenceProperty {
 
     protected List<PreferenceProperty> dependents = new LinkedList<PreferenceProperty>();
 
+    protected List<PreferenceProperty> optionalDependents = new LinkedList<PreferenceProperty>();
+
     public NCPreferenceProperty(String name, Class type) {
         this(name, type, false);
     }
@@ -34,6 +36,10 @@ public class NCPreferenceProperty implements PreferenceProperty {
 
     public void addDependents(PreferenceProperty... properties) {
         dependents.addAll(Arrays.asList(properties));
+    }
+
+    public void addOptionalDependents(PreferenceProperty... properties) {
+        optionalDependents.addAll(Arrays.asList(properties));
     }
 
     public String getName() {
@@ -74,5 +80,9 @@ public class NCPreferenceProperty implements PreferenceProperty {
     @Override
     public List<PreferenceProperty> getDependents() {
         return dependents;
+    }
+
+    public List<PreferenceProperty> getOptionalDependents() {
+        return optionalDependents;
     }
 }

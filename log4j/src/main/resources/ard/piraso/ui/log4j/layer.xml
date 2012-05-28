@@ -23,14 +23,14 @@
 <filesystem>
     <folder name="log4j">
         <file name="preferences">
-            <attr name="com.*" stringvalue="[GENERAL] com"/>
-            <attr name="org.*" stringvalue="[GENERAL] org"/>
-            <attr name="permLead.*" stringvalue="[FRONTEND] permLead"/>
-            <attr name="action.*" stringvalue="[FRONTEND] action"/>
-            <attr name="adsense.*" stringvalue="[FRONTEND] adsense"/>
-            <attr name="adsenseAction.*" stringvalue="[FRONTEND] adsenseAction"/>
-            <attr name="org\\.springframework.*" stringvalue="[THIRD-PARTY] org.springframework"/>
-            <attr name="org\\.hibernate.*" stringvalue="[THIRD-PARTY] org.hibernate"/>
+            <attr name="com" stringvalue="[GENERAL] com"/>
+            <attr name="org" stringvalue="[GENERAL] org"/>
+            <attr name="permLead" stringvalue="[FRONTEND] permLead"/>
+            <attr name="action" stringvalue="[FRONTEND] action"/>
+            <attr name="adsense" stringvalue="[FRONTEND] adsense"/>
+            <attr name="adsenseAction" stringvalue="[FRONTEND] adsenseAction"/>
+            <attr name="org\\.springframework" stringvalue="[THIRD-PARTY] org.springframework"/>
+            <attr name="org\\.hibernate" stringvalue="[THIRD-PARTY] org.hibernate"/>
         </file>
     </folder>
 </filesystem>

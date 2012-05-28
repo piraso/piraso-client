@@ -76,7 +76,7 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
         for(String value : attrValues) {
             String regex = attrs.get(value);
 
-            mapping.put("log4j." + regex, value + " (All Levels)");
+            mapping.put("log4j." + regex, value);
             NCPreferenceProperty pp = PPFactory.createEntry(Log4jEntry.class, "log4j." + regex, Boolean.class);
             pp.setParent(true);
             pp.addDependents(log4jEnabled);
@@ -84,15 +84,17 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
 
             List<NCPreferenceProperty> levels = new ArrayList<NCPreferenceProperty>(6);
             for(String level : new String[] {"fatal", "error", "warn", "info", "debug", "trace", "all"}) {
-                mapping.put("log4j." + regex + "." + level.toUpperCase(), getMessage("log4j." + level));
+                mapping.put("log4j." + regex + ".*." + level.toUpperCase(), getMessage("log4j." + level));
 
-                NCPreferenceProperty pplevel = PPFactory.createEntry(Log4jEntry.class, "log4j." + regex + "." + level.toUpperCase(), Boolean.class);
+                NCPreferenceProperty pplevel = PPFactory.createEntry(Log4jEntry.class, "log4j." + regex + ".*." + level.toUpperCase(), Boolean.class);
                 pplevel.addDependents(log4jEnabled);
                 pplevel.setChild(true);
                 pplevel.addDependents(levels.toArray(new NCPreferenceProperty[levels.size()]));
 
                 levels.add(pplevel);
-                pp.addDependents(pplevel);
+
+                pplevel.addDependents(pp);
+                pp.addOptionalDependents(pplevel);
 
                 result.add(pplevel);
             }
