@@ -46,11 +46,23 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
         NCPreferenceProperty resultSet = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName(), Boolean.class);
         NCPreferenceProperty resultSetMC = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED.getPropertyName(), Boolean.class);
 
+        conn.setParent(true);
+        connMC.setChild(true);
         connMC.addDependents(conn);
+
+        prepared.setParent(true);
         prepared.addDependents(conn);
+
+        viewSQL.setChild(true);
         viewSQL.addDependents(conn, prepared);
+
+        preparedMC.setChild(true);
         preparedMC.addDependents(conn, prepared);
+
+        resultSet.setParent(true);
         resultSet.addDependents(conn, prepared);
+
+        resultSetMC.setChild(true);
         resultSetMC.addDependents(resultSet, prepared, conn);
 
         return Arrays.asList(conn, connMC, prepared, viewSQL, preparedMC, resultSet, resultSetMC);
