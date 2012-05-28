@@ -38,8 +38,6 @@ import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
 
-// An example action demonstrating how the wizard could be called from within
-// your code. You can move the code below wherever you need, or register an action:
 @ActionID(category="File", id="ard.piraso.ui.base.action.NewMonitorWindowWizardAction")
 @ActionRegistration(iconBase="ard/piraso/ui/base/icons/new.png", iconInMenu=true, displayName="New Context Monitor")
 @ActionReferences({

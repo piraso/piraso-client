@@ -23,13 +23,13 @@ import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
 
-@ActionID(category="Tools", id="ard.piraso.ui.base.action.ConfigureMonitorAction")
-@ActionRegistration(iconBase="ard/piraso/ui/base/icons/monitor.png", iconInMenu=true, displayName="Configure Monitors")
+@ActionID(category="Tools", id="ard.piraso.ui.base.action.ContextMonitorManagerShowAction")
+@ActionRegistration(iconBase="ard/piraso/ui/base/icons/monitor.png", iconInMenu=true, displayName="Context Monitor Manager")
 @ActionReferences({
     @ActionReference(path = "Menu/Tools", position = 600),
     @ActionReference(path = "Toolbars/Tools", position = 600)
 })
-public final class ConfigureMonitorAction implements ActionListener {
+public final class ContextMonitorManagerShowAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
