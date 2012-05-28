@@ -27,10 +27,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import javax.swing.*;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openide.util.ImageUtilities;
 
 /**
@@ -39,9 +41,9 @@ import org.openide.util.ImageUtilities;
  * @author adeleon
  */
 public class PreferencePanel extends javax.swing.JPanel {
-    private static final String EXPAND_ICON_PATH = "/ard/piraso/ui/base/icons/bullet_toggle_plus.png";
+    private static final String EXPAND_ICON_PATH = "ard/piraso/ui/base/icons/bullet_toggle_plus.png";
 
-    private static final String COLLAPSE_ICON_PATH = "/ard/piraso/ui/base/icons/bullet_toggle_minus.png";
+    private static final String COLLAPSE_ICON_PATH = "ard/piraso/ui/base/icons/bullet_toggle_minus.png";
 
     private ImageIcon expandImage = ImageUtilities.loadImageIcon(EXPAND_ICON_PATH, true);
 
@@ -194,7 +196,6 @@ public class PreferencePanel extends javax.swing.JPanel {
             chkPreferences[l] = new JCheckBox();
             chkPreferences[l].setText(provider.getMessage(prop.getName()));
             chkPreferences[l].setSelected(prop.isDefaultValue());
-            chkPreferences[l].addActionListener(new CheckBoxClickHandler(l));
 
             if(prop.isChild()) {
                 if(childrenPanel == null) {
@@ -221,7 +222,7 @@ public class PreferencePanel extends javax.swing.JPanel {
                 parentToggle = null;
             } else {
                 if(parentToggle != null) {
-                    parentToggle.setVisible(false);
+                    parentChildHandler.hide();
                 }
 
                 JPanel parentPanel = new JPanel();
@@ -230,7 +231,11 @@ public class PreferencePanel extends javax.swing.JPanel {
 
                 parentToggle = new JButton(expandImage);
 
-                parentChildHandler = new ParentChildHandler(parentToggle);
+                JLabel previewLabel = new JLabel();
+                previewLabel.setForeground(new Color(0, 128, 0));
+                previewLabel.setFont(previewLabel.getFont().deriveFont(Font.ITALIC));
+
+                parentChildHandler = new ParentChildHandler(parentToggle, previewLabel);
                 parentChildHandler.addPreference(chkPreferences[l]);
                 handlers.add(parentChildHandler);
 
@@ -238,6 +243,7 @@ public class PreferencePanel extends javax.swing.JPanel {
 
                 parentPanel.add(parentToggle);
                 parentPanel.add(chkPreferences[l]);
+                parentPanel.add(previewLabel);
 
                 pnlPreferences.add(parentPanel, c.xyw(4, r, 3));
 
@@ -245,6 +251,7 @@ public class PreferencePanel extends javax.swing.JPanel {
                 r += 2;
             }
 
+            chkPreferences[l].addActionListener(new CheckBoxClickHandler(l, parentChildHandler));
         }
     }
 
@@ -340,12 +347,15 @@ public class PreferencePanel extends javax.swing.JPanel {
     private class ParentChildHandler implements ActionListener {
         private JButton parentToggle;
 
+        private JLabel preview;
+
         private JPanel childrenPanel;
 
-        private java.util.List<JCheckBox> preferences = new ArrayList<JCheckBox>();
+        private LinkedList<JCheckBox> preferences = new LinkedList<JCheckBox>();
 
-        private ParentChildHandler(JButton parentToggle) {
+        private ParentChildHandler(JButton parentToggle, JLabel preview) {
             this.parentToggle = parentToggle;
+            this.preview = preview;
         }
 
         private void setChildrenPanel(JPanel childrenPanel) {
@@ -354,6 +364,11 @@ public class PreferencePanel extends javax.swing.JPanel {
             if(childrenPanel != null && parentToggle != null) {
                 parentToggle.addActionListener(this);
             }
+        }
+
+        public void hide() {
+            parentToggle.setVisible(false);
+            preview.setVisible(false);
         }
 
         private void addPreference(JCheckBox preference) {
@@ -365,25 +380,50 @@ public class PreferencePanel extends javax.swing.JPanel {
                 return;
             }
 
-            boolean someChecked = false;
-            for(JCheckBox pref : preferences) {
-                if(pref.isSelected()) {
-                    someChecked = true;
-                    break;
-                }
-            }
+            refreshUI(false);
+        }
 
-            refreshUI(someChecked);
+        private void refreshUI() {
+            refreshUI(childrenPanel.isVisible());
         }
 
         private void refreshUI(boolean show) {
             if(show) {
                 childrenPanel.setVisible(true);
                 parentToggle.setIcon(collapseImage);
+                preview.setVisible(false);
             } else {
                 childrenPanel.setVisible(false);
                 parentToggle.setIcon(expandImage);
+
+                String previewText = createPreviewText();
+                if(StringUtils.isNotBlank(previewText)) {
+                    preview.setText("[" + previewText + "]");
+                    preview.setVisible(true);
+                } else {
+                    preview.setVisible(false);
+                }
             }
+        }
+
+        private String createPreviewText() {
+            StringBuilder buf = new StringBuilder();
+            for(JCheckBox box : preferences) {
+                if(box.isSelected()) {
+                    if(provider.isPreviewLastChildOnly()) {
+                        buf.delete(0, buf.length());
+                        buf.append(box.getText());
+                    } else {
+                        if(buf.length() != 0) {
+                            buf.append(", ");
+                        }
+
+                        buf.append(box.getText());
+                    }
+                }
+            }
+
+            return buf.toString();
         }
 
         @Override
@@ -394,9 +434,15 @@ public class PreferencePanel extends javax.swing.JPanel {
 
     private class CheckBoxClickHandler implements ActionListener {
         private int index;
+        private ParentChildHandler handler;
 
         private CheckBoxClickHandler(int index) {
+            this(index, null);
+        }
+
+        private CheckBoxClickHandler(int index, ParentChildHandler handler) {
             this.index = index;
+            this.handler = handler;
         }
 
         @Override
@@ -405,6 +451,10 @@ public class PreferencePanel extends javax.swing.JPanel {
                 select(index);
             } else {
                 deselect(index);
+            }
+
+            if(handler != null) {
+                handler.refreshUI();
             }
         }
     }    

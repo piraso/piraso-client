@@ -34,6 +34,8 @@ public interface PreferenceProvider {
     public String getShortName();
     
     public boolean isHorizontalChildLayout();
+
+    public boolean isPreviewLastChildOnly();
     
     public List<? extends PreferenceProperty> getPreferences();
     

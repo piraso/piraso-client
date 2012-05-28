@@ -15,20 +15,32 @@
  */
 package ard.piraso.ui.base;
 
+import ard.piraso.api.GeneralPreferenceEnum;
+import ard.piraso.api.Preferences;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.PreferenceProvider;
 import ard.piraso.ui.base.manager.ConfiguredMonitorManager;
 import ard.piraso.ui.base.manager.MonitorVisitor;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import org.apache.commons.lang.StringUtils;
+import org.openide.ErrorManager;
 import org.openide.windows.WindowManager;
 
 /**
@@ -48,8 +60,11 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
      */
     public ContextMonitorDialog() {
         super(WindowManager.getDefault().getMainWindow(), true);
+        setTitle("Context Monitor Manager");
         initComponents();
         initPreferences();
+        addButtonRefreshListeners();
+
         lstMonitors.setModel(listModel);
         cboHost.setModel(cboModel);
 
@@ -66,6 +81,71 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
         
         refresh();
     }
+
+    private void addButtonRefreshListeners() {
+        DocumentListener documentChangeListener = new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                refreshButtons();
+            }
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                refreshButtons();
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                refreshButtons();
+            }
+        };
+
+        txtName.getDocument().addDocumentListener(documentChangeListener);
+        txtAddr.getDocument().addDocumentListener(documentChangeListener);
+        cboHost.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                refreshButtons();
+            }
+        });
+        cboHost.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                refreshButtons();
+            }
+            @Override
+            public void keyPressed(KeyEvent e) {
+                refreshButtons();
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {
+                refreshButtons();
+            }
+        });
+    }
+
+    private void refreshButtons() {
+        boolean enabled = checkEnabled();
+
+        btnSave.setEnabled(enabled);
+        if(enabled &&  ConfiguredMonitorManager.INSTANCE.containsMonitor(txtName.getText())) {
+            btnRemove.setEnabled(enabled);
+        } else {
+            btnRemove.setEnabled(false);
+        }
+    }
+
+    private boolean checkEnabled() {
+        if(StringUtils.isBlank(txtName.getText())) {
+            return false;
+        }
+        if(rdoOthers.isSelected() && StringUtils.isBlank(txtAddr.getText())) {
+            return false;
+        }
+        if(StringUtils.isBlank(String.valueOf(cboHost.getSelectedItem()))) {
+            return false;
+        }
+
+        return true;
+    }
     
     private void initPreferences() {
         List<PreferenceProvider> providers = PreferenceProviderManager.INSTANCE.getProviders();
@@ -80,6 +160,11 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
 
     private void initSelection(String name) {
         NewContextMonitorModel model = ConfiguredMonitorManager.INSTANCE.getMonitor(name);
+
+        if(model == null) {
+            // no selection
+            return;
+        }
 
         txtName.setText(model.getName());
         cboHost.setSelectedItem(model.getLoggingUrl());
@@ -98,8 +183,12 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
             panel.read(model);
         }
     }
-        
+
     public void refresh() {
+        refresh(null);
+    }
+        
+    public void refresh(String name) {
         listModel.clear();
         cboModel.removeAllElements();
 
@@ -113,6 +202,16 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
                 }
             }
         });
+
+        if(name != null) {
+            int index = listModel.indexOf(name);
+
+            if(index > -1) {
+                lstMonitors.setSelectedIndex(index);
+            }
+
+            return;
+        }
 
         // make the first index as selection
         lstMonitors.setSelectedIndex(0);
@@ -196,8 +295,15 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
         txtName.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.txtName.text")); // NOI18N
 
         btnSave.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.btnSave.text")); // NOI18N
+        btnSave.setEnabled(false);
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         btnRemove.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.btnRemove.text")); // NOI18N
+        btnRemove.setEnabled(false);
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnRemoveActionPerformed(evt);
@@ -306,7 +412,12 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
-
+        try {
+            ConfiguredMonitorManager.INSTANCE.remove(txtName.getText());
+            refresh();
+        } catch (IOException e) {
+            ErrorManager.getDefault().notify(e);
+        }
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
@@ -314,11 +425,28 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        txtName.setText("");
+        cboHost.setSelectedItem("");
+        rdoMyAddress.setSelected(true);
+        txtAddr.setText("");
+        txtAddr.setEnabled(false);
 
+        NewContextMonitorModel model = new NewContextMonitorModel();
+        model.setPreferences(new Preferences());
+        model.getPreferences().addProperty(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), true);
+
+        for(PreferencePanel panel : preferencePanels.values()) {
+            panel.read(model);
+        }
+
+        // ensure that there are no selected monitors on clear.
+        lstMonitors.getSelectionModel().clearSelection();
+        txtName.requestFocus();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void rdoMyAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoMyAddressActionPerformed
         txtAddr.setEnabled(!rdoMyAddress.isSelected());
+        refreshButtons();
     }//GEN-LAST:event_rdoMyAddressActionPerformed
 
     private void rdoOthersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdoOthersActionPerformed
@@ -326,8 +454,33 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
         
         if(txtAddr.isEnabled()) {
             txtAddr.requestFocus();
-        }        
+        }
+
+        refreshButtons();
     }//GEN-LAST:event_rdoOthersActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        NewContextMonitorModel model = new NewContextMonitorModel();
+        model.setPreferences(new Preferences());
+
+        model.setName(txtName.getText());
+        model.setLoggingUrl(String.valueOf(cboHost.getSelectedItem()));
+
+        if(rdoOthers.isSelected()) {
+            model.setWatchedAddr(txtAddr.getText());
+        }
+
+        for(PreferencePanel panel : preferencePanels.values()) {
+            panel.store(model);
+        }
+
+        try {
+            ConfiguredMonitorManager.INSTANCE.save(model);
+            refresh();
+        } catch (IOException e) {
+            ErrorManager.getDefault().notify(e);
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;

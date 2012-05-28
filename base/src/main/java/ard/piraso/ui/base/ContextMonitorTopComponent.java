@@ -41,7 +41,7 @@ import org.openide.windows.TopComponent;
  * Top component which displays something.
  */
 public final class ContextMonitorTopComponent extends TopComponent implements ListSelectionListener {
-    private static final String ICON_PATH = "/ard/piraso/ui/base/icons/remote_logger.png";
+    private static final String ICON_PATH = "ard/piraso/ui/base/icons/remote_logger.png";
 
     private IOEntryReaderActionProvider actionProvider;
 

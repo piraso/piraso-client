@@ -87,6 +87,11 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
     }
 
     @Override
+    public boolean isPreviewLastChildOnly() {
+        return false;
+    }
+
+    @Override
     public String getMessage(String name) {
         return getMessage(name, null);
     }

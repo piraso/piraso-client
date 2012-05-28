@@ -44,6 +44,11 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
     }
 
     @Override
+    public boolean isPreviewLastChildOnly() {
+        return true;
+    }
+
+    @Override
     public List<? extends PreferenceProperty> getPreferences() {
         FileObject log4jFolder = FileUtil.getConfigRoot().getFileObject("log4j");
         FileObject preferences = log4jFolder.getFileObject("preferences");
