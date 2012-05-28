@@ -28,9 +28,8 @@ import org.openide.util.Lookup;
 /**
  * Provides messages for entries.
  */
-public final class MessageProviderManager {
-
-    public static final MessageProviderManager INSTANCE = new MessageProviderManager();
+public enum MessageProviderManager {
+    INSTANCE;
     
     private Map<Class, MessageProvider> cache;
     

@@ -84,7 +84,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
         ContextMonitorTableCellRenderer renderer = new ContextMonitorTableCellRenderer();
         numColumn.setHeaderValue("");
-        numColumn.setMaxWidth(35);
+        numColumn.setMaxWidth(38);
         numColumn.setCellRenderer(renderer);
 
         typeColumn.setHeaderValue("Type");

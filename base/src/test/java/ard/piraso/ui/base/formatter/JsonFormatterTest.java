@@ -18,7 +18,10 @@
 
 package ard.piraso.ui.base.formatter;
 
+import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.formatter.JsonFormatter;
+import ard.piraso.ui.base.manager.PreferenceProviderManager;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Test;
 
 /**
@@ -30,5 +33,20 @@ public class JsonFormatterTest {
     public void testPrettyPrint() throws Exception {
         String str = JsonFormatter.prettyPrint("{\"preferences\":{\"booleanProperties\":{\"sql.view.enabled\":true,\"sql.prepared.statement.enabled\":true,\"sql.connection.enabled\":true,\"general.scoped.enabled\":true,\"sql.resultset.enabled\":true},\"integerProperties\":null,\"urlPatterns\":null},\"watchedAddr\":null,\"loggingUrl\":\"http://127.0.0.1/piraso/logging\",\"desc\":\"Profile for checking SQL Queries and retrieved Data.\"}");
         System.out.println(str);
+    }
+    
+    @Test
+    public void testX() throws Exception {
+        NewContextMonitorModel model = new NewContextMonitorModel();
+        model.setName("local-8080-sqls");
+        model.setPreferences(PreferenceProviderManager.INSTANCE.createPreferences());
+        model.setLoggingUrl("http://127.0.0.1:8080/piraso/logging");
+        
+        model.getPreferences().addProperty("sql.connection.enabled", true);
+        model.getPreferences().addProperty("sql.prepared.statement.enabled", true);
+        model.getPreferences().addProperty("sql.view.enabled", true);
+        model.getPreferences().addProperty("sql.resultset.enabled", true);
+        
+        System.out.println(new ObjectMapper().writeValueAsString(model));
     }
 }

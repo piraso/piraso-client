@@ -28,14 +28,10 @@ import org.openide.util.Lookup;
 /**
  * Manages preference provider.
  */
-public final class PreferenceProviderManager {
-
-    public static final PreferenceProviderManager INSTANCE = new PreferenceProviderManager();
+public enum PreferenceProviderManager {
+    INSTANCE;
 
     private List<PreferenceProvider> providerCache;
-
-    private PreferenceProviderManager() {
-    }
 
     public List<PreferenceProvider> getProviders() {
         if(providerCache != null) {

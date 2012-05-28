@@ -42,7 +42,7 @@ public class Log4jEntryRowRenderingProviderImpl implements EntryRowRenderingProv
         if("ERROR".equals(log4j.getLogLevel()) || "FATAL".equals(log4j.getLogLevel())) {
             cell.setForeground(Color.RED);
         } else if("WARN".equals(log4j.getLogLevel())) {
-            cell.setForeground(new Color(128, 128, 0));
+            cell.setForeground(Color.ORANGE);
         } else if("DEBUG".equals(log4j.getLogLevel())) {
             cell.setForeground(Color.DARK_GRAY);
         } else if("TRACE".equals(log4j.getLogLevel())) {

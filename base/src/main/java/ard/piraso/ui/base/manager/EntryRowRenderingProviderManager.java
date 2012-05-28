@@ -27,12 +27,8 @@ import org.openide.util.Lookup;
 /**
  * Provides cell rendering to entry rows.
  */
-public class EntryRowRenderingProviderManager {
-
-    public static final EntryRowRenderingProviderManager INSTANCE = new EntryRowRenderingProviderManager();
-
-    private EntryRowRenderingProviderManager() {
-    }
+public enum EntryRowRenderingProviderManager {
+    INSTANCE;
 
     public void render(JLabel cell, Entry entry) {
         Collection<? extends EntryRowRenderingProvider> providers = Lookup.getDefault().lookupAll(EntryRowRenderingProvider.class);

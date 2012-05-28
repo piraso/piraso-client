@@ -28,6 +28,8 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  * @author adleon
  */
 public class NewContextMonitorModel implements WizardModel {
+    private String name;
+
     private Preferences preferences;
     
     private String watchedAddr;
@@ -66,6 +68,14 @@ public class NewContextMonitorModel implements WizardModel {
 
     public void setWatchedAddr(String watchedAddr) {
         this.watchedAddr = watchedAddr;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override

@@ -77,6 +77,16 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
     }
 
     @Override
+    public String getShortName() {
+        return getMessage("sql.name.short");
+    }
+
+    @Override
+    public boolean isHorizontalChildLayout() {
+        return false;
+    }
+
+    @Override
     public String getMessage(String name) {
         return getMessage(name, null);
     }

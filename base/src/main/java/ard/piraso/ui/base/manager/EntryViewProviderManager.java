@@ -27,11 +27,8 @@ import org.openide.windows.TopComponent;
 /**
  * Manages all {@link EntryViewProvider} service providers.
  */
-public class EntryViewProviderManager implements EntryViewProvider {
-
-    public static final EntryViewProviderManager INSTANCE = new EntryViewProviderManager();
-
-    private EntryViewProviderManager() {}
+public enum EntryViewProviderManager implements EntryViewProvider {
+    INSTANCE;
 
     @Override
     public Class<? extends TopComponent> getViewClass(Entry entry) {

@@ -19,7 +19,6 @@
 package ard.piraso.ui.api;
 
 import ard.piraso.api.entry.Entry;
-
 import java.util.List;
 
 /**
@@ -31,6 +30,10 @@ public interface PreferenceProvider {
     public Integer getOrder();
 
     public String getName();
+
+    public String getShortName();
+    
+    public boolean isHorizontalChildLayout();
     
     public List<? extends PreferenceProperty> getPreferences();
     

@@ -38,4 +38,12 @@
         <file name="Clipboard_hidden"/>
         <file name="UndoRedo_hidden"/>
     </folder>
+    <folder name="Configured_Monitors">
+        <file name="local-8080-sqls">
+            <attr name="value" stringvalue="{&quot;name&quot;:&quot;local-8080-sqls&quot;,&quot;preferences&quot;:{&quot;booleanProperties&quot;:{&quot;sql.view.enabled&quot;:true,&quot;sql.prepared.statement.enabled&quot;:true,&quot;sql.connection.enabled&quot;:true,&quot;general.scoped.enabled&quot;:true},&quot;integerProperties&quot;:null,&quot;urlPatterns&quot;:null},&quot;watchedAddr&quot;:null,&quot;loggingUrl&quot;:&quot;http://127.0.0.1:8080/piraso/logging&quot;,&quot;desc&quot;:null}"/>
+        </file>
+        <file name="local-8080-sqls-data">
+          <attr name="value" stringvalue="{&quot;name&quot;:&quot;local-8080-sqls-data&quot;,&quot;preferences&quot;:{&quot;booleanProperties&quot;:{&quot;sql.view.enabled&quot;:true,&quot;sql.prepared.statement.enabled&quot;:true,&quot;sql.connection.enabled&quot;:true,&quot;general.scoped.enabled&quot;:true,&quot;sql.resultset.enabled&quot;:true},&quot;integerProperties&quot;:null,&quot;urlPatterns&quot;:null},&quot;watchedAddr&quot;:null,&quot;loggingUrl&quot;:&quot;http://127.0.0.1:8080/piraso/logging&quot;,&quot;desc&quot;:null}"/>
+        </file>
+    </folder>
 </filesystem>
