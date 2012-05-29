@@ -1,4 +1,4 @@
-package ard.piraso.ui.base.manager;
+package ard.piraso.ui.api.manager;
 
 import ard.piraso.api.JacksonUtils;
 import ard.piraso.ui.api.WithNameModel;

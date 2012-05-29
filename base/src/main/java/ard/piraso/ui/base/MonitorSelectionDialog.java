@@ -17,7 +17,7 @@ package ard.piraso.ui.base;
 
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.base.manager.ModelManagers;
-import ard.piraso.ui.base.manager.ModelVisitor;
+import ard.piraso.ui.api.manager.ModelVisitor;
 import org.openide.windows.WindowManager;
 
 import javax.swing.*;
@@ -52,6 +52,8 @@ public class MonitorSelectionDialog extends javax.swing.JDialog {
             btnOk.setEnabled(!lstMonitors.isSelectionEmpty());
             }
         });
+
+        setLocationRelativeTo(getOwner());
     }
 
     public void showDialog(final List<String> excludes) {

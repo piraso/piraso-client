@@ -1,4 +1,4 @@
-package ard.piraso.ui.base.manager;
+package ard.piraso.ui.api.manager;
 
 /**
  * Visits all the models

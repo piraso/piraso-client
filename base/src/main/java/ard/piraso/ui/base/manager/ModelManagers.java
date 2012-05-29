@@ -2,6 +2,8 @@ package ard.piraso.ui.base.manager;
 
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.ProfileModel;
+import ard.piraso.ui.api.manager.ModelManager;
+import ard.piraso.ui.api.manager.ModelManagerImpl;
 import org.openide.filesystems.FileUtil;
 
 /**

@@ -19,21 +19,17 @@ import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.Preferences;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.PreferenceProvider;
+import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.base.manager.ModelManagers;
-import ard.piraso.ui.base.manager.ModelVisitor;
+import ard.piraso.ui.api.manager.ModelVisitor;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -41,13 +37,12 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
-import org.openide.windows.WindowManager;
 
 /**
  *
  * @author adeleon
  */
-public final class ContextMonitorDialog extends javax.swing.JDialog {
+public final class ContextMonitorDialog extends AbstractDialog {
 
     private DefaultListModel listModel = new DefaultListModel();
     
@@ -55,11 +50,12 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
 
     private Map<String, PreferencePanel> preferencePanels = new HashMap<String, PreferencePanel>();
 
+
     /**
      * Creates new form ContextMonitorDialog
      */
     public ContextMonitorDialog() {
-        super(WindowManager.getDefault().getMainWindow(), true);
+        super();
         setTitle("Manage Monitors");
         initComponents();
         initPreferences();
@@ -77,9 +73,8 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
             }
         });
 
-        setLocationRelativeTo(getOwner());
-        
         refresh();
+        setLocationRelativeTo(getOwner());
     }
 
     private void addButtonRefreshListeners() {

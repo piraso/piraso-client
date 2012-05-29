@@ -17,13 +17,13 @@ package ard.piraso.ui.base;
 
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.ProfileModel;
+import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.base.manager.ModelManagers;
-import ard.piraso.ui.base.manager.ModelVisitor;
+import ard.piraso.ui.api.manager.ModelVisitor;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
-import org.openide.windows.WindowManager;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -41,7 +41,7 @@ import java.util.List;
  *
  * @author adeleon
  */
-public class ProfilesDialog extends javax.swing.JDialog {
+public final class ProfilesDialog extends AbstractDialog {
 
     private DefaultListModel listModel = new DefaultListModel();
 
@@ -56,7 +56,7 @@ public class ProfilesDialog extends javax.swing.JDialog {
      * Creates new form ProfilesDialog
      */
     public ProfilesDialog() {
-        super(WindowManager.getDefault().getMainWindow(), true);
+        super();
         setTitle("Manage Profiles");
 
         initComponents();
@@ -73,8 +73,8 @@ public class ProfilesDialog extends javax.swing.JDialog {
             }
         });
 
-        setLocationRelativeTo(getOwner());
         refresh();
+        setLocationRelativeTo(getOwner());
     }
 
     private void initTable() {
