@@ -454,13 +454,27 @@ public class ProfilesDialog extends javax.swing.JDialog {
 
     private void btnDisassociateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDisassociateActionPerformed
         if(ArrayUtils.isNotEmpty(jtable.getSelectedRows())) {
+            List<String> removedMonitors = new ArrayList<String>();
             for(int index : jtable.getSelectedRows()) {
-                tableModel.removeRow(index);
+                removedMonitors.add(String.valueOf(tableModel.getValueAt(index, 0)));
+            }
+
+            for(String monitorName : removedMonitors) {
+                removeAssociatedMonitor(monitorName);
             }
         }
 
         refreshButtons();
     }//GEN-LAST:event_btnDisassociateActionPerformed
+
+    private void removeAssociatedMonitor(String name) {
+        for(int i = 0; i < tableModel.getRowCount(); i++) {
+            if(StringUtils.equals(name, String.valueOf(tableModel.getValueAt(i, 0)))) {
+                tableModel.removeRow(i);
+                return;
+            }
+        }
+    }
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         ProfileModel model = new ProfileModel();
