@@ -29,11 +29,10 @@ import java.util.logging.Logger;
 /**
  * Idle timeout manager.
  */
-public class IdleTimeout1Manager implements Runnable {
+public enum IdleTimeout1Manager implements Runnable {
+    INSTANCE;
 
     private static final Logger LOG = Logger.getLogger(IdleTimeout1Manager.class.getName());
-
-    public static final IdleTimeout1Manager INSTANCE = new IdleTimeout1Manager();
 
     private static final long WAIT_TIME = 500l;
 

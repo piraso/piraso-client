@@ -60,7 +60,7 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
      */
     public ContextMonitorDialog() {
         super(WindowManager.getDefault().getMainWindow(), true);
-        setTitle("Context Monitor Manager");
+        setTitle("Manage Monitors");
         initComponents();
         initPreferences();
         addButtonRefreshListeners();

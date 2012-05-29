@@ -16,20 +16,21 @@
 package ard.piraso.ui.base.action;
 
 import ard.piraso.ui.base.ContextMonitorDialog;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
 
-@ActionID(category="Tools", id="ard.piraso.ui.base.action.ContextMonitorManagerShowAction")
-@ActionRegistration(iconBase="ard/piraso/ui/base/icons/monitor.png", iconInMenu=true, displayName="Context Monitor Manager")
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+@ActionID(category="Tools", id="ard.piraso.ui.base.action.ManageProfilesShowAction")
+@ActionRegistration(iconBase="ard/piraso/ui/base/icons/gnome_network_idle.png", iconInMenu=true, displayName="Manage Profiles")
 @ActionReferences({
-    @ActionReference(path = "Menu/Tools", position = 600),
-    @ActionReference(path = "Toolbars/Tools", position = 600)
+    @ActionReference(path = "Menu/Tools", position = 605),
+    @ActionReference(path = "Toolbars/Tools", position = 605)
 })
-public final class ContextMonitorManagerShowAction implements ActionListener {
+public final class ManageProfilesShowAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {

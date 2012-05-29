@@ -30,10 +30,8 @@ import java.util.List;
 /**
  * EntryTabView provider manager
  */
-public class EntryTabViewProviderManager {
-    public static final EntryTabViewProviderManager INSTANCE = new EntryTabViewProviderManager();
-
-    private EntryTabViewProviderManager() {}
+public enum EntryTabViewProviderManager {
+    INSTANCE;
 
     public List<EntryTabView> getTabView(Class owner, Entry entry) {
         Collection<? extends EntryTabViewProvider> providers = Lookup.getDefault().lookupAll(EntryTabViewProvider.class);
