@@ -23,10 +23,11 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.PPFactory;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
-import java.util.ArrayList;
-import java.util.List;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ServiceProvider(service=PreferenceProvider.class)
 public class GeneralPreferenceProviderImpl implements PreferenceProvider {

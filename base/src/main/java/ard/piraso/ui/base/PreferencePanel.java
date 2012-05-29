@@ -21,19 +21,18 @@ import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang.StringUtils;
+import org.openide.util.ImageUtilities;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
-import javax.swing.*;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
-import org.openide.util.ImageUtilities;
 
 /**
  * Preference panel.

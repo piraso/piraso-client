@@ -22,8 +22,9 @@ import ard.piraso.api.Preferences;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
-import java.util.*;
 import org.openide.util.Lookup;
+
+import java.util.*;
 
 /**
  * Manages preference provider.

@@ -23,12 +23,7 @@ import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
-import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 import ard.piraso.ui.api.util.NotificationUtils;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.text.BadLocationException;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
@@ -37,6 +32,13 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
+
+import javax.swing.text.BadLocationException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 
 /**
  * Top component which displays something.

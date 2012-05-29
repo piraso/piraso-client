@@ -22,8 +22,9 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.AbstractPirasoEntryLoader;
 import ard.piraso.api.io.PirasoEntryLoader;
 import ard.piraso.ui.api.PirasoEntryLoaderProvider;
-import java.io.IOException;
 import org.openide.util.lookup.ServiceProvider;
+
+import java.io.IOException;
 
 /**
  * Provides entry loader

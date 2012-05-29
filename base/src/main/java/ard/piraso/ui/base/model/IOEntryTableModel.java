@@ -26,15 +26,15 @@ import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryEvent;
 import ard.piraso.ui.io.IOEntryReader;
 import ard.piraso.ui.io.IOEntryReceivedListener;
+import org.apache.commons.collections.CollectionUtils;
+
+import javax.swing.*;
+import javax.swing.table.AbstractTableModel;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
-import javax.swing.JTable;
-import javax.swing.SwingUtilities;
-import javax.swing.table.AbstractTableModel;
-import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Table model for handling {@link ard.piraso.ui.io.IOEntry} class.

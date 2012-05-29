@@ -16,12 +16,13 @@
 package ard.piraso.ui.base.action;
 
 import ard.piraso.ui.base.ProfilesDialog;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @ActionID(category="Tools", id="ard.piraso.ui.base.action.ManageProfilesShowAction")
 @ActionRegistration(iconBase="ard/piraso/ui/base/icons/gnome_network_idle.png", iconInMenu=true, displayName="Manage Profiles")

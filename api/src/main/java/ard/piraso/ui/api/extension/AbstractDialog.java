@@ -1,6 +1,5 @@
 package ard.piraso.ui.api.extension;
 
-import java.awt.event.*;
 import org.openide.windows.WindowManager;
 
 import javax.swing.*;
@@ -8,6 +7,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.event.*;
 
 /**
  * Base class for dialog

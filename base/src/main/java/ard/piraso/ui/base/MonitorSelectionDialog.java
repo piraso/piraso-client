@@ -16,8 +16,8 @@
 package ard.piraso.ui.base;
 
 import ard.piraso.ui.api.NewContextMonitorModel;
-import ard.piraso.ui.base.manager.ModelManagers;
 import ard.piraso.ui.api.manager.ModelVisitor;
+import ard.piraso.ui.base.manager.ModelManagers;
 import org.openide.windows.WindowManager;
 
 import javax.swing.*;

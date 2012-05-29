@@ -26,15 +26,15 @@ import ard.piraso.ui.api.extension.WizardVisualPanel;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import java.awt.Font;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.collections.MapUtils;
 
 public final class NewMonitorWindowVisualPanel2 extends WizardVisualPanel<NewContextMonitorModel> {
             

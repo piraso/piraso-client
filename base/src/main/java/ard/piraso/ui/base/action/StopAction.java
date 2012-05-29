@@ -19,13 +19,14 @@
 package ard.piraso.ui.base.action;
 
 import ard.piraso.ui.base.cookie.StartCookie;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
 import org.openide.util.NbBundle.Messages;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @ActionID(category = "Tools", id = "ard.piraso.ui.base.action.StartAction")
 @ActionRegistration(iconBase="ard/piraso/ui/base/icons/start.png", iconInMenu=true, displayName = "#CTL_StartAction")

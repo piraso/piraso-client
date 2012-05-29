@@ -4,7 +4,6 @@ import ard.piraso.api.JacksonUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openide.filesystems.FileObject;
 
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

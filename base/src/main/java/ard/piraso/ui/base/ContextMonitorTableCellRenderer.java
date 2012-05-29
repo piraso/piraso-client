@@ -22,12 +22,10 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MethodCallEntry;
 import ard.piraso.ui.base.manager.EntryRowRenderingProviderManager;
 import ard.piraso.ui.base.model.IOEntryTableModel;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import javax.swing.JLabel;
-import javax.swing.JTable;
+
+import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
+import java.awt.*;
 
 /**
  * Table cell renderer.

@@ -20,20 +20,19 @@ import ard.piraso.api.Preferences;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.PreferenceProvider;
 import ard.piraso.ui.api.extension.AbstractDialog;
-import ard.piraso.ui.base.manager.ModelManagers;
 import ard.piraso.ui.api.manager.ModelVisitor;
+import ard.piraso.ui.base.manager.ModelManagers;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
+import org.apache.commons.lang.StringUtils;
+import org.openide.ErrorManager;
 
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import org.apache.commons.lang.StringUtils;
-import org.openide.ErrorManager;
 
 /**
  *

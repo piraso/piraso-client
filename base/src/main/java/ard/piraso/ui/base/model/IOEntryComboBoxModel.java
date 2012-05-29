@@ -19,11 +19,11 @@
 package ard.piraso.ui.base.model;
 
 import ard.piraso.api.entry.RequestEntry;
+import org.apache.commons.collections.CollectionUtils;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.AbstractListModel;
-import javax.swing.ComboBoxModel;
-import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Request url combo box

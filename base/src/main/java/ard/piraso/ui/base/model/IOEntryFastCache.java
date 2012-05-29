@@ -24,13 +24,14 @@ import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryReader;
+import org.apache.commons.collections.CollectionUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
-import org.apache.commons.collections.CollectionUtils;
 
 /**
  * Table Model Cache

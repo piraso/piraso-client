@@ -20,12 +20,13 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.io.PirasoEntryLoaderRegistry;
 import ard.piraso.ui.api.PirasoEntryLoaderProvider;
-import java.util.Collection;
-import java.util.Set;
-import java.util.logging.Logger;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
+
+import java.util.Collection;
+import java.util.Set;
+import java.util.logging.Logger;
 
 public class Installer extends ModuleInstall {
     private static final Logger LOG = Logger.getLogger(Installer.class.getName());

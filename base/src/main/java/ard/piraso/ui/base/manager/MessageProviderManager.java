@@ -20,10 +20,11 @@ package ard.piraso.ui.base.manager;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.MessageProvider;
+import org.openide.util.Lookup;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import org.openide.util.Lookup;
 
 /**
  * Provides messages for entries.
