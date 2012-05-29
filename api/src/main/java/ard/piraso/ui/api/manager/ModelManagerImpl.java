@@ -73,7 +73,7 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
                 String json = (String) monitor.getAttribute("value");
                 return MAPPER.readValue(json, clazz);
             } catch (Exception e) {
-                LOG.log(Level.WARNING, String.format("Error while parsing json for monitor %s", monitor.getName()), e);
+                LOG.log(Level.WARNING, String.format("Error while parsing json %s", monitor.getName()), e);
             }
         }
 

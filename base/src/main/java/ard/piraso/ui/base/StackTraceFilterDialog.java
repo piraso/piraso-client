@@ -15,13 +15,31 @@
  */
 package ard.piraso.ui.base;
 
+import ard.piraso.ui.api.StackTraceFilterModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
+import ard.piraso.ui.base.manager.SingleModelManagers;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author adeleon
  */
-public class StackTraceFilterDialog extends AbstractDialog {
+public final class StackTraceFilterDialog extends AbstractDialog {
+
+    private DefaultTableModel tableModel = new DefaultTableModel(0, 2) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return column != 0;
+        }
+    };
 
     /**
      * Creates new form StackTraceFilterDialog
@@ -31,8 +49,60 @@ public class StackTraceFilterDialog extends AbstractDialog {
         setTitle("Manage Stack Trace Filters");
 
         initComponents();
+        initTable();
         getRootPane().setDefaultButton(btnSave);
         setLocationRelativeTo(getOwner());
+
+        addButtonRefreshListeners();
+        refresh();
+    }
+
+    public void refresh() {
+        StackTraceFilterModel model = SingleModelManagers.STACK_TRACE_FILTER.get();
+
+        if(model == null) {
+            return;
+        }
+
+        if(CollectionUtils.isNotEmpty(model.getFilters())) {
+            for(StackTraceFilterModel.Child child : model.getFilters()) {
+                tableModel.addRow(new Object[]{child.getRegex(), child.isBold()});
+            }
+        }
+        
+        refreshButtons();
+    }
+
+
+    protected void addButtonRefreshListeners() {
+        jtable.getSelectionModel().addListSelectionListener(REFRESH_BUTTON_LIST_SELECTION_LISTENER);
+    }
+
+    @Override
+    protected void refreshButtons() {
+        btnRemove.setEnabled(jtable.getSelectedRow() >= 0);
+        btnEdit.setEnabled(jtable.getSelectedRow() >= 0);
+        btnSave.setEnabled(tableModel.getRowCount() > 0);
+    }
+
+    private void initTable() {
+        TableColumn regexColumn = jtable.getColumnModel().getColumn(0);
+        TableColumn boldColumn = jtable.getColumnModel().getColumn(1);
+
+        regexColumn.setHeaderValue("Regex");
+        regexColumn.setPreferredWidth(210);
+
+        boldColumn.setHeaderValue("Bold");
+        boldColumn.setPreferredWidth(30);
+        boldColumn.setMaxWidth(30);
+        boldColumn.setCellEditor(jtable.getDefaultEditor(Boolean.class));
+        boldColumn.setCellRenderer(jtable.getDefaultRenderer(Boolean.class));
+
+        jtable.setShowHorizontalLines(false);
+        jtable.setAutoscrolls(true);
+        jtable.setColumnSelectionAllowed(false);
+        jtable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jtable.getTableHeader().setReorderingAllowed(false);
     }
 
     /**
@@ -58,17 +128,7 @@ public class StackTraceFilterDialog extends AbstractDialog {
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.jLabel1.text")); // NOI18N
 
-        jtable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jtable.setModel(tableModel);
         jScrollPane1.setViewportView(jtable);
 
         btnAdd.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnAdd.text")); // NOI18N
@@ -87,6 +147,7 @@ public class StackTraceFilterDialog extends AbstractDialog {
         });
 
         btnEdit.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnEdit.text")); // NOI18N
+        btnEdit.setEnabled(false);
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
@@ -113,6 +174,7 @@ public class StackTraceFilterDialog extends AbstractDialog {
         );
 
         btnSave.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnSave.text")); // NOI18N
+        btnSave.setEnabled(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -169,19 +231,82 @@ public class StackTraceFilterDialog extends AbstractDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        StackTraceFilterInputDialog dialog = new StackTraceFilterInputDialog();
 
+        dialog.setVisible(true);
+
+        if(!dialog.isCancelled()) {
+            // maybe we are adding an existing value
+            for(int i = 0; i < tableModel.getRowCount(); i++) {
+                if(StringUtils.equals(dialog.getRegex(), String.valueOf(tableModel.getValueAt(i, 0)))) {
+                    tableModel.setValueAt(dialog.getRegex(), jtable.getSelectedRow(), 0);
+                    tableModel.setValueAt(dialog.isBold(), jtable.getSelectedRow(), 1);
+                    return;
+                }
+            }
+
+            tableModel.addRow(new Object[]{
+                    dialog.getRegex(),
+                    dialog.isBold()
+            });
+        }
+
+        refreshButtons();
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        if(ArrayUtils.isNotEmpty(jtable.getSelectedRows())) {
+            List<String> removed = new ArrayList<String>();
+            for(int index : jtable.getSelectedRows()) {
+                removed.add(String.valueOf(tableModel.getValueAt(index, 0)));
+            }
 
+            for(String regex : removed) {
+                removeRegex(regex);
+            }
+        }
+        
+        refreshButtons();
     }//GEN-LAST:event_btnRemoveActionPerformed
 
+    private void removeRegex(String regex) {
+        for(int i = 0; i < tableModel.getRowCount(); i++) {
+            if(StringUtils.equals(regex, String.valueOf(tableModel.getValueAt(i, 0)))) {
+                tableModel.removeRow(i);
+                return;
+            }
+        }
+    }    
+    
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        StackTraceFilterInputDialog dialog = new StackTraceFilterInputDialog();
 
+        String regex = (String) tableModel.getValueAt(jtable.getSelectedRow(), 0);
+        boolean bold = (Boolean) tableModel.getValueAt(jtable.getSelectedRow(), 1);
+        dialog.setRegex(regex);
+        dialog.setBold(bold);
+        dialog.setVisible(true);
+
+        if(!dialog.isCancelled()) {
+            tableModel.setValueAt(dialog.getRegex(), jtable.getSelectedRow(), 0);
+            tableModel.setValueAt(dialog.isBold(), jtable.getSelectedRow(), 1);
+        }
+
+        refreshButtons();
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        StackTraceFilterModel model = new StackTraceFilterModel();
 
+        for(int i = 0; i < tableModel.getRowCount(); i++) {
+            String regex = (String) tableModel.getValueAt(i, 0);
+            boolean bold = (Boolean) tableModel.getValueAt(i, 1);
+
+            model.add(regex, bold);
+        }
+
+        SingleModelManagers.STACK_TRACE_FILTER.save(model);
+        dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed

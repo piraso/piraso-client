@@ -15,7 +15,17 @@
  */
 package ard.piraso.ui.log4j;
 
+import ard.piraso.ui.api.StackTraceFilterModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -23,16 +33,72 @@ import ard.piraso.ui.api.extension.AbstractDialog;
  */
 public class Log4jPreferenceDialog extends AbstractDialog {
 
+    private DefaultTableModel tableModel = new DefaultTableModel(0, 2) {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
+    
     /**
      * Creates new form Log4jPreferenceDialog
      */
     public Log4jPreferenceDialog() {
         super();
         initComponents();
-        
+        initTable();
+
         getRootPane().setDefaultButton(btnSave);
         setLocationRelativeTo(getOwner());
+        addButtonRefreshListeners();
+        refresh();
     }
+
+    public void refresh() {
+        Log4jPreferencesModel model = SingleModelManagers.LOG4J_PREFERENCES.get();
+
+        if(model == null) {
+            return;
+        }
+
+        if(CollectionUtils.isNotEmpty(model.getPreferences())) {
+            for(Log4jPreferencesModel.Child child : model.getPreferences()) {
+                tableModel.addRow(new Object[]{child.getLogger(), child.getDescription()});
+            }
+        }
+
+        refreshButtons();
+    }
+
+
+    protected void addButtonRefreshListeners() {
+        jtable.getSelectionModel().addListSelectionListener(REFRESH_BUTTON_LIST_SELECTION_LISTENER);
+    }
+
+    @Override
+    protected void refreshButtons() {
+        btnRemove.setEnabled(jtable.getSelectedRow() >= 0);
+        btnEdit.setEnabled(jtable.getSelectedRow() >= 0);
+        btnSave.setEnabled(tableModel.getRowCount() > 0);
+    }
+
+    private void initTable() {
+        TableColumn loggerColumn = jtable.getColumnModel().getColumn(0);
+        TableColumn descriptionColumn = jtable.getColumnModel().getColumn(1);
+
+        loggerColumn.setHeaderValue("Logger");
+        loggerColumn.setPreferredWidth(120);
+
+        descriptionColumn.setHeaderValue("Description");
+        descriptionColumn.setPreferredWidth(300);
+
+        jtable.setShowHorizontalLines(false);
+        jtable.setAutoscrolls(true);
+        jtable.setColumnSelectionAllowed(false);
+        jtable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jtable.getTableHeader().setReorderingAllowed(false);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -57,17 +123,7 @@ public class Log4jPreferenceDialog extends AbstractDialog {
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(Log4jPreferenceDialog.class, "Log4jPreferenceDialog.jLabel1.text")); // NOI18N
 
-        jtable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jtable.setModel(tableModel);
         jScrollPane1.setViewportView(jtable);
 
         btnAdd.setText(org.openide.util.NbBundle.getMessage(Log4jPreferenceDialog.class, "Log4jPreferenceDialog.btnAdd.text")); // NOI18N
@@ -86,6 +142,7 @@ public class Log4jPreferenceDialog extends AbstractDialog {
         });
 
         btnEdit.setText(org.openide.util.NbBundle.getMessage(Log4jPreferenceDialog.class, "Log4jPreferenceDialog.btnEdit.text")); // NOI18N
+        btnEdit.setEnabled(false);
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEditActionPerformed(evt);
@@ -112,6 +169,7 @@ public class Log4jPreferenceDialog extends AbstractDialog {
         );
 
         btnSave.setText(org.openide.util.NbBundle.getMessage(Log4jPreferenceDialog.class, "Log4jPreferenceDialog.btnSave.text")); // NOI18N
+        btnSave.setEnabled(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSaveActionPerformed(evt);
@@ -142,7 +200,7 @@ public class Log4jPreferenceDialog extends AbstractDialog {
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(271, Short.MAX_VALUE)
+                        .addContainerGap(362, Short.MAX_VALUE)
                         .add(btnSave)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(btnCancel)))
@@ -168,20 +226,84 @@ public class Log4jPreferenceDialog extends AbstractDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        Log4jPreferenceInputDialog dialog = new Log4jPreferenceInputDialog();
 
-   }//GEN-LAST:event_btnAddActionPerformed
+        dialog.setVisible(true);
+
+        if(!dialog.isCancelled()) {
+            // maybe we are adding an existing value
+            for(int i = 0; i < tableModel.getRowCount(); i++) {
+                if(StringUtils.equals(dialog.getLogger(), String.valueOf(tableModel.getValueAt(i, 0)))) {
+                    tableModel.setValueAt(dialog.getLogger(), jtable.getSelectedRow(), 0);
+                    tableModel.setValueAt(dialog.getDescription(), jtable.getSelectedRow(), 1);
+                    return;
+                }
+            }
+
+            tableModel.addRow(new Object[]{
+                    dialog.getLogger(),
+                    dialog.getDescription()
+            });
+        }
+
+        refreshButtons();
+    }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        if(ArrayUtils.isNotEmpty(jtable.getSelectedRows())) {
+            List<String> removed = new ArrayList<String>();
+            for(int index : jtable.getSelectedRows()) {
+                removed.add(String.valueOf(tableModel.getValueAt(index, 0)));
+            }
 
-   }//GEN-LAST:event_btnRemoveActionPerformed
+            for(String logger : removed) {
+                removeLogger(logger);
+            }
+        }
+
+        refreshButtons();
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
+    private void removeLogger(String logger) {
+        for(int i = 0; i < tableModel.getRowCount(); i++) {
+            if(StringUtils.equals(logger, String.valueOf(tableModel.getValueAt(i, 0)))) {
+                tableModel.removeRow(i);
+                return;
+            }
+        }
+    }
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        Log4jPreferenceInputDialog dialog = new Log4jPreferenceInputDialog();
 
-   }//GEN-LAST:event_btnEditActionPerformed
+        String logger = (String) tableModel.getValueAt(jtable.getSelectedRow(), 0);
+        String description = (String) tableModel.getValueAt(jtable.getSelectedRow(), 1);
+        dialog.setLogger(logger);
+        dialog.setDescription(description);
+        dialog.setVisible(true);
+
+        if(!dialog.isCancelled()) {
+            tableModel.setValueAt(dialog.getLogger(), jtable.getSelectedRow(), 0);
+            tableModel.setValueAt(dialog.getDescription(), jtable.getSelectedRow(), 1);
+        }
+
+        refreshButtons();
+    }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        Log4jPreferencesModel model = new Log4jPreferencesModel();
 
-   }//GEN-LAST:event_btnSaveActionPerformed
+        for(int i = 0; i < tableModel.getRowCount(); i++) {
+            String logger = (String) tableModel.getValueAt(i, 0);
+            String description = (String) tableModel.getValueAt(i, 1);
+
+            model.add(logger, description);
+        }
+
+        SingleModelManagers.LOG4J_PREFERENCES.save(model);
+        dispose();
+
+    }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         dispose();

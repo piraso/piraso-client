@@ -26,8 +26,6 @@ import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -99,31 +97,14 @@ public final class ProfilesDialog extends AbstractDialog {
         jtable.getTableHeader().setReorderingAllowed(false);
     }
 
-    private void addButtonRefreshListeners() {
-        txtName.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                refreshButtons();
-            }
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                refreshButtons();
-            }
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                refreshButtons();
-            }
-        });
-
-        jtable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                refreshButtons();
-            }
-        });
+    protected void addButtonRefreshListeners() {
+        txtName.getDocument().addDocumentListener(REFRESH_BUTTON_DOCUMENT_LISTENER);
+        jtable.getSelectionModel().addListSelectionListener(REFRESH_BUTTON_LIST_SELECTION_LISTENER);
     }
 
-    private void refreshButtons() {
+    
+    @Override
+    protected void refreshButtons() {
         boolean enabled = checkEnabled();
 
         btnSave.setEnabled(enabled);

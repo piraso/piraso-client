@@ -24,14 +24,11 @@ import ard.piraso.ui.base.manager.ModelManagers;
 import ard.piraso.ui.api.manager.ModelVisitor;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 
-import java.awt.event.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -78,46 +75,13 @@ public final class ContextMonitorDialog extends AbstractDialog {
     }
 
     private void addButtonRefreshListeners() {
-        DocumentListener documentChangeListener = new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                refreshButtons();
-            }
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                refreshButtons();
-            }
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                refreshButtons();
-            }
-        };
-
-        txtName.getDocument().addDocumentListener(documentChangeListener);
-        txtAddr.getDocument().addDocumentListener(documentChangeListener);
-        cboHost.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                refreshButtons();
-            }
-        });
-        cboHost.getEditor().getEditorComponent().addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                refreshButtons();
-            }
-            @Override
-            public void keyPressed(KeyEvent e) {
-                refreshButtons();
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {
-                refreshButtons();
-            }
-        });
+        txtName.getDocument().addDocumentListener(REFRESH_BUTTON_DOCUMENT_LISTENER);
+        txtAddr.getDocument().addDocumentListener(REFRESH_BUTTON_DOCUMENT_LISTENER);
+        cboHost.addItemListener(REFRESH_BUTTON_ITEM_LISTENER);
+        cboHost.getEditor().getEditorComponent().addKeyListener(REFRESH_BUTTON_KEY_LISTENER);
     }
 
-    private void refreshButtons() {
+    protected void refreshButtons() {
         boolean enabled = checkEnabled();
 
         btnSave.setEnabled(enabled);

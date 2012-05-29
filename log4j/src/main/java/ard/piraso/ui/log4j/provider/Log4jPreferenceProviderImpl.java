@@ -7,13 +7,12 @@ import ard.piraso.ui.api.NCPreferenceProperty;
 import ard.piraso.ui.api.PPFactory;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
-import java.util.*;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.openide.filesystems.FileObject;
-import org.openide.filesystems.FileUtil;
+import ard.piraso.ui.log4j.Log4jPreferencesModel;
+import ard.piraso.ui.log4j.SingleModelManagers;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;
+
+import java.util.*;
 
 /**
  * Provides log4j preferences.
@@ -50,8 +49,7 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
 
     @Override
     public List<? extends PreferenceProperty> getPreferences() {
-        FileObject log4jFolder = FileUtil.getConfigRoot().getFileObject("log4j");
-        FileObject preferences = log4jFolder.getFileObject("preferences");
+        Log4jPreferencesModel model = SingleModelManagers.LOG4J_PREFERENCES.get();
 
         mapping = new HashMap<String, String>();
         List<PreferenceProperty> result = new LinkedList<PreferenceProperty>();
@@ -59,24 +57,10 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
         PreferenceProperty log4jEnabled = PPFactory.createEntry(Log4jEntry.class, Log4jPreferenceEnum.LOG4J_ENABLED.getPropertyName(), Boolean.class);
         result.add(log4jEnabled);
 
-        Enumeration<String> attributes = preferences.getAttributes();
-        List<String> attrNames = new ArrayList<String>();
-        List<String> attrValues = new ArrayList<String>();
-        Map<String, String> attrs = new HashMap<String, String>();
-        CollectionUtils.addAll(attrNames, attributes);
+        for(Log4jPreferencesModel.Child child : model.getPreferences()) {
+            String regex = child.getLogger();
 
-        for(String regex : attrNames) {
-            String value = String.valueOf(preferences.getAttribute(regex));
-            attrValues.add(value);
-            attrs.put(value, regex);
-        }
-
-        Collections.sort(attrValues);
-
-        for(String value : attrValues) {
-            String regex = attrs.get(value);
-
-            mapping.put("log4j." + regex, value);
+            mapping.put("log4j." + regex, child.getDescription());
             NCPreferenceProperty pp = PPFactory.createEntry(Log4jEntry.class, "log4j." + regex, Boolean.class);
             pp.setParent(true);
             pp.addDependents(log4jEnabled);
