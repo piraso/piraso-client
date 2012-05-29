@@ -27,7 +27,7 @@ import org.openide.awt.ActionRegistration;
 @ActionRegistration(iconBase="ard/piraso/ui/base/icons/gnome_video_display.png", iconInMenu=true, displayName="Manage Monitors")
 @ActionReferences({
     @ActionReference(path = "Menu/Tools", position = 600),
-    @ActionReference(path = "Toolbars/Tools", position = 600)
+    @ActionReference(path = "Toolbars/Window", position = 800)
 })
 public final class ManageMonitorShowAction implements ActionListener {
 

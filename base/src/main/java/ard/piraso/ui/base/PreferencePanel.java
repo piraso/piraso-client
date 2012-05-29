@@ -410,7 +410,9 @@ public class PreferencePanel extends javax.swing.JPanel {
         }
 
         private void refreshUI() {
-            refreshUI(childrenPanel.isVisible());
+            if(childrenPanel != null && parentToggle != null) {
+                refreshUI(childrenPanel.isVisible());
+            }
         }
 
         private void refreshUI(boolean show) {

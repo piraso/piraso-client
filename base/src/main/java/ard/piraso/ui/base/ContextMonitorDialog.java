@@ -19,8 +19,8 @@ import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.Preferences;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.PreferenceProvider;
-import ard.piraso.ui.base.manager.ConfiguredMonitorManager;
-import ard.piraso.ui.base.manager.MonitorVisitor;
+import ard.piraso.ui.base.manager.ModelManagers;
+import ard.piraso.ui.base.manager.ModelVisitor;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 
 import java.awt.event.ItemEvent;
@@ -126,7 +126,7 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
         boolean enabled = checkEnabled();
 
         btnSave.setEnabled(enabled);
-        if(enabled &&  ConfiguredMonitorManager.INSTANCE.containsMonitor(txtName.getText())) {
+        if(enabled &&  ModelManagers.MONITORS.contains(txtName.getText())) {
             btnRemove.setEnabled(enabled);
         } else {
             btnRemove.setEnabled(false);
@@ -159,7 +159,7 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
     }
 
     private void initSelection(String name) {
-        NewContextMonitorModel model = ConfiguredMonitorManager.INSTANCE.getMonitor(name);
+        NewContextMonitorModel model = ModelManagers.MONITORS.get(name);
 
         if(model == null) {
             // no selection
@@ -192,12 +192,12 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
         listModel.clear();
         cboModel.removeAllElements();
 
-        ConfiguredMonitorManager.INSTANCE.visitMonitors(new MonitorVisitor() {
+        ModelManagers.MONITORS.visit(new ModelVisitor<NewContextMonitorModel>() {
             @Override
             public void visit(NewContextMonitorModel model) {
                 listModel.addElement(model.getName());
 
-                if(cboModel.getIndexOf(model.getLoggingUrl()) == -1) {
+                if (cboModel.getIndexOf(model.getLoggingUrl()) == -1) {
                     cboModel.addElement(model.getLoggingUrl());
                 }
             }
@@ -413,7 +413,7 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
 
     private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
         try {
-            ConfiguredMonitorManager.INSTANCE.remove(txtName.getText());
+            ModelManagers.MONITORS.remove(txtName.getText());
             refresh();
         } catch (IOException e) {
             ErrorManager.getDefault().notify(e);
@@ -475,7 +475,7 @@ public final class ContextMonitorDialog extends javax.swing.JDialog {
         }
 
         try {
-            ConfiguredMonitorManager.INSTANCE.save(model);
+            ModelManagers.MONITORS.save(model);
             refresh();
         } catch (IOException e) {
             ErrorManager.getDefault().notify(e);

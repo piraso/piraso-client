@@ -27,7 +27,7 @@ import org.apache.commons.lang.builder.HashCodeBuilder;
  *
  * @author adleon
  */
-public class NewContextMonitorModel implements WizardModel {
+public class NewContextMonitorModel implements WizardModel, WithNameModel {
     private String name;
 
     private Preferences preferences;
