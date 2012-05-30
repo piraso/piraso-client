@@ -15,7 +15,7 @@
  */
 package ard.piraso.ui.base.action;
 
-import ard.piraso.ui.base.StackTraceFilterDialog;
+import ard.piraso.ui.api.StackTraceFilterDialog;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;

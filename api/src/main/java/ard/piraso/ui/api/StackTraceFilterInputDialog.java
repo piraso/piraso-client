@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ard.piraso.ui.base;
+package ard.piraso.ui.api;
 
 import ard.piraso.ui.api.extension.AbstractDialog;
 import org.apache.commons.lang.StringUtils;
@@ -83,11 +83,11 @@ public class StackTraceFilterInputDialog extends AbstractDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.jLabel1.text_1")); // NOI18N
 
-        txtName.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.txtName.text")); // NOI18N
+        txtName.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.txtName.text_1")); // NOI18N
 
-        btnOk.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.btnOk.text")); // NOI18N
+        btnOk.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.btnOk.text_1")); // NOI18N
         btnOk.setEnabled(false);
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -95,14 +95,14 @@ public class StackTraceFilterInputDialog extends AbstractDialog {
             }
         });
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.btnCancel.text")); // NOI18N
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.btnCancel.text_1")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
 
-        chkBold.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.chkBold.text")); // NOI18N
+        chkBold.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterInputDialog.class, "StackTraceFilterInputDialog.chkBold.text_1")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,18 +111,18 @@ public class StackTraceFilterInputDialog extends AbstractDialog {
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(layout.createSequentialGroup()
-                        .addContainerGap(219, Short.MAX_VALUE)
+                        .addContainerGap(251, Short.MAX_VALUE)
                         .add(btnOk)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(btnCancel))
                     .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
                         .add(15, 15, 15)
                         .add(jLabel1)
-                        .add(41, 41, 41)
+                        .add(18, 18, 18)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
                                 .add(chkBold)
-                                .add(0, 0, Short.MAX_VALUE))
+                                .add(0, 218, Short.MAX_VALUE))
                             .add(txtName))))
                 .add(14, 14, 14))
         );

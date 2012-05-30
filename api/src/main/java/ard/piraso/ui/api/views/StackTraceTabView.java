@@ -21,6 +21,8 @@ package ard.piraso.ui.api.views;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.StackTraceAwareEntry;
 import ard.piraso.api.entry.StackTraceElementEntry;
+import ard.piraso.ui.api.StackTraceFilterModel;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.openide.ErrorManager;
 
 import javax.swing.text.BadLocationException;
@@ -42,13 +44,39 @@ public class StackTraceTabView extends FilteredTextTabView<StackTraceAwareEntry>
 
     @Override
     public void refreshView(Entry entry) {
+        StackTraceFilterModel model = SingleModelManagers.STACK_TRACE_FILTER.get();
         StackTraceAwareEntry stackTraceAwareEntry = (StackTraceAwareEntry) entry;
         try {
             btnCopy.setEnabled(true);
             txtEditor.setText("");
-            insertBoldCode(txtEditor, "STACK TRACE:");
+            insertBoldBlueCode(txtEditor, "STACK TRACE:\n");
+            boolean insertedEllipsis = false;
             for(StackTraceElementEntry st : stackTraceAwareEntry.getStackTrace()) {
-                insertCode(txtEditor, "\n    " + st.toString());
+                String value = st.toString();
+                if(btnFilter.isSelected()) {
+                    if(model.isBold(value)) {
+                        insertBoldCode(txtEditor, "\n    " + value);
+                        insertedEllipsis = false;
+                    } else if(model.isMatch(value)) {
+                        insertCode(txtEditor, "\n    " + value);
+                        insertedEllipsis = false;
+                    } else {
+                        if(!insertedEllipsis) {
+                            insertGrayCode(txtEditor, "\n    ...");
+                            insertedEllipsis = true;
+                        }
+                    }
+                } else {
+                    if(model.isBold(value)) {
+                        insertBoldCode(txtEditor, "\n    " + value);
+                    } else if(model.isMatch(value)) {
+                        insertCode(txtEditor, "\n    " + value);
+                    } else {
+                        insertGrayCode(txtEditor, "\n    " + value);
+                    }
+
+                    insertedEllipsis = false;
+                }
             }
 
             start(txtEditor);
@@ -60,6 +88,6 @@ public class StackTraceTabView extends FilteredTextTabView<StackTraceAwareEntry>
 
     @Override
     protected void btnFilterClickHandle() {
-
+        refreshView((Entry) entry);
     }
 }

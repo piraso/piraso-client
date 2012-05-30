@@ -26,7 +26,7 @@ public class StackTraceFilterModel {
 
     public boolean isMatch(String value) {
         if(StringUtils.isNotBlank(value)) {
-            String valueToCompare = StringUtils.trim(value);
+            String valueToCompare = getValue(value);
 
             for(Child child : filters) {
                 if(valueToCompare.matches(child.getRegex())) {
@@ -40,7 +40,7 @@ public class StackTraceFilterModel {
 
     public boolean isBold(String value) {
         if(StringUtils.isNotBlank(value)) {
-            String valueToCompare = StringUtils.trim(value);
+            String valueToCompare = getValue(value);
             for(Child child : filters) {
                 if(child.isBold() && valueToCompare.matches(child.getRegex())) {
                     return true;
@@ -49,6 +49,16 @@ public class StackTraceFilterModel {
         }
 
         return false;
+    }
+
+    private String getValue(String str) {
+        String value = StringUtils.trim(str);
+
+        if(value.startsWith("at ")) {
+            value = value.substring(3);
+        }
+
+        return value;
     }
 
     public static final class Child {

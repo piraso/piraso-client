@@ -101,6 +101,8 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         elapseColumn.setCellRenderer(renderer);
 
         table.setShowHorizontalLines(false);
+        table.setShowGrid(false);
+        table.setShowVerticalLines(false);
         table.setAutoscrolls(true);
         table.setColumnSelectionAllowed(false);
         table.getTableHeader().setReorderingAllowed(false);

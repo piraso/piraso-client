@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ard.piraso.ui.base;
+package ard.piraso.ui.api;
 
-import ard.piraso.ui.api.StackTraceFilterModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
-import ard.piraso.ui.base.manager.SingleModelManagers;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -126,19 +125,19 @@ public final class StackTraceFilterDialog extends AbstractDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.jLabel1.text_1")); // NOI18N
 
         jtable.setModel(tableModel);
         jScrollPane1.setViewportView(jtable);
 
-        btnAdd.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnAdd.text")); // NOI18N
+        btnAdd.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnAdd.text_1")); // NOI18N
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAddActionPerformed(evt);
             }
         });
 
-        btnRemove.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnRemove.text")); // NOI18N
+        btnRemove.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnRemove.text_1")); // NOI18N
         btnRemove.setEnabled(false);
         btnRemove.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -146,7 +145,7 @@ public final class StackTraceFilterDialog extends AbstractDialog {
             }
         });
 
-        btnEdit.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnEdit.text")); // NOI18N
+        btnEdit.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnEdit.text_1")); // NOI18N
         btnEdit.setEnabled(false);
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -173,7 +172,7 @@ public final class StackTraceFilterDialog extends AbstractDialog {
                 .addContainerGap())
         );
 
-        btnSave.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnSave.text")); // NOI18N
+        btnSave.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnSave.text_1")); // NOI18N
         btnSave.setEnabled(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -181,7 +180,7 @@ public final class StackTraceFilterDialog extends AbstractDialog {
             }
         });
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnCancel.text")); // NOI18N
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(StackTraceFilterDialog.class, "StackTraceFilterDialog.btnCancel.text_1")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -205,7 +204,7 @@ public final class StackTraceFilterDialog extends AbstractDialog {
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(263, Short.MAX_VALUE)
+                        .addContainerGap(291, Short.MAX_VALUE)
                         .add(btnSave)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(btnCancel)))

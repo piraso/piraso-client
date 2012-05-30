@@ -105,7 +105,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
             .add(layout.createSequentialGroup()
                 .add(15, 15, 15)
                 .add(lblStatus)
-                .addContainerGap(375, Short.MAX_VALUE))
+                .addContainerGap(246, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)

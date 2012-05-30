@@ -34,18 +34,26 @@ public final class JTextPaneUtils {
 
     public static SimpleAttributeSet CODE_BOLD = new SimpleAttributeSet();
 
+    public static SimpleAttributeSet CODE_BOLD_BLUE = new SimpleAttributeSet();
+
+
     public static SimpleAttributeSet CODE = new SimpleAttributeSet();
 
     public static SimpleAttributeSet CODE_BLUE = new SimpleAttributeSet();
 
     public static SimpleAttributeSet CODE_RED = new SimpleAttributeSet();
+    public static SimpleAttributeSet CODE_GRAY = new SimpleAttributeSet();
+
 
     static {
         setupCode(CODE_HEADER, Color.BLACK, true, 14);
         setupCode(CODE_BOLD, Color.BLACK, true, 13);
         setupCode(CODE, Color.BLACK, false, 13);
         setupCode(CODE_BLUE, Color.BLUE, false, 13);
+        setupCode(CODE_BOLD_BLUE, Color.BLUE, true, 13);
+
         setupCode(CODE_RED, Color.RED, false, 13);
+        setupCode(CODE_GRAY, Color.GRAY, false, 13);
     }
 
     private static void setupCode(SimpleAttributeSet set, Color color, boolean bold, int fontSize) {
@@ -71,6 +79,10 @@ public final class JTextPaneUtils {
         insertText(textPane, text, CODE_BOLD);
     }
 
+    public static void insertBoldBlueCode(JTextPane textPane, String text) throws BadLocationException {
+        insertText(textPane, text, CODE_BOLD_BLUE);
+    }
+
     public static void insertCode(JTextPane textPane, String text) throws BadLocationException {
 
         if(text.equals("@not-supported")) {
@@ -79,6 +91,16 @@ public final class JTextPaneUtils {
             insertText(textPane, text, CODE_BLUE);
         } else {
             insertText(textPane, text, CODE);
+        }
+    }
+
+    public static void insertGrayCode(JTextPane textPane, String text) throws BadLocationException {
+        if(text.equals("@not-supported")) {
+            insertText(textPane, text, CODE_RED);
+        } else if(text.equals("@null")) {
+            insertText(textPane, text, CODE_BLUE);
+        } else {
+            insertText(textPane, text, CODE_GRAY);
         }
     }
 

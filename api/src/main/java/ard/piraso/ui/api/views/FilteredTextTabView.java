@@ -68,7 +68,6 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
         jToolBar1.setRollover(true);
 
         btnFilter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/filter.png"))); // NOI18N
-        btnFilter.setSelected(true);
         btnFilter.setText(org.openide.util.NbBundle.getMessage(FilteredTextTabView.class, "FilteredTextTabView.btnFilter.text")); // NOI18N
         btnFilter.setToolTipText(org.openide.util.NbBundle.getMessage(FilteredTextTabView.class, "FilteredTextTabView.btnFilter.toolTipText")); // NOI18N
         btnFilter.setFocusable(false);

@@ -21,14 +21,16 @@ package ard.piraso.ui.api.views;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.ThrowableAwareEntry;
+import ard.piraso.ui.api.StackTraceFilterModel;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.openide.ErrorManager;
 
 import javax.swing.text.BadLocationException;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 
-import static ard.piraso.ui.api.util.JTextPaneUtils.insertCode;
-import static ard.piraso.ui.api.util.JTextPaneUtils.start;
+import static ard.piraso.ui.api.util.JTextPaneUtils.*;
+import static ard.piraso.ui.api.util.JTextPaneUtils.insertBoldCode;
+import static ard.piraso.ui.api.util.JTextPaneUtils.insertGrayCode;
 
 /**
  *
@@ -42,16 +44,48 @@ public class ExceptionTabView extends FilteredTextTabView<ThrowableAwareEntry> {
 
     @Override
     public void refreshView(Entry entry) {
+        StackTraceFilterModel model = SingleModelManagers.STACK_TRACE_FILTER.get();
         ThrowableAwareEntry throwableAwareEntry = (ThrowableAwareEntry) entry;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         throwableAwareEntry.getThrown().printStackTrace(new PrintStream(out, true));
 
         try {
             txtEditor.setText("");
-            insertCode(txtEditor, out.toString());
+
+            BufferedReader reader = new BufferedReader(new StringReader(out.toString()));
+
+            insertBoldBlueCode(txtEditor, "EXCEPTION:\n");
+            String value;
+            boolean insertedEllipsis = false;
+            while((value = reader.readLine()) != null) {
+                if(btnFilter.isSelected()) {
+                    if(model.isBold(value)) {
+                        insertBoldCode(txtEditor, "\n    " + value);
+                        insertedEllipsis = false;
+                    } else if(model.isMatch(value)) {
+                        insertCode(txtEditor, "\n    " + value);
+                        insertedEllipsis = false;
+                    } else {
+                        if(!insertedEllipsis) {
+                            insertGrayCode(txtEditor, "\n    ...");
+                            insertedEllipsis = true;
+                        }
+                    }
+                } else {
+                    if(model.isBold(value)) {
+                        insertBoldCode(txtEditor, "\n    " + value);
+                    } else if(model.isMatch(value)) {
+                        insertCode(txtEditor, "\n    " + value);
+                    } else {
+                        insertGrayCode(txtEditor, "\n    " + value);
+                    }
+
+                    insertedEllipsis = false;
+                }
+            }
 
             start(txtEditor);
-        } catch (BadLocationException e) {
+        } catch (Exception e) {
             btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);
         }
@@ -59,5 +93,6 @@ public class ExceptionTabView extends FilteredTextTabView<ThrowableAwareEntry> {
 
     @Override
     protected void btnFilterClickHandle() {
+        refreshView((Entry) entry);
     }
 }
