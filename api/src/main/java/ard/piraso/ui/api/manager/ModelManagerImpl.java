@@ -6,7 +6,11 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openide.filesystems.FileObject;
 
+import javax.swing.event.EventListenerList;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,9 +27,42 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
 
     private final Class<T> clazz;
 
+    private EventListenerList listeners = new EventListenerList();
+
     public ModelManagerImpl(FileObject persistent, Class<T> clazz) {
         this.clazz = clazz;
         this.persistent = persistent;
+    }
+
+    public void addModelOnChangeListener(ModelOnChangeListener listener) {
+        listeners.add(ModelOnChangeListener.class, listener);
+    }
+
+    public void fireOnChangeEvent() {
+        ModelOnChangeListener[] handlers = listeners.getListeners(ModelOnChangeListener.class);
+
+        for(ModelOnChangeListener handler : handlers) {
+            handler.onChange(new ModelEvent(this));
+        }
+    }
+
+    @Override
+    public List<String> getNames() {
+        final List<String> names = new ArrayList<String>();
+
+        visit(new ModelVisitor<T>() {
+            @Override
+            public void visit(T t) {
+                names.add(t.getName());
+            }
+        });
+
+        Collections.sort(names);
+        return names;
+    }
+
+    public boolean isEmpty() {
+        return size() == 0;
     }
 
     public int size() {
@@ -87,11 +124,13 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
             }
 
             monitor.setAttribute("value", MAPPER.writeValueAsString(model));
+            fireOnChangeEvent();
             return;
         }
 
         FileObject newMonitor = persistent.createData(model.getName());
         newMonitor.setAttribute("value", MAPPER.writeValueAsString(model));
+        fireOnChangeEvent();
     }
 
     public void remove(String name) throws IOException {
@@ -102,6 +141,8 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
 
             monitor.delete();
         }
+
+        fireOnChangeEvent();
     }
 
 }
