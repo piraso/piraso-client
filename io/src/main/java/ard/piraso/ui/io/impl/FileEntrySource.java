@@ -44,6 +44,8 @@ public class FileEntrySource implements IOEntrySource {
 
     private File source;
 
+    private String name;
+
     public FileEntrySource(File source) throws FileNotFoundException {
         Validate.notNull(source, "source should not be null.");
         this.source = source;
@@ -51,6 +53,10 @@ public class FileEntrySource implements IOEntrySource {
         if(!source.isFile()) {
             throw new FileNotFoundException(String.format("File %s not found.", source.getAbsolutePath()));
         }
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
@@ -61,6 +67,11 @@ public class FileEntrySource implements IOEntrySource {
         } catch (IOException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

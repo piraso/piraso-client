@@ -50,6 +50,8 @@ public class HttpEntrySource implements IOEntrySource {
 
     private String watchedAddr;
 
+    private String name;
+
     public HttpEntrySource(Preferences preferences, String uri) {
         this(preferences, uri, null);
     }
@@ -58,6 +60,10 @@ public class HttpEntrySource implements IOEntrySource {
         this.preferences = preferences;
         this.uri = uri;
         this.watchedAddr = watchedAddr;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     private void initReader() {
@@ -82,6 +88,19 @@ public class HttpEntrySource implements IOEntrySource {
     @Override
     public void reset() {
         initReader();
+    }
+
+    public boolean testConnection() throws Exception {
+        if(reader == null && !alive) {
+            initReader();
+        }
+
+        return reader.testConnection();
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override

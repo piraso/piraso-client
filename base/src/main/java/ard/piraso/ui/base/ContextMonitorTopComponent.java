@@ -48,8 +48,8 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
     private SingleClassInstanceContent<Entry> entryContent;
 
-    public ContextMonitorTopComponent(IOEntryReader reader) {
-        setName(NbBundle.getMessage(ContextMonitorTopComponent.class, "CTL_ContextMonitorTopComponent"));
+    public ContextMonitorTopComponent(IOEntryReader reader, String name) {
+        setName(name);
         setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
         setIcon(ImageUtilities.loadImage(ICON_PATH, true));
 

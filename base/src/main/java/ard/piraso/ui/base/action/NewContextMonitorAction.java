@@ -2,6 +2,8 @@ package ard.piraso.ui.base.action;
 
 import ard.piraso.ui.api.manager.ModelEvent;
 import ard.piraso.ui.api.manager.ModelOnChangeListener;
+import ard.piraso.ui.base.ContextMonitorDispatcher;
+import ard.piraso.ui.base.NewContextMonitorDialog;
 import ard.piraso.ui.base.manager.ModelManagers;
 import org.openide.awt.*;
 import org.openide.util.ImageUtilities;
@@ -36,7 +38,7 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("here!");
+        new NewContextMonitorDialog().setVisible(true);
     }
 
     @Override
@@ -51,6 +53,7 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
         return menu;
     }
 
+    @Override
     public Component getToolbarPresenter() {
         JPopupMenu popup = new JPopupMenu();
         addMenuItems(popup);
@@ -71,7 +74,7 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
         for(Iterator<String> itr = profiles.iterator(); itr.hasNext() && added <= MAX_MENU_ITEM_COUNT; added++) {
             String profileName = itr.next();
             JMenuItem item = new JMenuItem(String.format("Profile: %s", profileName));
-
+            item.addActionListener(new ProfileHandler(profileName));
             menu.add(item);
         }
 
@@ -83,6 +86,7 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
         for(Iterator<String> itr = monitors.iterator(); itr.hasNext() && added <= MAX_MENU_ITEM_COUNT; added++) {
             String monitorName = itr.next();
             JMenuItem item = new JMenuItem(String.format("Monitor: %s", monitorName));
+            item.addActionListener(new MonitorHandler(monitorName));
             menu.add(item);
         }
 
@@ -97,6 +101,34 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
             ((JMenu) menu).addSeparator();
         } else if(menu instanceof JPopupMenu) {
             ((JPopupMenu) menu).addSeparator();
+        }
+    }
+
+    private class MonitorHandler implements ActionListener {
+
+        private String monitorName;
+
+        private MonitorHandler(String monitorName) {
+            this.monitorName = monitorName;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ContextMonitorDispatcher.forwardByMonitorName(monitorName);
+        }
+    }
+
+    private class ProfileHandler implements ActionListener {
+
+        private String profileName;
+
+        private ProfileHandler(String profileName) {
+            this.profileName = profileName;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            ContextMonitorDispatcher.forwardByProfileName(profileName);
         }
     }
 

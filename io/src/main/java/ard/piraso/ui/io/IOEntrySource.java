@@ -25,6 +25,8 @@ import ard.piraso.api.io.EntryReadListener;
  * @author adleon
  */
 public interface IOEntrySource {
+
+    public String getName();
     
     public void start();
     
