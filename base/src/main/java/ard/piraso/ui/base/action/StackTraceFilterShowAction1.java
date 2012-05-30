@@ -29,8 +29,7 @@ import java.awt.event.ActionListener;
 @ActionReferences({
     @ActionReference(path = "Menu/Tools", position = 610)
 })
-public final class StackTraceFilterShowAction implements ActionListener {
-
+public final class StackTraceFilterShowAction1 implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
