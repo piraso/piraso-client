@@ -27,10 +27,11 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
     private static final String SMALL_ICON_PATH = "ard/piraso/ui/base/icons/new.png";
     private static final String LARGE_ICON_PATH = "ard/piraso/ui/base/icons/new24.png";
 
-    private static final int MAX_MENU_ITEM_COUNT = 25;
+    private static final int MAX_MENU_ITEM_COUNT = 20;
 
     public NewContextMonitorAction() {
         putValue("iconBase", SMALL_ICON_PATH);
+        putValue(Action.SHORT_DESCRIPTION, "New Context Monitor");
     }
 
     @Override
