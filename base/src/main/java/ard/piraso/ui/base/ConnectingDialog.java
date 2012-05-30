@@ -50,9 +50,11 @@ public class ConnectingDialog extends javax.swing.JDialog {
 
         for(NewContextMonitorModel m : models) {
             HttpEntrySource source = new HttpEntrySource(m.getPreferences(), m.getLoggingUrl(), m.getWatchedAddr());
+            source.setName(m.getName());
 
             try {
                 setLabel("Testing connection to " + m.getName() + "...");
+                source.reset();
                 if(source.testConnection()) {
                     validResults.add(source);
                 } else {
