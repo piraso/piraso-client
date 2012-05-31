@@ -17,16 +17,23 @@ package ard.piraso.ui.base;
 
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.io.impl.HttpEntrySource;
-import java.util.*;
 import org.openide.windows.WindowManager;
 
-import javax.swing.JDialog;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author adeleon
  */
 public class ConnectingDialog extends javax.swing.JDialog {
+    
+    private static final Logger LOG = Logger.getLogger(ConnectingDialog.class.getName());
     
     private Map<NewContextMonitorModel, String> failures;
     
@@ -61,7 +68,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
                     failures.put(m, "Connection Failure.");
                 }
             } catch(Exception e) {
-                e.printStackTrace();
+                LOG.log(Level.WARNING, e.getMessage(), e);
                 failures.put(m, e.getMessage());
             }
         }
