@@ -68,7 +68,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
                     failures.put(m, "Connection Failure.");
                 }
             } catch(Exception e) {
-                LOG.log(Level.WARNING, e.getMessage(), e);
+                //LOG.log(Level.WARNING, e.getMessage(), e);
                 failures.put(m, e.getMessage());
             }
         }

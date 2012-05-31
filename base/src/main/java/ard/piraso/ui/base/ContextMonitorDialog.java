@@ -434,7 +434,7 @@ public final class ContextMonitorDialog extends AbstractDialog {
 
         try {
             ModelManagers.MONITORS.save(model);
-            refresh();
+            refresh(model.getName());
         } catch (IOException e) {
             ErrorManager.getDefault().notify(e);
         }
