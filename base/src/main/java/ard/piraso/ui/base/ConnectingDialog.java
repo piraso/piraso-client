@@ -20,10 +20,13 @@ import ard.piraso.ui.io.impl.HttpEntrySource;
 import org.openide.windows.WindowManager;
 
 import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -46,33 +49,46 @@ public class ConnectingDialog extends javax.swing.JDialog {
         initComponents();
 
         setLocationRelativeTo(getOwner());
-        setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
     }
     
-    public void startTests(List<NewContextMonitorModel> models) {
+    public void startTests(final List<NewContextMonitorModel> models) {
         failures = new HashMap<NewContextMonitorModel, String>();
         validResults = new ArrayList<HttpEntrySource>();
+
         setVisible(true);
 
-        for(NewContextMonitorModel m : models) {
-            HttpEntrySource source = new HttpEntrySource(m.getPreferences(), m.getLoggingUrl(), m.getWatchedAddr());
-            source.setName(m.getName());
-
-            try {
-                // setLabel("Testing connection to " + m.getName() + "...");
-                source.reset();
-                if(source.testConnection()) {
-                    validResults.add(source);
-                } else {
-                    failures.put(m, "Connection Failure.");
-                }
-            } catch(Exception e) {
-                //LOG.log(Level.WARNING, e.getMessage(), e);
-                failures.put(m, e.getMessage());
-            }
+        try {
+            startTestingConnectivity(models);
+        } catch (Exception e) {
+            LOG.log(Level.WARNING, e.getMessage(), e);
         }
+    }
 
-        dispose();
+    private void startTestingConnectivity(final List<NewContextMonitorModel> models) throws ExecutionException, InterruptedException, InvocationTargetException {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                for (NewContextMonitorModel m : models) {
+                    HttpEntrySource source = new HttpEntrySource(m.getPreferences(), m.getLoggingUrl(), m.getWatchedAddr());
+                    source.setName(m.getName());
+
+                    try {
+                        source.reset();
+                        if (source.testConnection()) {
+                            validResults.add(source);
+                        } else {
+                            failures.put(m, "Connection Failure.");
+                        }
+                    } catch (Exception e) {
+                        failures.put(m, e.getMessage());
+                    }
+                }
+
+                dispose();
+
+                ContextMonitorDispatcher.handleResults(validResults, failures);
+            }
+        });
     }
 
     public List<HttpEntrySource> getValidResults() {
@@ -98,10 +114,11 @@ public class ConnectingDialog extends javax.swing.JDialog {
 
         lblStatus = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setAlwaysOnTop(true);
         setResizable(false);
 
+        lblStatus.setForeground(new java.awt.Color(0, 102, 0));
         lblStatus.setText(org.openide.util.NbBundle.getMessage(ConnectingDialog.class, "ConnectingDialog.lblStatus.text")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -111,7 +128,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
             .add(layout.createSequentialGroup()
                 .add(15, 15, 15)
                 .add(lblStatus)
-                .addContainerGap(239, Short.MAX_VALUE))
+                .addContainerGap(216, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)

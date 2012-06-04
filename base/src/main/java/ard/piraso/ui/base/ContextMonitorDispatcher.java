@@ -28,11 +28,14 @@ import ard.piraso.ui.io.impl.HttpEntrySource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -45,35 +48,37 @@ public final class ContextMonitorDispatcher {
         processModels(Arrays.asList(model));
     }
 
-    public static void forwardByProfileName(String profile) {
-        List<NewContextMonitorModel> results = new ArrayList<NewContextMonitorModel>();
-        ProfileModel model =  ModelManagers.PROFILES.get(profile);
+    public static void forwardByProfileName(String profileName) {
+        final List<NewContextMonitorModel> models = new ArrayList<NewContextMonitorModel>();
+        ProfileModel profile =  ModelManagers.PROFILES.get(profileName);
 
-        if(CollectionUtils.isNotEmpty(model.getMonitors())) {
-            for(String monitorName : model.getMonitors()) {
+        if(CollectionUtils.isNotEmpty(profile.getMonitors())) {
+            for(String monitorName : profile.getMonitors()) {
                 NewContextMonitorModel newContextMonitor = ModelManagers.MONITORS.get(monitorName);
 
                 if(newContextMonitor != null) {
-                    results.add(newContextMonitor);
+                    models.add(newContextMonitor);
                 }
             }
         }
 
-        processModels(results);
+        processModels(models);
     }
 
-    private static void processModels(List<NewContextMonitorModel> results) {
+    private static void processModels(List<NewContextMonitorModel> models) {
         ConnectingDialog dialog = new ConnectingDialog();
-        dialog.startTests(results);
+        dialog.startTests(models);
+    }
 
-        if(CollectionUtils.isNotEmpty(dialog.getValidResults())) {
-            for(HttpEntrySource source : dialog.getValidResults()) {
+    public static void handleResults(List<HttpEntrySource> validResults, Map<NewContextMonitorModel, String> failures) {
+        if(CollectionUtils.isNotEmpty(validResults)) {
+            for(HttpEntrySource source : validResults) {
                 forward(source);
             }
         }
 
-        if(MapUtils.isNotEmpty(dialog.getFailures())) {
-            new FailureDialog().show(dialog.getFailures());
+        if(MapUtils.isNotEmpty(failures)) {
+            new FailureDialog().show(failures);
         }
     }
 
