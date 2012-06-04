@@ -16,15 +16,16 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.log4j;
+package ard.piraso.ui.base;
 
-import ard.piraso.api.log4j.Log4jEntry;
+import ard.piraso.api.entry.*;
 import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.ErrorManager;
@@ -34,30 +35,30 @@ import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
 import javax.swing.text.BadLocationException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static ard.piraso.ui.api.util.JTextPaneUtils.*;
+import java.util.*;
 
 /**
  * Top component which displays something.
  */
-@ActionID(category = "Window", id = "ard.piraso.ui.log4j.Log4jViewTopComponent")
-@ActionReference(path = "Menu/Window", position = 336)
-@ConvertAsProperties(dtd = "-//ard.piraso.ui.log4j//Log4jView//EN", autostore = false)
-@TopComponent.Description(preferredID = "Log4jViewTopComponent", iconBase="ard/piraso/ui/log4j/icons/log4j.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+@ActionID(category = "Window", id = "ard.piraso.ui.base.ResponseViewTopComponent")
+@ActionReference(path = "Menu/Window", position = 340)
+@ConvertAsProperties(dtd = "-//ard.piraso.ui.base//ResponseView//EN", autostore = false)
+@TopComponent.Description(preferredID = "ResponseViewTopComponent", iconBase="ard/piraso/ui/base/icons/location_http.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = true)
-@TopComponent.OpenActionRegistration(displayName = "#CTL_Log4jViewAction", preferredID = "Log4jViewTopComponent")
-public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<Log4jEntry> {
-    
-    private final static SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+@TopComponent.OpenActionRegistration(displayName = "#CTL_ResponseViewAction", preferredID = "ResponseViewTopComponent")
+public final class ResponseViewTopComponent extends AbstractEntryViewTopComponent<HttpResponseEntry> {
 
-    public Log4jViewTopComponent() {
-        super(Log4jEntry.class);
+    public ResponseViewTopComponent() {
+        super(HttpResponseEntry.class);
         initComponents();
-        setName(NbBundle.getMessage(Log4jViewTopComponent.class, "CTL_Log4jViewTopComponent"));
-        setToolTipText(NbBundle.getMessage(Log4jViewTopComponent.class, "HINT_Log4jViewTopComponent"));
+        setName(NbBundle.getMessage(ResponseViewTopComponent.class, "CTL_ResponseViewTopComponent"));
+        setToolTipText(NbBundle.getMessage(ResponseViewTopComponent.class, "HINT_ResponseViewTopComponent"));
     }
 
     @Override
@@ -67,11 +68,11 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
         jTabbedPane.removeAll();
 
         if(currentEntry != null) {
-            components.add(new EntryTabView(jPanel1, "Message"));
-            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(Log4jViewTopComponent.class, currentEntry));
+            components.add(new EntryTabView(jPanel1, "Response"));
+            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(ResponseViewTopComponent.class, currentEntry));
         }
 
-        refreshLog4jView();
+        refreshRequestView();
 
         if(CollectionUtils.isNotEmpty(components)) {
             for(EntryTabView tabView : components) {
@@ -83,43 +84,73 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
         revalidate();
     }
 
-    private void refreshLog4jView() {
+    private void refreshRequestView() {
         try {
             txtMessage.setText("");
             btnCopy.setEnabled(currentEntry != null);
 
             if(currentEntry != null) {
-                insertBoldCode(txtMessage, "Level: ");
-                insertCode(txtMessage, currentEntry.getLogLevel());
+                insertBoldCode(txtMessage, "Status: ");
 
-                if(CollectionUtils.isNotEmpty(currentEntry.getGroup().getGroups())) {
-                    insertBoldCode(txtMessage, "\nLogger: ");
-                    insertCode(txtMessage, currentEntry.getGroup().getGroups().iterator().next());
+                if(currentEntry.getStatusReason() != null) {
+                    insertCode(txtMessage, currentEntry.getStatusReason());
+                } else  {
+                    if(currentEntry.getStatus() == 0) {
+                        insertCode(txtMessage, "200");
+                    } else {
+                        insertCode(txtMessage, String.valueOf(currentEntry.getStatus()));
+                    }
                 }
-                
-                insertBoldCode(txtMessage, "\nTime: ");
-                insertCode(txtMessage, FORMATTER.format(currentEntry.getTime()));
 
-                insertBoldCode(txtMessage, "\nThread: ");
-                insertUnderline(txtMessage, "id");
-                insertCode(txtMessage, String.format(": %d, ", currentEntry.getThreadId()));
-                insertUnderline(txtMessage, "name");
-                insertCode(txtMessage, String.format(": %s, ", currentEntry.getThreadName()));
-                insertUnderline(txtMessage, "priority");
-                insertCode(txtMessage, String.format(": %d", currentEntry.getThreadPriority()));
-                
-                if(StringUtils.isNotBlank(currentEntry.getNdc())) {
-                    insertBoldCode(txtMessage, "\nNDC: ");
-                    insertCode(txtMessage, currentEntry.getNdc());
+                if(MapUtils.isNotEmpty(currentEntry.getDateHeader()) || 
+                        MapUtils.isNotEmpty(currentEntry.getIntHeader()) ||
+                        MapUtils.isNotEmpty(currentEntry.getStringHeader())) {
+                    insertBoldCode(txtMessage, "\n\nHeaders: ");
+                    
+                    if(MapUtils.isNotEmpty(currentEntry.getStringHeader())) {
+                        for(Map.Entry<String, HeaderEntry<String>> header : currentEntry.getStringHeader().entrySet()) {
+                            if("cookie".equalsIgnoreCase(header.getKey())) {
+                                continue;
+                            }
+                            
+                            HeaderEntry<String> h = header.getValue();
+                            
+                            insertCode(txtMessage, "\n    ");
+                            insertUnderline(txtMessage, h.getName());
+                            insertCode(txtMessage, ": " + h.getValue());
+                        }                        
+                    }
+                    
+                    if(MapUtils.isNotEmpty(currentEntry.getIntHeader())) {
+                        for(Map.Entry<String, HeaderEntry<Integer>> header : currentEntry.getIntHeader().entrySet()) {
+                            HeaderEntry<Integer> h = header.getValue();
+                            
+                            insertCode(txtMessage, "\n    ");
+                            insertUnderline(txtMessage, h.getName());
+                            insertCode(txtMessage, ": " + h.getValue());
+                        }                        
+                    }
+                    
+                    if(MapUtils.isNotEmpty(currentEntry.getDateHeader())) {
+                        for(Map.Entry<String, HeaderEntry<Long>> header : currentEntry.getDateHeader().entrySet()) {
+                            HeaderEntry<Long> h = header.getValue();
+                            
+                            insertCode(txtMessage, "\n    ");
+                            insertUnderline(txtMessage, h.getName());
+                            insertCode(txtMessage, ": " + new Date(h.getValue()));
+                        }                        
+                    }
                 }
-                
-                if(currentEntry.getMdc() != null && !StringUtils.equalsIgnoreCase(currentEntry.getMdc(), "null")) {
-                    insertBoldCode(txtMessage, "\nMDC: ");
-                    insertCode(txtMessage, currentEntry.getMdc());
+
+                if(CollectionUtils.isNotEmpty(currentEntry.getCookies())) {
+                    insertBoldCode(txtMessage, "\n\nCookies: ");
+
+                    for(CookieEntry cookie : currentEntry.getCookies()) {
+                        insertCode(txtMessage, "\n    ");
+                        insertUnderline(txtMessage, cookie.getName());
+                        insertCode(txtMessage, ": " + cookie.getValue());
+                    }
                 }
-                
-                insertBoldCode(txtMessage, "\nMessage: ");
-                insertCode(txtMessage, currentEntry.getMessage());                
             }
 
             start(txtMessage);
@@ -155,9 +186,9 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
         jToolBar1.setOrientation(1);
         jToolBar1.setRollover(true);
 
-        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/log4j/icons/copy.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnCopy, org.openide.util.NbBundle.getMessage(Log4jViewTopComponent.class, "Log4jViewTopComponent.btnCopy.text")); // NOI18N
-        btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(Log4jViewTopComponent.class, "Log4jViewTopComponent.btnCopy.toolTipText")); // NOI18N
+        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/copy.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCopy, org.openide.util.NbBundle.getMessage(ResponseViewTopComponent.class, "ResponseViewTopComponent.btnCopy.text")); // NOI18N
+        btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(ResponseViewTopComponent.class, "ResponseViewTopComponent.btnCopy.toolTipText")); // NOI18N
         btnCopy.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         btnCopy.setEnabled(false);
         btnCopy.setFocusable(false);
@@ -179,7 +210,7 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
     private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
         if (currentEntry != null) {
             ClipboardUtils.copy(txtMessage.getText());
-            NotificationUtils.info("Log message information is now copied to clipboard.");
+            NotificationUtils.info("Response information is now copied to clipboard.");
         }
     }//GEN-LAST:event_btnCopyActionPerformed
 

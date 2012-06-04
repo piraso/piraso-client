@@ -39,6 +39,9 @@ public final class JTextPaneUtils {
 
     public static SimpleAttributeSet CODE = new SimpleAttributeSet();
 
+    public static SimpleAttributeSet CODE_UNDERLINE = new SimpleAttributeSet();
+
+
     public static SimpleAttributeSet CODE_BLUE = new SimpleAttributeSet();
 
     public static SimpleAttributeSet CODE_RED = new SimpleAttributeSet();
@@ -54,13 +57,24 @@ public final class JTextPaneUtils {
 
         setupCode(CODE_RED, Color.RED, false, 13);
         setupCode(CODE_GRAY, Color.GRAY, false, 13);
+
+        setupCode(CODE_UNDERLINE, Color.BLACK, false, true, 13);
+
     }
 
     private static void setupCode(SimpleAttributeSet set, Color color, boolean bold, int fontSize) {
+        setupCode(set, color, bold, false, fontSize);
+    }
+
+    private static void setupCode(SimpleAttributeSet set, Color color, boolean bold, boolean underline, int fontSize) {
         StyleConstants.setForeground(set, color);
 
         if(bold) {
             StyleConstants.setBold(set, true);
+        }
+
+        if(underline) {
+            StyleConstants.setUnderline(set, true);
         }
 
         StyleConstants.setFontFamily(set, "Monospaced");
@@ -91,6 +105,17 @@ public final class JTextPaneUtils {
             insertText(textPane, text, CODE_BLUE);
         } else {
             insertText(textPane, text, CODE);
+        }
+    }
+
+    public static void insertUnderline(JTextPane textPane, String text) throws BadLocationException {
+
+        if(text.equals("@not-supported")) {
+            insertText(textPane, text, CODE_RED);
+        } else if(text.equals("@null")) {
+            insertText(textPane, text, CODE_BLUE);
+        } else {
+            insertText(textPane, text, CODE_UNDERLINE);
         }
     }
 

@@ -60,7 +60,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
             source.setName(m.getName());
 
             try {
-                setLabel("Testing connection to " + m.getName() + "...");
+                // setLabel("Testing connection to " + m.getName() + "...");
                 source.reset();
                 if(source.testConnection()) {
                     validResults.add(source);
@@ -112,7 +112,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
             .add(layout.createSequentialGroup()
                 .add(15, 15, 15)
                 .add(lblStatus)
-                .addContainerGap(246, Short.MAX_VALUE))
+                .addContainerGap(239, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)

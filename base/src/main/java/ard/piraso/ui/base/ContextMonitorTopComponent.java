@@ -114,7 +114,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     public void valueChanged(ListSelectionEvent e) {
         if(e.getValueIsAdjusting()) return;
         if(e.getSource() != table.getSelectionModel()) return;
-        if(table.getSelectedRow() <= 0) return;
+        if(table.getSelectedRow() < 0) return;
 
         Entry entry = tableModel.getEntryAt(table.getSelectedRow()).getEntry();
         Class<? extends TopComponent> viewClass = EntryViewProviderManager.INSTANCE.getViewClass(entry);
