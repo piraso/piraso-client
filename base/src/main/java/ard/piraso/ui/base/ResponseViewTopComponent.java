@@ -47,7 +47,7 @@ import java.util.*;
  * Top component which displays something.
  */
 @ActionID(category = "Window", id = "ard.piraso.ui.base.ResponseViewTopComponent")
-@ActionReference(path = "Menu/Window", position = 340)
+@ActionReference(path = "Menu/Window", position = 345)
 @ConvertAsProperties(dtd = "-//ard.piraso.ui.base//ResponseView//EN", autostore = false)
 @TopComponent.Description(preferredID = "ResponseViewTopComponent", iconBase="ard/piraso/ui/base/icons/location_http.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = true)
