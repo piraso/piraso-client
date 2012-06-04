@@ -51,7 +51,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
         setLocationRelativeTo(getOwner());
     }
     
-    public void startTests(final List<NewContextMonitorModel> models) {
+    public void establishConnection(final List<NewContextMonitorModel> models) {
         failures = new HashMap<NewContextMonitorModel, String>();
         validResults = new ArrayList<HttpEntrySource>();
 

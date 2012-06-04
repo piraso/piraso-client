@@ -28,14 +28,12 @@ import ard.piraso.ui.io.impl.HttpEntrySource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 /**
  *
@@ -67,7 +65,7 @@ public final class ContextMonitorDispatcher {
 
     private static void processModels(List<NewContextMonitorModel> models) {
         ConnectingDialog dialog = new ConnectingDialog();
-        dialog.startTests(models);
+        dialog.establishConnection(models);
     }
 
     public static void handleResults(List<HttpEntrySource> validResults, Map<NewContextMonitorModel, String> failures) {
