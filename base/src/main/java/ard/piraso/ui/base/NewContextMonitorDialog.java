@@ -17,7 +17,8 @@ package ard.piraso.ui.base;
 
 import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.base.manager.ModelManagers;
-import javax.swing.DefaultComboBoxModel;
+
+import javax.swing.*;
 
 /**
  *

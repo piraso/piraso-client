@@ -20,7 +20,6 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.entry.CookieEntry;
 import ard.piraso.api.entry.HttpRequestEntry;
-import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
@@ -28,7 +27,6 @@ import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.ErrorManager;
 import org.openide.awt.ActionID;

@@ -17,16 +17,17 @@ package ard.piraso.ui.base;
 
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
+import org.openide.ErrorManager;
 
+import java.util.Map;
 
-import static ard.piraso.ui.api.util.JTextPaneUtils.*;
+import static ard.piraso.ui.api.util.JTextPaneUtils.insertHeaderCode;
+import static ard.piraso.ui.api.util.JTextPaneUtils.insertText;
 
 /**
  *
  * @author adeleon
  */
-import java.util.Map;
-import org.openide.ErrorManager;
 public class FailureDialog extends AbstractDialog {
 
     /**

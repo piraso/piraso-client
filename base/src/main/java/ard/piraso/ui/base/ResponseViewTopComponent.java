@@ -18,7 +18,9 @@
 
 package ard.piraso.ui.base;
 
-import ard.piraso.api.entry.*;
+import ard.piraso.api.entry.CookieEntry;
+import ard.piraso.api.entry.HeaderEntry;
+import ard.piraso.api.entry.HttpResponseEntry;
 import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
@@ -26,7 +28,6 @@ import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
-import org.apache.commons.lang.StringUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.ErrorManager;
 import org.openide.awt.ActionID;
@@ -36,12 +37,11 @@ import org.openide.windows.TopComponent;
 
 import javax.swing.text.BadLocationException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static ard.piraso.ui.api.util.JTextPaneUtils.*;
-import java.util.*;
 
 /**
  * Top component which displays something.
