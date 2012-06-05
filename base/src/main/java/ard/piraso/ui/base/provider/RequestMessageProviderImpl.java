@@ -19,6 +19,7 @@
 package ard.piraso.ui.base.provider;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.GlobalRequestEntry;
 import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.ui.api.MessageProvider;
 import org.openide.util.lookup.ServiceProvider;
@@ -37,6 +38,10 @@ public class RequestMessageProviderImpl implements MessageProvider {
     @Override
     public String toMessage(Entry entry) {
         RequestEntry request = (RequestEntry) entry;
+
+        if(GlobalRequestEntry.class.isInstance(request)) {
+            return "-- Start of global request --";
+        }
 
         return "REQUEST: " + request.getPath();
     }

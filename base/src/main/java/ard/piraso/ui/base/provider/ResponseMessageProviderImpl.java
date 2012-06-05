@@ -38,11 +38,17 @@ public class ResponseMessageProviderImpl implements MessageProvider {
     public String toMessage(Entry entry) {
         ResponseEntry response = (ResponseEntry) entry;
 
-        StringBuilder buf = new StringBuilder("RESPONSE: ");
-        buf.append(response.getStatus());
+        StringBuilder buf = new StringBuilder("RESPONSE:");
+
 
         if(response.getStatusReason() != null) {
             buf.append(" ").append(response.getStatusReason());
+        }
+
+        if(response.getStatus() == 0) {
+            buf.append(" 200");
+        } else {
+            buf.append(" ").append(response.getStatus());
         }
 
         return buf.toString();

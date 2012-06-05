@@ -78,9 +78,9 @@ public class IOEntryRequest {
         
         IOEntry ioEntry = new IOEntry(serializable, evt.getEntry());
         
-        if(RequestEntry.class.isInstance(evt.getEntry())) {
+        if(RequestEntry.class.isInstance(evt.getEntry()) && request == null) {
             request = ioEntry;
-        } else if(ResponseEntry.class.isInstance(evt.getEntry())) {
+        } else if(ResponseEntry.class.isInstance(evt.getEntry()) && response == null) {
             response = ioEntry;
 
             LOG.log(Level.INFO, String.format("Request[%s]: Response received completed.", id));

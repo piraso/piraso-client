@@ -19,6 +19,7 @@
 package ard.piraso.ui.base.provider;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.GlobalRequestEntry;
 import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.api.entry.ResponseEntry;
 import ard.piraso.ui.api.EntryRowRenderingProvider;
@@ -39,7 +40,12 @@ public class GeneralEntryRowRenderingProviderImpl implements EntryRowRenderingPr
 
     @Override
     public void render(JLabel cell, Entry entry) {
-        cell.setBackground(new Color(255, 180, 66));
+        if(GlobalRequestEntry.class.isInstance(entry)) {
+            cell.setBackground(Color.GREEN);
+        } else {
+            cell.setBackground(new Color(255, 180, 66));
+        }
+
         cell.setFont(cell.getFont().deriveFont(Font.BOLD));
     }
 }

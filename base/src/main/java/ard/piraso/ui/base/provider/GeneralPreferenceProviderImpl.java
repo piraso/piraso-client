@@ -34,11 +34,12 @@ public class GeneralPreferenceProviderImpl implements PreferenceProvider {
 
     @Override
     public List<? extends PreferenceProperty> getPreferences() {
-        List<PreferenceProperty> preferences = new ArrayList<PreferenceProperty>(2);
+        List<PreferenceProperty> preferences = new ArrayList<PreferenceProperty>(3);
         
         preferences.add(PPFactory.createNC(GeneralPreferenceEnum.STACK_TRACE_ENABLED.getPropertyName(), Boolean.class));
         preferences.add(PPFactory.createNC(GeneralPreferenceEnum.SCOPE_ENABLED.getPropertyName(), Boolean.class, true));
-        
+        preferences.add(PPFactory.createNC(GeneralPreferenceEnum.NO_REQUEST_CONTEXT.getPropertyName(), Boolean.class, false));
+
         return preferences;
     }
 
