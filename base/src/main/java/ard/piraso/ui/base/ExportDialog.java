@@ -272,7 +272,7 @@ public class ExportDialog extends AbstractDialog {
         try {
             File file = new File(txtTargetFile.getText());
             JacksonUtils.createMapper().writeValue(new FileWriter(file), settings);
-            NotificationUtils.info(String.format("Export for file '%s' was successful.", file.getName()));
+            NotificationUtils.info(String.format("Export to file '%s' was successful.", file.getName()));
             dispose();
         } catch (IOException e) {
             ErrorManager.getDefault().notify(e);

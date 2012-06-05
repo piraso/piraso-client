@@ -25,6 +25,8 @@ import ard.piraso.ui.api.util.WindowUtils;
 import ard.piraso.ui.base.manager.EntryViewProviderManager;
 import ard.piraso.ui.base.model.IOEntryComboBoxModel;
 import ard.piraso.ui.base.model.IOEntryTableModel;
+import ard.piraso.ui.io.IOEntryEvent;
+import ard.piraso.ui.io.IOEntryListener;
 import ard.piraso.ui.io.IOEntryReader;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
@@ -32,6 +34,7 @@ import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
 
+import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
@@ -42,7 +45,11 @@ import java.awt.event.ActionListener;
  * Top component which displays something.
  */
 public final class ContextMonitorTopComponent extends TopComponent implements ListSelectionListener {
-    private static final String ICON_PATH = "ard/piraso/ui/base/icons/remote_logger.png";
+    public static final String INACTIVE_ICON_PATH = "ard/piraso/ui/base/icons/status-inactive.png";
+
+    public static final String STOPPED_ICON_PATH = "ard/piraso/ui/base/icons/status-stopped.png";
+
+    public static final String STARTED_ICON_PATH = "ard/piraso/ui/base/icons/status-active.png";
 
     private IOEntryReaderActionProvider actionProvider;
 
@@ -51,7 +58,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     public ContextMonitorTopComponent(IOEntryReader reader, String name) {
         setName(name);
         setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
-        setIcon(ImageUtilities.loadImage(ICON_PATH, true));
+        setIcon(ImageUtilities.loadImage(INACTIVE_ICON_PATH, true));
 
         InstanceContent content = new InstanceContent();
         associateLookup(new AbstractLookup(content));
@@ -60,6 +67,33 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         this.actionProvider = new IOEntryReaderActionProvider(reader, content);
         this.tableModel = new IOEntryTableModel(reader);
         this.comboBoxModel = tableModel.getComboBoxModel();
+
+        // added icon listeners
+        reader.addListener(new IOEntryListener() {
+            @Override
+            public void started(IOEntryEvent evt) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        setIcon(ImageUtilities.loadImage(STARTED_ICON_PATH, true));
+                    }
+                });
+            }
+            @Override
+            public void stopped(IOEntryEvent evt) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(isOpened()) {
+                            setIcon(ImageUtilities.loadImage(STOPPED_ICON_PATH, true));
+                        }
+                    }
+                });
+            }
+            @Override
+            public void receivedEntry(IOEntryEvent evt) {
+            }
+        });
         
         initComponents();
         initTable();

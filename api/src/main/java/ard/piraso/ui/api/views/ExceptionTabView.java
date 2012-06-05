@@ -23,6 +23,7 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.ThrowableAwareEntry;
 import ard.piraso.ui.api.StackTraceFilterModel;
 import ard.piraso.ui.api.manager.SingleModelManagers;
+import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
 
 import javax.swing.text.BadLocationException;
@@ -57,7 +58,22 @@ public class ExceptionTabView extends FilteredTextTabView<ThrowableAwareEntry> {
             insertBoldBlueCode(txtEditor, "EXCEPTION:\n");
             String value;
             boolean insertedEllipsis = false;
+            boolean firstLine = true;
             while((value = reader.readLine()) != null) {
+                if(firstLine) {
+                    insertCode(txtEditor, "\n    ");
+                    insertUnderline(txtEditor, value);
+
+                    firstLine = false;
+                    continue;
+                } else if(StringUtils.startsWith(value.trim(), "Caused by: ")) {
+                    insertCode(txtEditor, "\n    ");
+                    insertUnderline(txtEditor, value);
+                    insertedEllipsis = false;
+
+                    continue;
+                }
+
                 if(btnFilter.isSelected()) {
                     if(model.isBold(value)) {
                         insertBoldCode(txtEditor, "\n    " + value);

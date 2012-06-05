@@ -17,14 +17,13 @@ package ard.piraso.ui.base;
 
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.io.impl.HttpEntrySource;
+import org.apache.commons.lang.StringUtils;
+import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,6 +68,11 @@ public class ConnectingDialog extends javax.swing.JDialog {
             @Override
             public void run() {
                 for (NewContextMonitorModel m : models) {
+                    if(isOpened(m.getName())) {
+                        failures.put(m, "Already monitoring.");
+                        continue;
+                    }
+
                     HttpEntrySource source = new HttpEntrySource(m.getPreferences(), m.getLoggingUrl(), m.getWatchedAddr());
                     source.setName(m.getName());
 
@@ -89,6 +93,20 @@ public class ConnectingDialog extends javax.swing.JDialog {
                 ContextMonitorDispatcher.handleResults(validResults, failures);
             }
         });
+    }
+
+    public boolean isOpened(String name) {
+        Set<TopComponent> opened = TopComponent.getRegistry().getOpened();
+        for(TopComponent component : opened) {
+            if(ContextMonitorTopComponent.class.isInstance(component)) {
+                ContextMonitorTopComponent editor = (ContextMonitorTopComponent) component;
+                if(StringUtils.equals(editor.getName(), name)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public List<HttpEntrySource> getValidResults() {
@@ -115,10 +133,12 @@ public class ConnectingDialog extends javax.swing.JDialog {
         lblStatus = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle(org.openide.util.NbBundle.getMessage(ConnectingDialog.class, "ConnectingDialog.title")); // NOI18N
         setAlwaysOnTop(true);
         setResizable(false);
 
         lblStatus.setForeground(new java.awt.Color(0, 102, 0));
+        lblStatus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/network.png"))); // NOI18N
         lblStatus.setText(org.openide.util.NbBundle.getMessage(ConnectingDialog.class, "ConnectingDialog.lblStatus.text")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
@@ -128,14 +148,14 @@ public class ConnectingDialog extends javax.swing.JDialog {
             .add(layout.createSequentialGroup()
                 .add(15, 15, 15)
                 .add(lblStatus)
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addContainerGap(126, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(17, 17, 17)
+                .add(14, 14, 14)
                 .add(lblStatus)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();

@@ -89,7 +89,7 @@ public class ImportDialog extends AbstractDialog {
                 continue;
             }
 
-            tableModel.addRow(new Object[]{Boolean.FALSE, entry.getKey()});
+            tableModel.addRow(new Object[]{Boolean.TRUE, entry.getKey()});
         }
     }
 
@@ -282,7 +282,7 @@ public class ImportDialog extends AbstractDialog {
                 }
             }
 
-            NotificationUtils.info(String.format("Import of file '%s' was successful.", selectedFile.getName()));
+            NotificationUtils.info(String.format("Import from file '%s' was successful.", selectedFile.getName()));
             dispose();
         } catch(Exception e) {
             ErrorManager.getDefault().notify(e);
