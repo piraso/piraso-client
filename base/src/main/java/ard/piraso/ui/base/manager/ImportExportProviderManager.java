@@ -2,6 +2,7 @@ package ard.piraso.ui.base.manager;
 
 import ard.piraso.ui.api.ExportHandler;
 import ard.piraso.ui.api.ImportExportProvider;
+import ard.piraso.ui.api.ImportHandler;
 import org.openide.util.Lookup;
 
 import java.util.ArrayList;
@@ -20,6 +21,17 @@ public enum ImportExportProviderManager {
 
         for(ImportExportProvider provider : providers) {
             options.add(provider.getExportHandler());
+        }
+
+        return options;
+    }
+
+    public List<ImportHandler> getImportHandlers() {
+        List<ImportHandler> options = new ArrayList<ImportHandler>();
+        Collection<? extends ImportExportProvider> providers = Lookup.getDefault().lookupAll(ImportExportProvider.class);
+
+        for(ImportExportProvider provider : providers) {
+            options.add(provider.getImportHandler());
         }
 
         return options;

@@ -8,4 +8,6 @@ import ard.piraso.api.entry.ObjectEntry;
 public interface ImportExportProvider {
 
     public ExportHandler getExportHandler();
+
+    public ImportHandler getImportHandler();
 }

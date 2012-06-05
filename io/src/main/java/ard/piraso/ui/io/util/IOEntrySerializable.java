@@ -21,7 +21,7 @@ package ard.piraso.ui.io.util;
 import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.io.EntryReadEvent;
-import ard.piraso.api.io.PirasoEntryLoaderRegistry;
+import ard.piraso.api.io.PirasoObjectLoaderRegistry;
 
 import java.io.IOException;
 import java.util.Date;
@@ -94,6 +94,6 @@ public class IOEntrySerializable {
     }
     
     public Entry toEntry() throws IOException {
-        return PirasoEntryLoaderRegistry.INSTANCE.loadEntry(classType, entryValue);
+        return (Entry) PirasoObjectLoaderRegistry.INSTANCE.loadObject(classType, entryValue);
     }
 }

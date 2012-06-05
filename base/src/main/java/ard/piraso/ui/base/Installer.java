@@ -18,8 +18,8 @@
 
 package ard.piraso.ui.base;
 
-import ard.piraso.api.io.PirasoEntryLoaderRegistry;
-import ard.piraso.ui.api.PirasoEntryLoaderProvider;
+import ard.piraso.api.io.PirasoObjectLoaderRegistry;
+import ard.piraso.ui.api.PirasoObjectLoaderProvider;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
@@ -39,10 +39,10 @@ public class Installer extends ModuleInstall {
 
     private void registerEntryLoaders() {
         // register all piraso entry loader
-        Collection<? extends PirasoEntryLoaderProvider> providers = Lookup.getDefault().lookupAll(PirasoEntryLoaderProvider.class);
-        for(PirasoEntryLoaderProvider provider : providers) {
-            LOG.info("Added loader by: " + provider.getClass().getName());
-            PirasoEntryLoaderRegistry.INSTANCE.addEntryLoader(provider.getLoader());
+        Collection<? extends PirasoObjectLoaderProvider> providers = Lookup.getDefault().lookupAll(PirasoObjectLoaderProvider.class);
+        for(PirasoObjectLoaderProvider loaderProvider : providers) {
+            LOG.info("Added loader by: " + loaderProvider.getClass().getName());
+            PirasoObjectLoaderRegistry.INSTANCE.addEntryLoader(loaderProvider.getLoader());
         }
     }
 

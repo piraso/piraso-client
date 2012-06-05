@@ -1,4 +1,4 @@
-package ard.piraso.ui.log4j;
+package ard.piraso.ui.log4j.provider;
 
 import org.apache.commons.lang.Validate;
 

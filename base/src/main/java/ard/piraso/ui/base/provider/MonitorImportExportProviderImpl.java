@@ -4,12 +4,12 @@ import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.converter.ObjectConverterRegistry;
 import ard.piraso.api.converter.TypeConverter;
 import ard.piraso.api.entry.ObjectEntry;
-import ard.piraso.ui.api.ExportHandler;
-import ard.piraso.ui.api.ImportExportProvider;
-import ard.piraso.ui.api.MonitorSettings;
-import ard.piraso.ui.api.NewContextMonitorModel;
+import ard.piraso.api.entry.ObjectEntryUtils;
+import ard.piraso.ui.api.*;
 import ard.piraso.ui.api.manager.ModelVisitor;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.manager.ModelManagers;
+import org.apache.commons.collections.CollectionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -27,17 +27,51 @@ public class MonitorImportExportProviderImpl implements ImportExportProvider {
 
     private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
 
-    private final ExportHandler handler = new Handler();
+    public static final String OPTION = "Monitors";
+
+    private final ExportHandler exportHandler = new Export();
+
+    private final ImportHandler importHandler = new Import();
 
     @Override
     public ExportHandler getExportHandler() {
-        return handler;
+        return exportHandler;
     }
 
-    public class Handler implements ExportHandler {
+    @Override
+    public ImportHandler getImportHandler() {
+        return importHandler;
+    }
+
+    public class Import implements ImportHandler {
+
         @Override
         public String getOption() {
-            return "Monitors";
+            return OPTION;
+        }
+
+        @Override
+        public void handle(String settingStr) {
+            try {
+                ObjectEntry entry = MAPPER.readValue(settingStr, ObjectEntry.class);
+                MonitorSettings setting = (MonitorSettings) ObjectEntryUtils.toObject(entry);
+
+                if(CollectionUtils.isNotEmpty(setting.getModels())) {
+                    for(NewContextMonitorModel monitor : setting.getModels()) {
+                        ModelManagers.MONITORS.save(monitor);
+                    }
+                }
+            } catch (IOException e) {
+                throw new IllegalStateException(e.getMessage(), e);
+            }
+        }
+    }
+
+    public class Export implements ExportHandler {
+
+        @Override
+        public String getOption() {
+            return OPTION;
         }
 
         @Override

@@ -89,6 +89,11 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>nbm-maven-plugin</artifactId>
                 <extensions>true</extensions>
+                <configuration>
+                    <publicPackages>
+                        <publicPackage>ard.piraso.ui.log4j.provider</publicPackage>
+                    </publicPackages>
+                </configuration>
             </plugin>
 
             <plugin>

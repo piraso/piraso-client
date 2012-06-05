@@ -7,7 +7,6 @@ import ard.piraso.ui.api.NCPreferenceProperty;
 import ard.piraso.ui.api.PPFactory;
 import ard.piraso.ui.api.PreferenceProperty;
 import ard.piraso.ui.api.PreferenceProvider;
-import ard.piraso.ui.log4j.Log4jPreferencesModel;
 import ard.piraso.ui.log4j.SingleModelManagers;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.ServiceProvider;

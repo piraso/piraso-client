@@ -4,9 +4,11 @@ import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.converter.ObjectConverterRegistry;
 import ard.piraso.api.converter.TypeConverter;
 import ard.piraso.api.entry.ObjectEntry;
+import ard.piraso.api.entry.ObjectEntryUtils;
 import ard.piraso.ui.api.*;
 import ard.piraso.ui.api.manager.ModelVisitor;
 import ard.piraso.ui.base.manager.ModelManagers;
+import org.apache.commons.collections.CollectionUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -23,18 +25,50 @@ public class ProfileImportExportProviderImpl implements ImportExportProvider {
     }
 
     private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    public static final String OPTION = "Profiles";
 
-    private final ExportHandler handler = new Handler();
+    private final ExportHandler exportHandler = new Export();
+
+    private final ImportHandler importHandler = new Import();
 
     @Override
     public ExportHandler getExportHandler() {
-        return handler;
+        return exportHandler;
     }
 
-    public class Handler implements ExportHandler {
+    @Override
+    public ImportHandler getImportHandler() {
+        return importHandler;
+    }
+
+    public class Import implements ImportHandler {
+
         @Override
         public String getOption() {
-            return "Profiles";
+            return OPTION;
+        }
+
+        @Override
+        public void handle(String settingStr) {
+            try {
+                ObjectEntry entry = MAPPER.readValue(settingStr, ObjectEntry.class);
+                ProfileSettings setting = (ProfileSettings) ObjectEntryUtils.toObject(entry);
+
+                if(CollectionUtils.isNotEmpty(setting.getModels())) {
+                    for(ProfileModel profileModel : setting.getModels()) {
+                        ModelManagers.PROFILES.save(profileModel);
+                    }
+                }
+            } catch (IOException e) {
+                throw new IllegalStateException(e.getMessage(), e);
+            }
+        }
+    }
+
+    public class Export implements ExportHandler {
+        @Override
+        public String getOption() {
+            return OPTION;
         }
 
         @Override

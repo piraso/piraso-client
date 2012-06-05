@@ -16,12 +16,12 @@
 package ard.piraso.ui.base;
 
 import ard.piraso.api.JacksonUtils;
-import ard.piraso.ui.api.ExportHandler;
+import ard.piraso.ui.api.ImportHandler;
 import ard.piraso.ui.api.ObjectEntrySettings;
 import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.api.util.NotificationUtils;
 import ard.piraso.ui.base.manager.ImportExportProviderManager;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
 import org.openide.filesystems.FileChooserBuilder;
@@ -33,7 +33,6 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -43,8 +42,8 @@ import java.util.Map;
  *
  * @author adeleon
  */
-public class ExportDialog extends AbstractDialog {
-
+public class ImportDialog extends AbstractDialog {
+    
     private DefaultTableModel tableModel = new DefaultTableModel(0, 2) {
         @Override
         public boolean isCellEditable(int row, int column) {
@@ -52,35 +51,45 @@ public class ExportDialog extends AbstractDialog {
         }
     };
 
-    private Map<String, ExportHandler> handlers;
+    private ObjectEntrySettings settings;
+
+    private Map<String, ImportHandler> handlers;
+
+    private File selectedFile;
 
     /**
-     * Creates new form ExportDialog
+     * Creates new form ImportDialog
      */
-    public ExportDialog() {
+    public ImportDialog() {
         super();
-        setTitle("Export");
+        setTitle("Import");
+
         initComponents();
         initTable();
-
         addButtonRefreshListeners();
         setLocationRelativeTo(getOwner());
-        getRootPane().setDefaultButton(btnExport);
-
-        refresh();
+        getRootPane().setDefaultButton(btnImport);
     }
 
     private void refresh() {
-        handlers = new HashMap<String, ExportHandler>();
-        List<ExportHandler> options = ImportExportProviderManager.INSTANCE.getExportHandlers();
+        if(settings != null && MapUtils.isEmpty(settings.getModels())) {
+            return;
+        }
+
+        handlers = new HashMap<String, ImportHandler>();
+        List<ImportHandler> options = ImportExportProviderManager.INSTANCE.getImportHandlers();
+        for(ImportHandler handler : options) {
+            handlers.put(handler.getOption(), handler);
+        }
+
         tableModel.setRowCount(0);
 
-        if(CollectionUtils.isNotEmpty(options)) {
-            for(ExportHandler handler : options) {
-                tableModel.addRow(new Object[]{Boolean.FALSE, handler.getOption()});
-
-                handlers.put(handler.getOption(), handler);
+        for(Map.Entry<String, String> entry : settings.getModels().entrySet()) {
+            if(!handlers.containsKey(entry.getKey())) {
+                continue;
             }
+
+            tableModel.addRow(new Object[]{Boolean.FALSE, entry.getKey()});
         }
     }
 
@@ -96,9 +105,9 @@ public class ExportDialog extends AbstractDialog {
 
     @Override
     protected void refreshButtons() {
-        btnExport.setEnabled(StringUtils.isNotBlank(txtTargetFile.getText()) && hasSelectedOption());
-    }    
-    
+        btnImport.setEnabled(StringUtils.isNotBlank(txtSourceFile.getText()) && hasSelectedOption());
+    }
+
     protected boolean hasSelectedOption() {
         for(int i = 0; i < tableModel.getRowCount(); i++) {
             if((Boolean) tableModel.getValueAt(i, 0)) {
@@ -108,7 +117,7 @@ public class ExportDialog extends AbstractDialog {
 
         return false;
     }
-    
+
     private void initTable() {
         TableColumn selectionColumn = jtable.getColumnModel().getColumn(0);
         TableColumn boldOption = jtable.getColumnModel().getColumn(1);
@@ -142,39 +151,39 @@ public class ExportDialog extends AbstractDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jtable = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
-        txtTargetFile = new javax.swing.JTextField();
+        txtSourceFile = new javax.swing.JTextField();
         btnBrowse = new javax.swing.JButton();
-        btnExport = new javax.swing.JButton();
+        btnImport = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(ExportDialog.class, "ExportDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(ImportDialog.class, "ImportDialog.jLabel1.text")); // NOI18N
 
         jtable.setModel(tableModel);
         jScrollPane1.setViewportView(jtable);
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(ExportDialog.class, "ExportDialog.jLabel2.text")); // NOI18N
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(ImportDialog.class, "ImportDialog.jLabel2.text")); // NOI18N
 
-        txtTargetFile.setEditable(false);
-        txtTargetFile.setText(org.openide.util.NbBundle.getMessage(ExportDialog.class, "ExportDialog.txtTargetFile.text")); // NOI18N
+        txtSourceFile.setEditable(false);
+        txtSourceFile.setText(org.openide.util.NbBundle.getMessage(ImportDialog.class, "ImportDialog.txtSourceFile.text")); // NOI18N
 
-        btnBrowse.setText(org.openide.util.NbBundle.getMessage(ExportDialog.class, "ExportDialog.btnBrowse.text")); // NOI18N
+        btnBrowse.setText(org.openide.util.NbBundle.getMessage(ImportDialog.class, "ImportDialog.btnBrowse.text")); // NOI18N
         btnBrowse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBrowseActionPerformed(evt);
             }
         });
 
-        btnExport.setText(org.openide.util.NbBundle.getMessage(ExportDialog.class, "ExportDialog.btnExport.text")); // NOI18N
-        btnExport.setEnabled(false);
-        btnExport.addActionListener(new java.awt.event.ActionListener() {
+        btnImport.setText(org.openide.util.NbBundle.getMessage(ImportDialog.class, "ImportDialog.btnImport.text")); // NOI18N
+        btnImport.setEnabled(false);
+        btnImport.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnExportActionPerformed(evt);
+                btnImportActionPerformed(evt);
             }
         });
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(ExportDialog.class, "ExportDialog.btnCancel.text")); // NOI18N
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(ImportDialog.class, "ImportDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
@@ -196,14 +205,14 @@ public class ExportDialog extends AbstractDialog {
                             .add(layout.createSequentialGroup()
                                 .add(jLabel2)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(txtTargetFile)
+                                .add(txtSourceFile)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(btnBrowse))
-                            .add(jScrollPane1))
+                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .add(12, 12, 12))))
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(392, Short.MAX_VALUE)
-                .add(btnExport)
+                .addContainerGap(369, Short.MAX_VALUE)
+                .add(btnImport)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(btnCancel)
                 .addContainerGap())
@@ -214,79 +223,85 @@ public class ExportDialog extends AbstractDialog {
                 .add(7, 7, 7)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(jLabel2)
-                    .add(txtTargetFile, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(txtSourceFile, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                     .add(btnBrowse))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(jLabel1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 298, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(btnCancel)
-                    .add(btnExport))
+                    .add(btnImport))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
+        File home = new File(System.getProperty("user.home"));
+        File pirasoDir = new File(home, "piraso");
+        if (!pirasoDir.isDirectory()) {
+            pirasoDir.mkdirs();
+        }
+
+        JFileChooser browserFileChooser = new FileChooserBuilder("piraso-dir")
+                .setTitle(NbBundle.getMessage(ExportDialog.class, "ImportDialog.browser.title"))
+                .setDefaultWorkingDirectory(pirasoDir)
+                .createFileChooser();
+
+        browserFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
+
+        int result = browserFileChooser.showDialog(this, NbBundle.getMessage(ExportDialog.class, "ImportDialog.browser.approveText"));
+
+        if (JFileChooser.APPROVE_OPTION == result) {
+            selectedFile = browserFileChooser.getSelectedFile();
+            txtSourceFile.setText(browserFileChooser.getSelectedFile().getAbsolutePath());
+
+            try {
+                settings = JacksonUtils.createMapper().readValue(selectedFile, ObjectEntrySettings.class);
+            } catch (IOException e) {
+                ErrorManager.getDefault().notify(e);
+                return;
+            }
+
+            refresh();
+        }
+    }//GEN-LAST:event_btnBrowseActionPerformed
+
+    private void btnImportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImportActionPerformed
+        try {
+            for(int i = 0; i < tableModel.getRowCount(); i++) {
+                if((Boolean) tableModel.getValueAt(i, 0)) {
+                    String key = String.valueOf(tableModel.getValueAt(i, 1));
+                    ImportHandler handler = handlers.get(key);
+                    String settingsStr = settings.getModels().get(key);
+
+                    handler.handle(settingsStr);
+                }
+            }
+
+            NotificationUtils.info(String.format("Import of file '%s' was successful.", selectedFile.getName()));
+            dispose();
+        } catch(Exception e) {
+            ErrorManager.getDefault().notify(e);
+        }
+    }//GEN-LAST:event_btnImportActionPerformed
+
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
-    private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        File home = new File (System.getProperty("user.home"));
-        File pirasoDir = new File(home, "piraso");
-        if(!pirasoDir.isDirectory()) {
-            pirasoDir.mkdirs();
-        }
-
-        String username = System.getProperty("user.name");
-
-        JFileChooser browserFileChooser = new FileChooserBuilder("piraso-dir")
-                .setTitle(NbBundle.getMessage(ExportDialog.class, "ExportDialog.browser.title"))
-                .setDefaultWorkingDirectory(pirasoDir)
-                .createFileChooser();
-
-        browserFileChooser.setSelectedFile(new File(pirasoDir, String.format("%s-piraso.settings.prz", username)));
-        int result = browserFileChooser.showDialog(this, NbBundle.getMessage(ExportDialog.class, "ExportDialog.browser.approveText"));
-
-        if (JFileChooser.APPROVE_OPTION == result) {
-            txtTargetFile.setText(browserFileChooser.getSelectedFile().getAbsolutePath());
-            refreshButtons();
-        }
-    }//GEN-LAST:event_btnBrowseActionPerformed
-
-    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
-        ObjectEntrySettings settings = new ObjectEntrySettings();
-
-        for(int i = 0; i < tableModel.getRowCount(); i++) {
-            if((Boolean) tableModel.getValueAt(i, 0)) {
-                String key = String.valueOf(tableModel.getValueAt(i, 1));
-                ExportHandler handler = handlers.get(key);
-
-                settings.add(key, handler.getExportEntry());
-            }
-        }
-
-        try {
-            File file = new File(txtTargetFile.getText());
-            JacksonUtils.createMapper().writeValue(new FileWriter(file), settings);
-            NotificationUtils.info(String.format("Export for file '%s' was successful.", file.getName()));
-            dispose();
-        } catch (IOException e) {
-            ErrorManager.getDefault().notify(e);
-        }
-    }//GEN-LAST:event_btnExportActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnCancel;
-    private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnImport;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jtable;
-    private javax.swing.JTextField txtTargetFile;
+    private javax.swing.JTextField txtSourceFile;
     // End of variables declaration//GEN-END:variables
 }

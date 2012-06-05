@@ -18,12 +18,12 @@
 
 package ard.piraso.ui.api;
 
-import ard.piraso.api.io.PirasoEntryLoader;
+import ard.piraso.api.io.PirasoObjectLoader;
 
 /**
- * Provides {@link ard.piraso.api.io.PirasoEntryLoader}.
+ * Provides {@link ard.piraso.api.io.PirasoObjectLoader}.
  */
-public interface PirasoEntryLoaderProvider {
+public interface PirasoObjectLoaderProvider {
 
-    public PirasoEntryLoader getLoader();
+    public PirasoObjectLoader getLoader();
 }

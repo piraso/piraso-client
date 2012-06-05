@@ -18,10 +18,9 @@
 
 package ard.piraso.ui.log4j.provider;
 
-import ard.piraso.api.entry.Entry;
-import ard.piraso.api.io.AbstractPirasoEntryLoader;
-import ard.piraso.api.io.PirasoEntryLoader;
-import ard.piraso.ui.api.PirasoEntryLoaderProvider;
+import ard.piraso.api.io.AbstractPirasoObjectLoader;
+import ard.piraso.api.io.PirasoObjectLoader;
+import ard.piraso.ui.api.PirasoObjectLoaderProvider;
 import org.openide.util.lookup.ServiceProvider;
 
 import java.io.IOException;
@@ -29,20 +28,22 @@ import java.io.IOException;
 /**
  * Provides entry loader
  */
-@ServiceProvider(service=PirasoEntryLoaderProvider.class)
-public class Log4jEntryLoaderProviderImpl implements PirasoEntryLoaderProvider {
+@ServiceProvider(service=PirasoObjectLoaderProvider.class)
+public class Log4jObjectLoaderProviderImpl implements PirasoObjectLoaderProvider {
 
     @Override
-    public PirasoEntryLoader getLoader() {
+    public PirasoObjectLoader getLoader() {
         return new PirasoEntryLoaderImpl();
     }
 
-    private class PirasoEntryLoaderImpl extends AbstractPirasoEntryLoader {
+    private class PirasoEntryLoaderImpl extends AbstractPirasoObjectLoader {
         @Override
         @SuppressWarnings("unchecked")
-        public Entry loadEntry(String className, String content) throws IOException, ClassNotFoundException {
-            Class clazz = Class.forName(className);
-            return (Entry) mapper.readValue(content, clazz);
+        public Object loadObject(String className, String content) throws IOException, ClassNotFoundException {
+            ClassLoader loader = Log4jObjectLoaderProviderImpl.class.getClassLoader();
+
+            Class clazz = loader.loadClass(className);
+            return mapper.readValue(content, clazz);
         }
     }
 }

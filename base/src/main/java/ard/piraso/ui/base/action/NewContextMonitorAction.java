@@ -90,7 +90,10 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
             menu.add(item);
         }
 
-        addSeparator(menu);
+        if(added > 0) {
+            addSeparator(menu);
+        }
+
         JMenuItem item = new JMenuItem(String.format("Others..."));
         item.addActionListener(this);
         menu.add(item);

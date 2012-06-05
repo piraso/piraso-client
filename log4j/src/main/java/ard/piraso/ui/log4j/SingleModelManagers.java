@@ -1,5 +1,6 @@
 package ard.piraso.ui.log4j;
 
+import ard.piraso.ui.log4j.provider.Log4jPreferencesModel;
 import ard.piraso.ui.api.manager.SingleModelManager;
 import ard.piraso.ui.api.manager.SingleModelManagerImpl;
 import org.openide.filesystems.FileObject;
