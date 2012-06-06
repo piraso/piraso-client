@@ -1,8 +1,6 @@
 package ard.piraso.ui.api.manager;
 
 import ard.piraso.ui.api.StackTraceFilterModel;
-import ard.piraso.ui.api.manager.SingleModelManager;
-import ard.piraso.ui.api.manager.SingleModelManagerImpl;
 import org.openide.filesystems.FileUtil;
 
 /**

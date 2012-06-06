@@ -18,25 +18,27 @@
 
 package ard.piraso.ui.api.views;
 
-import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.Entry;
-import ard.piraso.ui.api.formatter.JsonFormatter;
-import org.codehaus.jackson.map.ObjectMapper;
+import ard.piraso.ui.api.formatter.XMLFormatter;
+import org.apache.batik.util.gui.xmleditor.XMLEditorKit;
 import org.openide.ErrorManager;
+
+import java.lang.reflect.Method;
+
 /**
  * For json view.
  */
-public class JsonTabView extends FilteredTextTabView<Entry> {
-    
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
-    
+public class XMLTabView extends FilteredTextTabView<Entry> {
+
     /**
      * Creates new form StackTraceTabView
      *
      * @param entry       the entry
      */
-    public JsonTabView(Entry entry) {
-        super(entry, "JSON is now copied to clipboard.");
+    public XMLTabView(Entry entry) {
+        super(entry, "XML is now copied to clipboard.");
+
+        txtEditor.setEditorKit(new XMLEditorKit());
     }
 
     @Override
@@ -45,8 +47,9 @@ public class JsonTabView extends FilteredTextTabView<Entry> {
         btnCopy.setEnabled(true);
 
         try {
+            Method method = entry.getClass().getMethod("getMessage");
             txtEditor.setEditable(false);
-            txtEditor.setText(JsonFormatter.prettyPrint(MAPPER.writeValueAsString(entry)));
+            txtEditor.setText("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" + XMLFormatter.prettyPrint((String) method.invoke(entry)));
         } catch (Exception e) {
             btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);

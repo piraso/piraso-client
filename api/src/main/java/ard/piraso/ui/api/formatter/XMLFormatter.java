@@ -26,6 +26,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * XML formatter
@@ -53,5 +55,42 @@ public class XMLFormatter {
 
     public static String prettyPrint(String input) {
         return prettyPrint(input, 2);
+    }
+
+    /**
+     * return true if the String passed in is something like XML
+     *
+     * @param inXMLStr a string that might be XML
+     * @return true of the string is XML, false otherwise
+     */
+    public static boolean isXMLLike(String inXMLStr) {
+
+        boolean retBool = false;
+        Pattern pattern;
+        Matcher matcher;
+
+        // REGULAR EXPRESSION TO SEE IF IT AT LEAST STARTS AND ENDS
+        // WITH THE SAME ELEMENT
+        final String XML_PATTERN_STR = "<(\\S+?)(.*?)>(.*?)</\\1>";
+
+
+
+        // IF WE HAVE A STRING
+        if (inXMLStr != null && inXMLStr.trim().length() > 0) {
+
+            // IF WE EVEN RESEMBLE XML
+            if (inXMLStr.trim().startsWith("<")) {
+
+                pattern = Pattern.compile(XML_PATTERN_STR,
+                        Pattern.CASE_INSENSITIVE | Pattern.DOTALL | Pattern.MULTILINE);
+
+                // RETURN TRUE IF IT HAS PASSED BOTH TESTS
+                matcher = pattern.matcher(inXMLStr);
+                retBool = matcher.matches();
+            }
+            // ELSE WE ARE FALSE
+        }
+
+        return retBool;
     }
 }

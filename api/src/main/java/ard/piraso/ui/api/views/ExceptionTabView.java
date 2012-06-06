@@ -26,12 +26,12 @@ import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
 
-import javax.swing.text.BadLocationException;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.StringReader;
 
 import static ard.piraso.ui.api.util.JTextPaneUtils.*;
-import static ard.piraso.ui.api.util.JTextPaneUtils.insertBoldCode;
-import static ard.piraso.ui.api.util.JTextPaneUtils.insertGrayCode;
 
 /**
  *

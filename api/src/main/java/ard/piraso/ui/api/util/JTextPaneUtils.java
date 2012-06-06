@@ -81,23 +81,23 @@ public final class JTextPaneUtils {
         StyleConstants.setFontSize(set, fontSize);
     }
 
-    public static void insertText(JTextPane textPane, String text, AttributeSet set) throws BadLocationException {
+    public static void insertText(JEditorPane textPane, String text, AttributeSet set) throws BadLocationException {
         textPane.getDocument().insertString(textPane.getDocument().getLength(), text, set);
     }
 
-    public static void insertHeaderCode(JTextPane textPane, String text) throws BadLocationException {
+    public static void insertHeaderCode(JEditorPane textPane, String text) throws BadLocationException {
         insertText(textPane, text, CODE_HEADER);
     }
 
-    public static void insertBoldCode(JTextPane textPane, String text) throws BadLocationException {
+    public static void insertBoldCode(JEditorPane textPane, String text) throws BadLocationException {
         insertText(textPane, text, CODE_BOLD);
     }
 
-    public static void insertBoldBlueCode(JTextPane textPane, String text) throws BadLocationException {
+    public static void insertBoldBlueCode(JEditorPane textPane, String text) throws BadLocationException {
         insertText(textPane, text, CODE_BOLD_BLUE);
     }
 
-    public static void insertCode(JTextPane textPane, String text) throws BadLocationException {
+    public static void insertCode(JEditorPane textPane, String text) throws BadLocationException {
 
         if(text.equals("@not-supported")) {
             insertText(textPane, text, CODE_RED);
@@ -108,7 +108,7 @@ public final class JTextPaneUtils {
         }
     }
 
-    public static void insertUnderline(JTextPane textPane, String text) throws BadLocationException {
+    public static void insertUnderline(JEditorPane textPane, String text) throws BadLocationException {
 
         if(text.equals("@not-supported")) {
             insertText(textPane, text, CODE_RED);
@@ -119,7 +119,7 @@ public final class JTextPaneUtils {
         }
     }
 
-    public static void insertGrayCode(JTextPane textPane, String text) throws BadLocationException {
+    public static void insertGrayCode(JEditorPane textPane, String text) throws BadLocationException {
         if(text.equals("@not-supported")) {
             insertText(textPane, text, CODE_RED);
         } else if(text.equals("@null")) {
@@ -129,11 +129,11 @@ public final class JTextPaneUtils {
         }
     }
 
-    public static void insertText(JTextPane textPane, String text) throws BadLocationException {
+    public static void insertText(JEditorPane textPane, String text) throws BadLocationException {
         insertText(textPane, text, null);
     }
 
-    public static void start(JTextPane textPane) {
+    public static void start(JEditorPane textPane) {
         textPane.setSelectionStart(0);
         textPane.setSelectionEnd(0);
     }

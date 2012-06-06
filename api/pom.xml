@@ -86,6 +86,24 @@
             <artifactId>jsontools-core</artifactId>
             <version>1.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.codeartisans.thirdparties.swing</groupId>
+            <artifactId>batik-all</artifactId>
+            <version>1.8pre-r1084380</version>
+            <type>jar</type>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.netbeans.modules</groupId>-->
+            <!--<artifactId>org-netbeans-modules-xml-text</artifactId>-->
+            <!--<version>${netbeans.version}</version>-->
+            <!--<type>jar</type>-->
+        <!--</dependency>-->
+<!--        <dependency>
+            <groupId>org.netbeans.modules</groupId>
+            <artifactId>org-netbeans-modules-web-core-syntax</artifactId>
+            <version>RELEASE65</version>
+            <type>jar</type>
+        </dependency>-->
     </dependencies>
 
     <build>
@@ -96,9 +114,40 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publicPackages>
-                        <publicPackage>ard.*</publicPackage>
-                        <publicPackage>org.*</publicPackage>
-                        <publicPackage>net.*</publicPackage>
+                        <publicPackage>ard.piraso.api.*</publicPackage>
+                        <publicPackage>ard.piraso.ui.api.*</publicPackage>
+                        <publicPackage>javax.annotation</publicPackage>
+                        <publicPackage>javax.annotation.meta</publicPackage>
+                        <publicPackage>javax.xml.*</publicPackage>
+                        <publicPackage>org.apache.batik.*</publicPackage>
+                        <publicPackage>org.apache.commons.collections.*</publicPackage>
+                        <publicPackage>org.apache.commons.io.*</publicPackage>
+                        <publicPackage>org.apache.commons.lang.*</publicPackage>
+                        <publicPackage>org.apache.commons.logging</publicPackage>
+                        <publicPackage>org.apache.commons.logging.impl</publicPackage>
+                        <publicPackage>org.apache.log4j.*</publicPackage>
+                        <publicPackage>org.apache.xmlcommons</publicPackage>
+                        <publicPackage>org.codehaus.jackson.*</publicPackage>
+                        <publicPackage>org.jdesktop.layout</publicPackage>
+                        <publicPackage>org.netbeans.api.actions</publicPackage>
+                        <publicPackage>org.netbeans.api.annotations.common</publicPackage>
+                        <publicPackage>org.netbeans.api.progress</publicPackage>
+                        <publicPackage>org.netbeans.api.progress.aggregate</publicPackage>
+                        <publicPackage>org.netbeans.modules.openide.awt</publicPackage>
+                        <publicPackage>org.netbeans.modules.openide.filesystems</publicPackage>
+                        <publicPackage>org.netbeans.modules.openide.filesystems.declmime</publicPackage>
+                        <publicPackage>org.netbeans.modules.openide.util</publicPackage>
+                        <publicPackage>org.netbeans.modules.openide.windows</publicPackage>
+                        <publicPackage>org.netbeans.modules.progress.spi</publicPackage>
+                        <publicPackage>org.netbeans.progress.module</publicPackage>
+                        <publicPackage>org.netbeans.spi.actions</publicPackage>
+                        <publicPackage>org.openide.*</publicPackage>
+                        <publicPackage>org.w3c.css.sac</publicPackage>
+                        <publicPackage>org.w3c.css.sac.helpers</publicPackage>
+                        <publicPackage>org.w3c.dom.*</publicPackage>
+                        <publicPackage>org.xml.sax</publicPackage>
+                        <publicPackage>org.xml.sax.ext</publicPackage>
+                        <publicPackage>org.xml.sax.helpers</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

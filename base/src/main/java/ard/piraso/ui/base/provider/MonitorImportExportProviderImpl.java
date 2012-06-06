@@ -7,7 +7,6 @@ import ard.piraso.api.entry.ObjectEntry;
 import ard.piraso.api.entry.ObjectEntryUtils;
 import ard.piraso.ui.api.*;
 import ard.piraso.ui.api.manager.ModelVisitor;
-import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.manager.ModelManagers;
 import org.apache.commons.collections.CollectionUtils;
 import org.codehaus.jackson.map.ObjectMapper;

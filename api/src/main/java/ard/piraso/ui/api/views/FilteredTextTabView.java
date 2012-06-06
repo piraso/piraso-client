@@ -58,7 +58,7 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
         btnFilter = new javax.swing.JToggleButton();
         btnCopy = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        txtEditor = new javax.swing.JTextPane();
+        txtEditor = new javax.swing.JEditorPane();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -97,7 +97,7 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
 
         add(jToolBar1, java.awt.BorderLayout.WEST);
 
-        txtEditor.setEditable(false);
+        txtEditor.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jScrollPane1.setViewportView(txtEditor);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -119,6 +119,6 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
     protected javax.swing.JToggleButton btnFilter;
     protected javax.swing.JScrollPane jScrollPane1;
     protected javax.swing.JToolBar jToolBar1;
-    protected javax.swing.JTextPane txtEditor;
+    protected javax.swing.JEditorPane txtEditor;
     // End of variables declaration//GEN-END:variables
 }
