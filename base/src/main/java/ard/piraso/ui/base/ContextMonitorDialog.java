@@ -20,7 +20,6 @@ import ard.piraso.api.Preferences;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.PreferenceProvider;
 import ard.piraso.ui.api.extension.AbstractDialog;
-import ard.piraso.ui.api.manager.ModelVisitor;
 import ard.piraso.ui.base.manager.ModelManagers;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import org.apache.commons.lang.StringUtils;
@@ -150,16 +149,17 @@ public final class ContextMonitorDialog extends AbstractDialog {
         listModel.clear();
         cboModel.removeAllElements();
 
-        ModelManagers.MONITORS.visit(new ModelVisitor<NewContextMonitorModel>() {
-            @Override
-            public void visit(NewContextMonitorModel model) {
-                listModel.addElement(model.getName());
+        List<String> monitorNames =  ModelManagers.MONITORS.getNames();
 
-                if (cboModel.getIndexOf(model.getLoggingUrl()) == -1) {
-                    cboModel.addElement(model.getLoggingUrl());
-                }
+        for(String monitorName : monitorNames) {
+            NewContextMonitorModel model = ModelManagers.MONITORS.get(monitorName);
+
+            listModel.addElement(model.getName());
+
+            if (cboModel.getIndexOf(model.getLoggingUrl()) == -1) {
+                cboModel.addElement(model.getLoggingUrl());
             }
-        });
+        }
 
         if(name != null) {
             int index = listModel.indexOf(name);

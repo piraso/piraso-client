@@ -18,7 +18,6 @@ package ard.piraso.ui.base;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.ProfileModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
-import ard.piraso.ui.api.manager.ModelVisitor;
 import ard.piraso.ui.base.manager.ModelManagers;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -168,12 +167,11 @@ public final class ProfilesDialog extends AbstractDialog {
     public void refresh(String name) {
         listModel.clear();
 
-        ModelManagers.PROFILES.visit(new ModelVisitor<ProfileModel>() {
-            @Override
-            public void visit(ProfileModel model) {
-                listModel.addElement(model.getName());
-            }
-        });
+        List<String> profileNames = ModelManagers.PROFILES.getNames();
+
+        for(String profileName : profileNames) {
+            listModel.addElement(profileName);
+        }
 
         if(name != null) {
             int index = listModel.indexOf(name);
