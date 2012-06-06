@@ -37,7 +37,7 @@ import static ard.piraso.ui.api.util.JTextPaneUtils.*;
  *
  * @author adeleon
  */
-public class ExceptionTabView extends FilteredTextTabView<ThrowableAwareEntry> {
+public class ExceptionTabView extends FilteredJTextPaneTabView<ThrowableAwareEntry> {
     
     public ExceptionTabView(ThrowableAwareEntry entry) {
         super(entry, "Exception information is now copied to clipboard.");

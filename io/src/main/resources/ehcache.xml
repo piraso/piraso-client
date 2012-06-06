@@ -21,7 +21,7 @@
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd" >
 
-    <diskStore path="user.dir/.piraso/cache"/>
+    <diskStore path="java.io.tmpdir/piraso/cache"/>
 
     <defaultCache maxElementsInMemory="1000"
                   memoryStoreEvictionPolicy="LFU"

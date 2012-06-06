@@ -32,7 +32,7 @@ import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 /**
  * @author adeleon
  */
-public class StackTraceTabView extends FilteredTextTabView<StackTraceAwareEntry> {
+public class StackTraceTabView extends FilteredJTextPaneTabView<StackTraceAwareEntry> {
     /**
      * Creates new form StackTraceTabView
      *

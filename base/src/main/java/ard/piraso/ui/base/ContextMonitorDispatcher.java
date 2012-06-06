@@ -63,9 +63,8 @@ public final class ContextMonitorDispatcher {
         processModels(models);
     }
 
-    private static void processModels(List<NewContextMonitorModel> models) {
-        ConnectingDialog dialog = new ConnectingDialog();
-        dialog.establishConnection(models);
+    private static void processModels(final List<NewContextMonitorModel> models) {
+        new ConnectingDialog(models).start().setVisible(true);
     }
 
     public static void handleResults(List<HttpEntrySource> validResults, Map<NewContextMonitorModel, String> failures) {

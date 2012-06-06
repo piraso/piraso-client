@@ -22,10 +22,7 @@ import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
 
 import javax.swing.*;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -40,59 +37,28 @@ public class ConnectingDialog extends javax.swing.JDialog {
     
     private List<HttpEntrySource> validResults;
 
+    private final List<NewContextMonitorModel> models;
+
     /**
      * Creates new form ConnectingDialog
      */
-    public ConnectingDialog() {
-        super(WindowManager.getDefault().getMainWindow(), false);
-        initComponents();
+    public ConnectingDialog(List<NewContextMonitorModel> models) {
+        super(WindowManager.getDefault().getMainWindow(), true);
 
-        setLocationRelativeTo(getOwner());
-    }
-    
-    public void establishConnection(final List<NewContextMonitorModel> models) {
+        this.models = models;
         failures = new HashMap<NewContextMonitorModel, String>();
         validResults = new ArrayList<HttpEntrySource>();
 
-        setVisible(true);
+        initComponents();
 
-        try {
-            startTestingConnectivity(models);
-        } catch (Exception e) {
-            LOG.log(Level.WARNING, e.getMessage(), e);
-        }
+        getRootPane().setDoubleBuffered(false);
+        setLocationRelativeTo(getOwner());
     }
 
-    private void startTestingConnectivity(final List<NewContextMonitorModel> models) throws ExecutionException, InterruptedException, InvocationTargetException {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                for (NewContextMonitorModel m : models) {
-                    if(isOpened(m.getName())) {
-                        failures.put(m, "Already monitoring.");
-                        continue;
-                    }
+    public ConnectingDialog start() {
+        new MyWorker().execute();
 
-                    HttpEntrySource source = new HttpEntrySource(m.getPreferences(), m.getLoggingUrl(), m.getWatchedAddr());
-                    source.setName(m.getName());
-
-                    try {
-                        source.reset();
-                        if (source.testConnection()) {
-                            validResults.add(source);
-                        } else {
-                            failures.put(m, "Connection Failure.");
-                        }
-                    } catch (Exception e) {
-                        failures.put(m, e.getMessage());
-                    }
-                }
-
-                dispose();
-
-                ContextMonitorDispatcher.handleResults(validResults, failures);
-            }
-        });
+        return this;
     }
 
     public boolean isOpened(String name) {
@@ -165,4 +131,47 @@ public class ConnectingDialog extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel lblStatus;
     // End of variables declaration//GEN-END:variables
+
+    private class MyWorker extends SwingWorker {
+
+        @Override
+        protected Object doInBackground() throws Exception {
+            while(!isVisible()) {
+                try {
+                    Thread.sleep(500l);
+                } catch (InterruptedException e) {
+                }
+            }
+
+            for (NewContextMonitorModel m : models) {
+                if(isOpened(m.getName())) {
+                    failures.put(m, "Already monitoring.");
+                    continue;
+                }
+
+                HttpEntrySource source = new HttpEntrySource(m.getPreferences(), m.getLoggingUrl(), m.getWatchedAddr());
+                source.setName(m.getName());
+
+                try {
+                    source.reset();
+                    if (source.testConnection()) {
+                        validResults.add(source);
+                    } else {
+                        failures.put(m, "Connection Failure.");
+                    }
+                } catch (Exception e) {
+                    failures.put(m, e.getMessage());
+                }
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void done() {
+            dispose();
+            ContextMonitorDispatcher.handleResults(validResults, failures);
+        }
+    }
+
 }
