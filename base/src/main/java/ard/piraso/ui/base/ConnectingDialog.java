@@ -23,16 +23,13 @@ import org.openide.windows.WindowManager;
 
 import javax.swing.*;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  *
  * @author adeleon
  */
 public class ConnectingDialog extends javax.swing.JDialog {
-    
-    private static final Logger LOG = Logger.getLogger(ConnectingDialog.class.getName());
-    
+
     private Map<NewContextMonitorModel, String> failures;
     
     private List<HttpEntrySource> validResults;
