@@ -21,6 +21,7 @@ package ard.piraso.ui.api.views;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
+import org.apache.batik.util.gui.xmleditor.XMLEditorKit;
 
 /**
  *
@@ -97,6 +98,7 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
 
         add(jToolBar1, java.awt.BorderLayout.WEST);
 
+        txtEditor.setEditorKit(new XMLEditorKit());
         txtEditor.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jScrollPane1.setViewportView(txtEditor);
 

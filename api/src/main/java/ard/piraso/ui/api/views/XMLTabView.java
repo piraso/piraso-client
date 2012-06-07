@@ -20,7 +20,6 @@ package ard.piraso.ui.api.views;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.formatter.XMLFormatter;
-import org.apache.batik.util.gui.xmleditor.XMLEditorKit;
 import org.openide.ErrorManager;
 
 import java.lang.reflect.Method;
@@ -37,8 +36,6 @@ public class XMLTabView extends FilteredTextTabView<Entry> {
      */
     public XMLTabView(Entry entry) {
         super(entry, "XML is now copied to clipboard.");
-
-        txtEditor.setEditorKit(new XMLEditorKit());
     }
 
     @Override
