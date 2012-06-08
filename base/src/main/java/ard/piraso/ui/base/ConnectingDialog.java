@@ -134,7 +134,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
         protected Object doInBackground() throws Exception {
             while(!isVisible()) {
                 try {
-                    Thread.sleep(500l);
+                    Thread.sleep(300l);
                 } catch (InterruptedException e) {
                 }
             }
@@ -156,7 +156,7 @@ public class ConnectingDialog extends javax.swing.JDialog {
                         failures.put(m, "Connection Failure.");
                     }
                 } catch (Exception e) {
-                    failures.put(m, e.getMessage());
+                    failures.put(m, e.toString());
                 }
             }
 

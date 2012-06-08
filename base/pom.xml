@@ -111,7 +111,12 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publicPackages>
-                        <publicPackage>ard.*</publicPackage>
+                        <publicPackage>ard.piraso.api.*</publicPackage>
+                        <publicPackage>ard.piraso.client.net</publicPackage>
+                        <publicPackage>ard.piraso.ui.api.*</publicPackage>
+                        <publicPackage>ard.piraso.ui.base.*</publicPackage>
+                        <publicPackage>ard.piraso.ui.io.*</publicPackage>
+                        <publicPackage>org.apache.http.*</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

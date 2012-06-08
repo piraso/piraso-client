@@ -34,10 +34,12 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
         this.persistent = persistent;
     }
 
+    @Override
     public void addModelOnChangeListener(ModelOnChangeListener listener) {
         listeners.add(ModelOnChangeListener.class, listener);
     }
 
+    @Override
     public void fireOnChangeEvent() {
         ModelOnChangeListener[] handlers = listeners.getListeners(ModelOnChangeListener.class);
 
@@ -61,10 +63,12 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
         return names;
     }
 
+    @Override
     public boolean isEmpty() {
         return size() == 0;
     }
 
+    @Override
     public int size() {
         int total = 0;
 
@@ -81,10 +85,12 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
         return total;
     }
 
+    @Override
     public boolean contains(String name) {
         return get(name) != null;
     }
 
+    @Override
     public void visit(ModelVisitor<T> visitor) {
         for(FileObject monitor : persistent.getChildren()) {
             try {
@@ -96,6 +102,7 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
         }
     }
 
+    @Override
     public T get(String name) {
         if(StringUtils.isBlank(name)) {
             return null;
@@ -117,9 +124,10 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
         return null;
     }
 
+    @Override
     public void save(T model) throws IOException {
         for(FileObject monitor : persistent.getChildren()) {
-            if(!model.getName().equals(monitor.getName())) {
+            if(!model.getName().equalsIgnoreCase(monitor.getName())) {
                 continue;
             }
 
@@ -133,6 +141,7 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
         fireOnChangeEvent();
     }
 
+    @Override
     public void remove(String name) throws IOException {
         for(FileObject monitor : persistent.getChildren()) {
             if(!name.equals(monitor.getName())) {

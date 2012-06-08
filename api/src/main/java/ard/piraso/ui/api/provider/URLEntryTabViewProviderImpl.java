@@ -16,40 +16,37 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.log4j.provider;
+package ard.piraso.ui.api.provider;
 
 import ard.piraso.api.entry.Entry;
-import ard.piraso.api.log4j.Log4jEntry;
+import ard.piraso.api.entry.MessageAwareEntry;
 import ard.piraso.ui.api.EntryTabViewProvider;
-import ard.piraso.ui.api.formatter.XMLFormatter;
-import ard.piraso.ui.api.provider.AbstractEntryTabViewProvider;
-import ard.piraso.ui.api.views.XMLTabView;
+import ard.piraso.ui.api.util.URLParser;
+import ard.piraso.ui.api.views.URLTabView;
+import org.apache.commons.collections.CollectionUtils;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
  * json tab view
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
-public class Log4jXMLEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<XMLTabView> {
-    public Log4jXMLEntryTabViewProviderImpl() {
-        super("XML");
+public class URLEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<URLTabView> {
+    public URLEntryTabViewProviderImpl() {
+        super("URLS");
     }
 
     @Override
     protected boolean isSupported(Entry entry) {
-        if(Log4jEntry.class.isInstance(entry)) {
-            Log4jEntry log4jEntry = (Log4jEntry) entry;
-
-            return XMLFormatter.isXMLLike(log4jEntry.getMessage());
+        if(MessageAwareEntry.class.isInstance(entry)) {
+            return CollectionUtils.isNotEmpty(URLParser.parseUrls(((MessageAwareEntry) entry).getMessage()));
         }
 
         return false;
     }
 
     @Override
-    protected XMLTabView createView(Entry entry) {
-        Log4jEntry log4jEntry = (Log4jEntry) entry;
-
-        return new XMLTabView(log4jEntry);
+    protected URLTabView createView(Entry entry) {
+        return new URLTabView((MessageAwareEntry) entry);
     }
+
 }

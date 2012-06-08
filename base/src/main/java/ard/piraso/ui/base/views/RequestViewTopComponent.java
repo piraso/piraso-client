@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.base.views;
 
 import ard.piraso.api.entry.CookieEntry;
 import ard.piraso.api.entry.HttpRequestEntry;

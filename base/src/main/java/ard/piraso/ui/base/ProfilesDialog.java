@@ -170,6 +170,10 @@ public final class ProfilesDialog extends AbstractDialog {
         List<String> profileNames = ModelManagers.PROFILES.getNames();
 
         for(String profileName : profileNames) {
+            if(ModelManagers.PROFILES.get(profileName) == null) {
+                continue;
+            }
+
             listModel.addElement(profileName);
         }
 

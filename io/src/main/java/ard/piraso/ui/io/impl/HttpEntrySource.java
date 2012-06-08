@@ -29,7 +29,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -74,6 +73,11 @@ public class HttpEntrySource implements IOEntrySource {
         manager.setMaxTotal(2);
 
         HttpClient client = new DefaultHttpClient(manager);
+
+        // set timeout
+        client.getParams().setParameter("http.socket.timeout", 1000 * 60 * 120);
+        client.getParams().setParameter("http.connection.timeout", 5000);
+
         HttpContext context = new BasicHttpContext();
         this.reader = new HttpPirasoEntryReader(client, context);
 
@@ -116,7 +120,8 @@ public class HttpEntrySource implements IOEntrySource {
                 reader.start();
             }
         } catch (Exception ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            LOG.warning(ex.getMessage());
+            ex.printStackTrace();
         } finally {
             LOG.info("Stopped Context Monitor for URL : " + uri);
             alive = false;
@@ -133,7 +138,8 @@ public class HttpEntrySource implements IOEntrySource {
                 LOG.info("Not stopped since already not active URL : " + uri);
             }
         } catch (IOException ex) {
-            LOG.log(Level.SEVERE, ex.getMessage(), ex);
+            LOG.warning(ex.getMessage());
+            ex.printStackTrace();
         } finally {
              alive = false;
         }

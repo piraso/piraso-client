@@ -153,6 +153,10 @@ public final class ContextMonitorDialog extends AbstractDialog {
 
         for(String monitorName : monitorNames) {
             NewContextMonitorModel model = ModelManagers.MONITORS.get(monitorName);
+            
+            if(model == null) {
+                continue;
+            }
 
             listModel.addElement(model.getName());
 

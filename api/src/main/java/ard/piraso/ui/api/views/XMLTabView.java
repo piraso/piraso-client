@@ -19,35 +19,35 @@
 package ard.piraso.ui.api.views;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.MessageAwareEntry;
 import ard.piraso.ui.api.formatter.XMLFormatter;
 import org.openide.ErrorManager;
-
-import java.lang.reflect.Method;
 
 /**
  * For json view.
  */
-public class XMLTabView extends FilteredSyntaxPaneTabView<Entry> {
+public class XMLTabView extends FilteredSyntaxPaneTabView<MessageAwareEntry> {
 
     /**
      * Creates new form StackTraceTabView
      *
      * @param entry       the entry
      */
-    public XMLTabView(Entry entry) {
+    public XMLTabView(MessageAwareEntry entry) {
         super(entry, "XML is now copied to clipboard.");
     }
 
     @Override
     public void refreshView(Entry entry) {
+        MessageAwareEntry m = (MessageAwareEntry) entry;
+
         btnFilter.setVisible(false);
         btnCopy.setEnabled(true);
 
         try {
-            Method method = entry.getClass().getMethod("getMessage");
             txtEditor.setEditable(false);
             txtEditor.setContentType("text/xml");
-            txtEditor.setText("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" + XMLFormatter.prettyPrint((String) method.invoke(entry)));
+            txtEditor.setText("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" + XMLFormatter.prettyPrint(m.getMessage()));
         } catch (Exception e) {
             btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);
