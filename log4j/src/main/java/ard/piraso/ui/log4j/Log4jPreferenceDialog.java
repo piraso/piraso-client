@@ -15,8 +15,8 @@
  */
 package ard.piraso.ui.log4j;
 
-import ard.piraso.ui.log4j.provider.Log4jPreferencesModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
+import ard.piraso.ui.log4j.provider.Log4jPreferencesModel;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;

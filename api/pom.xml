@@ -106,8 +106,7 @@
                         <publicPackage>ard.piraso.ui.api.*</publicPackage>
                         <publicPackage>javax.annotation</publicPackage>
                         <publicPackage>javax.annotation.meta</publicPackage>
-                        <publicPackage>javax.xml.*</publicPackage>
-                        <publicPackage>org.apache.batik.*</publicPackage>
+                        <publicPackage>jsyntaxpane</publicPackage>
                         <publicPackage>org.apache.commons.collections.*</publicPackage>
                         <publicPackage>org.apache.commons.io.*</publicPackage>
                         <publicPackage>org.apache.commons.lang.*</publicPackage>
@@ -132,7 +131,6 @@
                         <publicPackage>org.openide.*</publicPackage>
                         <publicPackage>org.w3c.css.sac</publicPackage>
                         <publicPackage>org.w3c.css.sac.helpers</publicPackage>
-                        <publicPackage>org.w3c.dom.*</publicPackage>
                         <publicPackage>org.xml.sax</publicPackage>
                         <publicPackage>org.xml.sax.ext</publicPackage>
                         <publicPackage>org.xml.sax.helpers</publicPackage>
