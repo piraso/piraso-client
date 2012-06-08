@@ -98,6 +98,7 @@ public abstract class FilteredJTextPaneTabView<T> extends AbstractTabView<T> {
         add(jToolBar1, java.awt.BorderLayout.WEST);
 
         txtEditor.setEditable(false);
+        txtEditor.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         jScrollPane1.setViewportView(txtEditor);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);

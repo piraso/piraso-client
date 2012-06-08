@@ -20,6 +20,7 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.io.PirasoObjectLoaderRegistry;
 import ard.piraso.ui.api.PirasoObjectLoaderProvider;
+import jsyntaxpane.DefaultSyntaxKit;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
@@ -34,6 +35,8 @@ public class Installer extends ModuleInstall {
     @Override
     public void restored() {
         LOG.info("Module Started.");
+        
+        DefaultSyntaxKit.initKit();
         registerEntryLoaders();
     }
 

@@ -21,14 +21,13 @@ package ard.piraso.ui.api.views;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
-import org.apache.batik.util.gui.xmleditor.XMLEditorKit;
 
 /**
  *
  * @author adeleon
  */
-public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
-
+public abstract class FilteredSyntaxPaneTabView<T> extends AbstractTabView<T> {
+    
     private String copyMessage;
     
     /** Creates new form StackTraceTabView
@@ -36,7 +35,7 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
      * @param entry the entry
      * @param copyMessage the copy message
      */
-    public FilteredTextTabView(T entry, String copyMessage) {
+    public FilteredSyntaxPaneTabView(T entry, String copyMessage) {
         super(entry);
         initComponents();
         
@@ -45,7 +44,7 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
     }
 
     protected abstract void btnFilterClickHandle();
-
+    
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -69,8 +68,8 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
         jToolBar1.setRollover(true);
 
         btnFilter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/filter.png"))); // NOI18N
-        btnFilter.setText(org.openide.util.NbBundle.getMessage(FilteredTextTabView.class, "FilteredTextTabView.btnFilter.text")); // NOI18N
-        btnFilter.setToolTipText(org.openide.util.NbBundle.getMessage(FilteredTextTabView.class, "FilteredTextTabView.btnFilter.toolTipText")); // NOI18N
+        btnFilter.setText(org.openide.util.NbBundle.getMessage(FilteredSyntaxPaneTabView.class, "FilteredSyntaxPaneTabView.btnFilter.text")); // NOI18N
+        btnFilter.setToolTipText(org.openide.util.NbBundle.getMessage(FilteredSyntaxPaneTabView.class, "FilteredSyntaxPaneTabView.btnFilter.toolTipText")); // NOI18N
         btnFilter.setFocusable(false);
         btnFilter.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnFilter.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -82,8 +81,8 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
         jToolBar1.add(btnFilter);
 
         btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/copy.png"))); // NOI18N
-        btnCopy.setText(org.openide.util.NbBundle.getMessage(FilteredTextTabView.class, "FilteredTextTabView.btnCopy.text")); // NOI18N
-        btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(FilteredTextTabView.class, "FilteredTextTabView.btnCopy.toolTipText")); // NOI18N
+        btnCopy.setText(org.openide.util.NbBundle.getMessage(FilteredSyntaxPaneTabView.class, "FilteredSyntaxPaneTabView.btnCopy.text")); // NOI18N
+        btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(FilteredSyntaxPaneTabView.class, "FilteredSyntaxPaneTabView.btnCopy.toolTipText")); // NOI18N
         btnCopy.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         btnCopy.setEnabled(false);
         btnCopy.setFocusable(false);
@@ -98,8 +97,7 @@ public abstract class FilteredTextTabView<T> extends AbstractTabView<T> {
 
         add(jToolBar1, java.awt.BorderLayout.WEST);
 
-        txtEditor.setEditorKit(new XMLEditorKit());
-        txtEditor.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        txtEditor.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         jScrollPane1.setViewportView(txtEditor);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);

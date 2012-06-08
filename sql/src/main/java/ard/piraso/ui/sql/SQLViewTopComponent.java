@@ -106,8 +106,10 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
             if(StringUtils.isNotEmpty(sql)) {
                 if(btnFormat.isSelected()) {
                     SQLForm form = createSQLInForm();
-                    txtSQL.setDocument(form.formatSQL(sql));
+                    txtSQL.setContentType("text/sql");
+                    txtSQL.setText(form.formatSQLAsString(sql));
                 } else {
+                    txtSQL.setContentType("text/plain");
                     txtSQL.setText(sql);
                 }
             }
@@ -146,7 +148,7 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         form.setSuppressEmptyLine(true);
         form.setSuppressLinebreak(true);
         form.setSuppressSpace(true);
-        form.setIndentJoin(true);
+        form.setIndentJoin(false);
         form.setSuppressEmptyLine(true);
         form.setSuppressLinebreak(true);
         form.setSuppressSpace(true);
@@ -178,7 +180,7 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
     private void initComponents() {
 
         scrollSQLPane = new javax.swing.JScrollPane();
-        txtSQL = new javax.swing.JTextPane();
+        txtSQL = new javax.swing.JEditorPane();
         scrollTable = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jToolBar1 = new javax.swing.JToolBar();
@@ -188,11 +190,9 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         btnCopy = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
 
-        txtSQL.setEditable(false);
-        txtSQL.setFont(new java.awt.Font("Monospaced", 0, 12));
         scrollSQLPane.setViewportView(txtSQL);
 
-        table.setFont(new java.awt.Font("Monospaced", 0, 12));
+        table.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         table.setModel(tableModel);
         scrollTable.setViewportView(table);
 
@@ -293,7 +293,7 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
     private javax.swing.JScrollPane scrollTable;
     private javax.swing.JTable table;
     private DefaultTableModel tableModel = new DefaultTableModel(0, 4);
-    private javax.swing.JTextPane txtSQL;
+    private javax.swing.JEditorPane txtSQL;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -97,7 +97,6 @@ public class ConnectingDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle(org.openide.util.NbBundle.getMessage(ConnectingDialog.class, "ConnectingDialog.title")); // NOI18N
-        setAlwaysOnTop(true);
         setResizable(false);
 
         lblStatus.setForeground(new java.awt.Color(0, 102, 0));

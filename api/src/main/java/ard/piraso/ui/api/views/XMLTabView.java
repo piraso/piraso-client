@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 /**
  * For json view.
  */
-public class XMLTabView extends FilteredTextTabView<Entry> {
+public class XMLTabView extends FilteredSyntaxPaneTabView<Entry> {
 
     /**
      * Creates new form StackTraceTabView
@@ -46,6 +46,7 @@ public class XMLTabView extends FilteredTextTabView<Entry> {
         try {
             Method method = entry.getClass().getMethod("getMessage");
             txtEditor.setEditable(false);
+            txtEditor.setContentType("text/xml");
             txtEditor.setText("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" + XMLFormatter.prettyPrint((String) method.invoke(entry)));
         } catch (Exception e) {
             btnCopy.setEnabled(false);

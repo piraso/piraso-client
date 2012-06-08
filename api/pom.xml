@@ -87,23 +87,11 @@
             <version>1.7</version>
         </dependency>
         <dependency>
-            <groupId>org.codeartisans.thirdparties.swing</groupId>
-            <artifactId>batik-all</artifactId>
-            <version>1.8pre-r1084380</version>
-            <type>jar</type>
+          <groupId>jsyntaxpane</groupId>
+          <artifactId>jsyntaxpane</artifactId>
+          <version>1.0-SNAPSHOT</version>
+          <type>jar</type>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.netbeans.modules</groupId>-->
-            <!--<artifactId>org-netbeans-modules-xml-text</artifactId>-->
-            <!--<version>${netbeans.version}</version>-->
-            <!--<type>jar</type>-->
-        <!--</dependency>-->
-<!--        <dependency>
-            <groupId>org.netbeans.modules</groupId>
-            <artifactId>org-netbeans-modules-web-core-syntax</artifactId>
-            <version>RELEASE65</version>
-            <type>jar</type>
-        </dependency>-->
     </dependencies>
 
     <build>

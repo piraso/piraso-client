@@ -23,10 +23,11 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.formatter.JsonFormatter;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openide.ErrorManager;
+
 /**
  * For json view.
  */
-public class JsonTabView extends FilteredTextTabView<Entry> {
+public class JsonTabView extends FilteredSyntaxPaneTabView<Entry> {
     
     private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
     
@@ -46,6 +47,7 @@ public class JsonTabView extends FilteredTextTabView<Entry> {
 
         try {
             txtEditor.setEditable(false);
+            txtEditor.setContentType("text/json");
             txtEditor.setText(JsonFormatter.prettyPrint(MAPPER.writeValueAsString(entry)));
         } catch (Exception e) {
             btnCopy.setEnabled(false);

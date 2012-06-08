@@ -39,10 +39,10 @@
               <Image iconType="3" name="/ard/piraso/ui/api/icons/filter.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="ard/piraso/ui/api/views/Bundle.properties" key="FilteredTextTabView.btnFilter.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="ard/piraso/ui/api/views/Bundle.properties" key="FilteredSyntaxPaneTabView.btnFilter.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="ard/piraso/ui/api/views/Bundle.properties" key="FilteredTextTabView.btnFilter.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="ard/piraso/ui/api/views/Bundle.properties" key="FilteredSyntaxPaneTabView.btnFilter.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
@@ -58,10 +58,10 @@
               <Image iconType="3" name="/ard/piraso/ui/api/icons/copy.png"/>
             </Property>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="ard/piraso/ui/api/views/Bundle.properties" key="FilteredTextTabView.btnCopy.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="ard/piraso/ui/api/views/Bundle.properties" key="FilteredSyntaxPaneTabView.btnCopy.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="ard/piraso/ui/api/views/Bundle.properties" key="FilteredTextTabView.btnCopy.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="ard/piraso/ui/api/views/Bundle.properties" key="FilteredSyntaxPaneTabView.btnCopy.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.EmptyBorderInfo">
@@ -90,11 +90,8 @@
       <SubComponents>
         <Component class="javax.swing.JEditorPane" name="txtEditor">
           <Properties>
-            <Property name="editorKit" type="javax.swing.text.EditorKit" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="new XMLEditorKit()" type="code"/>
-            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Monospaced" size="13" style="0"/>
+              <Font name="Monospaced" size="12" style="0"/>
             </Property>
           </Properties>
         </Component>
