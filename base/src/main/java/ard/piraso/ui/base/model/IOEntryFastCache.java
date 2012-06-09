@@ -24,7 +24,6 @@ import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryReader;
-import org.apache.commons.collections.CollectionUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -41,6 +40,8 @@ public class IOEntryFastCache {
     private static final Logger LOG = Logger.getLogger(IOEntryTableModel.class.getName());
 
     public static final int MAX_CACHE_SIZE = 1000;
+
+    public static final int MAX_GROUP_SIZE = 2;
 
     private Map<Long, Element> cache = new HashMap<Long, Element>(MAX_CACHE_SIZE);
 
@@ -185,15 +186,7 @@ public class IOEntryFastCache {
         }
 
         private String getGroup(Entry entry) {
-            if(entry.getGroup() == null) {
-                return "";
-            }
-
-            if(CollectionUtils.isNotEmpty(entry.getGroup().getGroups())) {
-                return "[" + entry.getGroup().getGroups().iterator().next() + "] ";
-            }
-
-            return "";
+            return MessageProviderManager.INSTANCE.getGroupMessage(entry);
         }
     }
 }

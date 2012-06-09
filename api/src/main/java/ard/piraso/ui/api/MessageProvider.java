@@ -28,4 +28,6 @@ public interface MessageProvider {
     public boolean isSupported(Entry entry);
     
     public String toMessage(Entry entry);
+
+    public String toGroupMessage(Entry entry);
 }

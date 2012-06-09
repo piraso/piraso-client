@@ -21,6 +21,7 @@ package ard.piraso.ui.base.provider;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.GlobalRequestEntry;
 import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.ui.api.AbstractMessageProvider;
 import ard.piraso.ui.api.MessageProvider;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -28,7 +29,7 @@ import org.openide.util.lookup.ServiceProvider;
  * Request message provider
  */
 @ServiceProvider(service=MessageProvider.class)
-public class RequestMessageProviderImpl implements MessageProvider {
+public class RequestMessageProviderImpl extends AbstractMessageProvider {
 
     @Override
     public boolean isSupported(Entry entry) {

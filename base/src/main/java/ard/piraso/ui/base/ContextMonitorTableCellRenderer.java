@@ -79,8 +79,11 @@ public class ContextMonitorTableCellRenderer extends JLabel implements TableCell
 
         if (column == ROWNUM_INDEX) {
             setBackground(new Color(233, 232, 226));
-            setFont(getFont().deriveFont(Font.BOLD));
+            setFont(getFont().deriveFont(Font.PLAIN, 10));
             setForeground(Color.BLACK);
+            setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 4));
+        } else {
+            setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         }
 
         if (data != null) {

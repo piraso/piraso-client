@@ -23,6 +23,7 @@ import ard.piraso.api.entry.HttpRequestEntry;
 import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -159,6 +160,7 @@ public final class RequestViewTopComponent extends AbstractEntryViewTopComponent
         jPanel1.setLayout(new java.awt.BorderLayout());
 
         txtMessage.setEditable(false);
+        txtMessage.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         jScrollPane1.setViewportView(txtMessage);
 
         jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);

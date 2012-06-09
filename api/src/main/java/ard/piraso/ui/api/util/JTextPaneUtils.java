@@ -18,6 +18,8 @@
 
 package ard.piraso.ui.api.util;
 
+import ard.piraso.ui.api.manager.FontProviderManager;
+
 import javax.swing.*;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -30,35 +32,36 @@ import java.awt.*;
  */
 public final class JTextPaneUtils {
 
-    public static SimpleAttributeSet CODE_HEADER = new SimpleAttributeSet();
+    public static final SimpleAttributeSet CODE_HEADER = new SimpleAttributeSet();
 
-    public static SimpleAttributeSet CODE_BOLD = new SimpleAttributeSet();
+    public static final SimpleAttributeSet CODE_BOLD = new SimpleAttributeSet();
 
-    public static SimpleAttributeSet CODE_BOLD_BLUE = new SimpleAttributeSet();
+    public static final SimpleAttributeSet CODE_BOLD_BLUE = new SimpleAttributeSet();
 
+    public static final SimpleAttributeSet CODE = new SimpleAttributeSet();
 
-    public static SimpleAttributeSet CODE = new SimpleAttributeSet();
+    public static final SimpleAttributeSet CODE_UNDERLINE = new SimpleAttributeSet();
 
-    public static SimpleAttributeSet CODE_UNDERLINE = new SimpleAttributeSet();
+    public static final SimpleAttributeSet CODE_BLUE = new SimpleAttributeSet();
 
-
-    public static SimpleAttributeSet CODE_BLUE = new SimpleAttributeSet();
-
-    public static SimpleAttributeSet CODE_RED = new SimpleAttributeSet();
-    public static SimpleAttributeSet CODE_GRAY = new SimpleAttributeSet();
+    public static final SimpleAttributeSet CODE_RED = new SimpleAttributeSet();
+    
+    public static final SimpleAttributeSet CODE_GRAY = new SimpleAttributeSet();
 
 
     static {
+        Font baseFont = FontProviderManager.INSTANCE.getEditorDefaultFont();
+
         setupCode(CODE_HEADER, Color.BLACK, true, 14);
-        setupCode(CODE_BOLD, Color.BLACK, true, 13);
-        setupCode(CODE, Color.BLACK, false, 13);
-        setupCode(CODE_BLUE, Color.BLUE, false, 13);
-        setupCode(CODE_BOLD_BLUE, Color.BLUE, true, 13);
+        setupCode(CODE_BOLD, Color.BLACK, true, baseFont.getSize());
+        setupCode(CODE, Color.BLACK, false, baseFont.getSize());
+        setupCode(CODE_BLUE, Color.BLUE, false, baseFont.getSize());
+        setupCode(CODE_BOLD_BLUE, Color.BLUE, true, baseFont.getSize());
 
-        setupCode(CODE_RED, Color.RED, false, 13);
-        setupCode(CODE_GRAY, Color.GRAY, false, 13);
+        setupCode(CODE_RED, Color.RED, false, baseFont.getSize());
+        setupCode(CODE_GRAY, Color.GRAY, false, baseFont.getSize());
 
-        setupCode(CODE_UNDERLINE, Color.BLACK, false, true, 13);
+        setupCode(CODE_UNDERLINE, Color.BLACK, false, true, baseFont.getSize());
 
     }
 
@@ -76,8 +79,8 @@ public final class JTextPaneUtils {
         if(underline) {
             StyleConstants.setUnderline(set, true);
         }
-
-        StyleConstants.setFontFamily(set, "Monospaced");
+        Font baseFont = FontProviderManager.INSTANCE.getEditorDefaultFont();
+        StyleConstants.setFontFamily(set, baseFont.getFamily());
         StyleConstants.setFontSize(set, fontSize);
     }
 

@@ -20,6 +20,7 @@ package ard.piraso.ui.sql.provider;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.sql.SQLViewEntry;
+import ard.piraso.ui.api.AbstractMessageProvider;
 import ard.piraso.ui.api.MessageProvider;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -27,7 +28,7 @@ import org.openide.util.lookup.ServiceProvider;
  * Provides message for {@link ard.piraso.api.sql.SQLViewEntry} class.
  */
 @ServiceProvider(service=MessageProvider.class)
-public class SQLViewMessageProviderImpl implements MessageProvider {
+public class SQLViewMessageProviderImpl extends AbstractMessageProvider {
     @Override
     public boolean isSupported(Entry entry) {
         return SQLViewEntry.class.isInstance(entry);

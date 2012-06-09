@@ -20,6 +20,7 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.util.SingleClassInstanceContent;
 import ard.piraso.ui.api.util.WindowUtils;
 import ard.piraso.ui.base.manager.EntryViewProviderManager;
@@ -134,9 +135,6 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         elapseColumn.setMaxWidth(100);
         elapseColumn.setCellRenderer(renderer);
 
-        table.setShowHorizontalLines(false);
-        table.setShowGrid(false);
-        table.setShowVerticalLines(false);
         table.setAutoscrolls(true);
         table.setColumnSelectionAllowed(false);
         table.getTableHeader().setReorderingAllowed(false);
@@ -209,7 +207,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         toolbar.setRollover(true);
         toolbar.add(jSeparator1);
 
-        cboUrl.setFont(new java.awt.Font("Monospaced", 0, 12));
+        cboUrl.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         cboUrl.setModel(comboBoxModel);
         toolbar.add(cboUrl);
 
@@ -229,10 +227,14 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         add(toolbar, java.awt.BorderLayout.NORTH);
 
         tableScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        tableScrollPane.setFont(new java.awt.Font("Monospaced", 0, 10));
+        tableScrollPane.setFont(new java.awt.Font("Monospaced", 0, 10)); // NOI18N
 
-        table.setFont(new java.awt.Font("Monospaced", 0, 12));
+        table.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         table.setModel(tableModel);
+        table.setGridColor(new java.awt.Color(204, 0, 0));
+        table.setRowMargin(0);
+        table.setShowHorizontalLines(false);
+        table.setShowVerticalLines(false);
         tableScrollPane.setViewportView(table);
 
         add(tableScrollPane, java.awt.BorderLayout.CENTER);

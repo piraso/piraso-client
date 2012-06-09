@@ -19,6 +19,7 @@
 package ard.piraso.ui.base.manager;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.ui.api.AbstractMessageProvider;
 import ard.piraso.ui.api.MessageProvider;
 import org.openide.util.Lookup;
 
@@ -65,8 +66,32 @@ public enum MessageProviderManager {
 
         return defaultProvider.toMessage(entry);
     }
+
+    public String getGroupMessage(Entry entry) {
+        if(entry == null) {
+            return null;
+        }
+
+        if(cache.containsKey(entry.getClass())) {
+            return cache.get(entry.getClass()).toGroupMessage(entry);
+        }
+
+        Collection<? extends MessageProvider> providers = Lookup.getDefault().lookupAll(MessageProvider.class);
+
+        for(MessageProvider provider : providers) {
+            if(provider.isSupported(entry)) {
+                cache.put(entry.getClass(), provider);
+
+                return provider.toMessage(entry);
+            }
+        }
+
+        cache.put(entry.getClass(), defaultProvider);
+
+        return defaultProvider.toGroupMessage(entry);
+    }
     
-    private class DefaultProviderImpl implements MessageProvider {
+    private class DefaultProviderImpl extends AbstractMessageProvider {
 
         @Override
         public boolean isSupported(Entry entry) {
@@ -75,7 +100,7 @@ public enum MessageProviderManager {
 
         @Override
         public String toMessage(Entry entry) {
-            return "DEFAULT: " + entry.getClass().toString();
+            return entry.getClass().toString();
         }        
     }
 }

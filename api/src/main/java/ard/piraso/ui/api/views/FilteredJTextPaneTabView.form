@@ -91,8 +91,8 @@
         <Component class="javax.swing.JTextPane" name="txtEditor">
           <Properties>
             <Property name="editable" type="boolean" value="false"/>
-            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Monospaced" size="12" style="0"/>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="FontProviderManager.INSTANCE.getEditorDefaultFont()" type="code"/>
             </Property>
           </Properties>
         </Component>

@@ -54,8 +54,10 @@ public class SQLDataTableCellRenderer extends JLabel implements TableCellRendere
         }
 
         if("@null".equals(data)) {
+            data = "null";
             setForeground(Color.BLUE);
         } else if("@not-supported".equals(data)) {
+            data = "not-supported";
             setForeground(Color.RED);
         }
 

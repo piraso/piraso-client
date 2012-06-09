@@ -21,6 +21,7 @@ package ard.piraso.ui.sql;
 import ard.piraso.api.sql.SQLDataViewEntry;
 import ard.piraso.api.sql.SQLParameterUtils;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.JTableUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
@@ -129,13 +130,13 @@ public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent
 
         setLayout(new java.awt.BorderLayout());
 
-        jTable2.setFont(new java.awt.Font("Monospaced", 0, 12));
+        jTable2.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         jTable2.setModel(table2Model);
         jScrollPane1.setViewportView(jTable2);
 
         jSplitPane1.setLeftComponent(jScrollPane1);
 
-        jTable1.setFont(new java.awt.Font("Monospaced", 0, 12));
+        jTable1.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         jTable1.setModel(table1Model);
         jScrollPane2.setViewportView(jTable1);
 

@@ -21,6 +21,8 @@ package ard.piraso.ui.log4j.provider;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.log4j.Log4jEntry;
 import ard.piraso.ui.api.MessageProvider;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.StringUtils;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
@@ -28,6 +30,8 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service=MessageProvider.class)
 public class Log4jMessageProviderImpl implements MessageProvider {
+    public static final int MAX_GROUP_SIZE = 2;
+
     @Override
     public boolean isSupported(Entry entry) {
         return Log4jEntry.class.isInstance(entry);
@@ -41,5 +45,35 @@ public class Log4jMessageProviderImpl implements MessageProvider {
         buf.append(log4j.getMessage());
 
         return buf.toString();
+    }
+
+    @Override
+    public String toGroupMessage(Entry entry) {
+        if(entry.getGroup() == null) {
+            return "";
+        }
+
+        if(CollectionUtils.isNotEmpty(entry.getGroup().getGroups())) {
+            String group = entry.getGroup().getGroups().iterator().next();
+            String[] split = StringUtils.split(group, ".");
+
+            if(split != null && split.length > MAX_GROUP_SIZE) {
+                StringBuilder buf = new StringBuilder();
+
+                for(int i = split.length - MAX_GROUP_SIZE; i < split.length; i++) {
+                    if(buf.length() > 0) {
+                        buf.append(".");
+                    }
+
+                    buf.append(split[i]);
+                }
+
+                group = buf.toString();
+            }
+
+            return String.format("[%s] ", group);
+        }
+
+        return "";
     }
 }

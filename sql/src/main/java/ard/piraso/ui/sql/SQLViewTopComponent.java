@@ -24,6 +24,7 @@ import ard.piraso.api.sql.SQLParameterEntry;
 import ard.piraso.api.sql.SQLViewEntry;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.extension.AlignableTableCellRendererImpl;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.JTableUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
@@ -190,9 +191,10 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         btnCopy = new javax.swing.JButton();
         jSplitPane1 = new javax.swing.JSplitPane();
 
+        txtSQL.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         scrollSQLPane.setViewportView(txtSQL);
 
-        table.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        table.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         table.setModel(tableModel);
         scrollTable.setViewportView(table);
 

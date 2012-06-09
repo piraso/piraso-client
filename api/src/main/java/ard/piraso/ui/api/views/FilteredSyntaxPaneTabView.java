@@ -19,6 +19,7 @@
 package ard.piraso.ui.api.views;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 
@@ -97,7 +98,7 @@ public abstract class FilteredSyntaxPaneTabView<T> extends AbstractTabView<T> {
 
         add(jToolBar1, java.awt.BorderLayout.WEST);
 
-        txtEditor.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         jScrollPane1.setViewportView(txtEditor);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
