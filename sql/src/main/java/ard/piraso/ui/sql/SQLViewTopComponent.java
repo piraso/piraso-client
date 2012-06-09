@@ -98,6 +98,8 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
 
     @Override
     protected void refreshView() {
+        table.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+        txtSQL.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         btnCopy.setEnabled(currentEntry != null);
         
         if(currentEntry != null) {

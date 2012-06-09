@@ -6,7 +6,6 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.openide.filesystems.FileObject;
 
-import javax.swing.event.EventListenerList;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +16,7 @@ import java.util.logging.Logger;
 /**
  * Model manager.
  */
-public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T> {
+public class ModelManagerImpl<T extends WithNameModel> extends AbstractModelManager implements ModelManager<T> {
 
     private static final Logger LOG = Logger.getLogger(ModelManagerImpl.class.getName());
 
@@ -27,25 +26,9 @@ public class ModelManagerImpl<T extends WithNameModel> implements ModelManager<T
 
     private final Class<T> clazz;
 
-    private EventListenerList listeners = new EventListenerList();
-
     public ModelManagerImpl(FileObject persistent, Class<T> clazz) {
         this.clazz = clazz;
         this.persistent = persistent;
-    }
-
-    @Override
-    public void addModelOnChangeListener(ModelOnChangeListener listener) {
-        listeners.add(ModelOnChangeListener.class, listener);
-    }
-
-    @Override
-    public void fireOnChangeEvent() {
-        ModelOnChangeListener[] handlers = listeners.getListeners(ModelOnChangeListener.class);
-
-        for(ModelOnChangeListener handler : handlers) {
-            handler.onChange(new ModelEvent(this));
-        }
     }
 
     @Override

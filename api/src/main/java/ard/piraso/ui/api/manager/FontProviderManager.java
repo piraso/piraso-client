@@ -26,7 +26,11 @@ public enum FontProviderManager {
         }
     }
 
-    public Font getEditorDefaultFont() {
+    public Font getDefaultFont() {
         return DEFAULT_FONT;
+    }
+
+    public Font getEditorDefaultFont() {
+        return DEFAULT_FONT.deriveFont((float) SingleModelManagers.GENERAL_SETTINGS.get().getFontSize());
     }
 }

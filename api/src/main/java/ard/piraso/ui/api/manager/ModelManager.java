@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * model manager.
  */
-public interface ModelManager<T extends WithNameModel> {
+public interface ModelManager<T extends WithNameModel> extends BaseModelManager {
     List<String> getNames();
     boolean isEmpty();
     int size();
@@ -17,6 +17,4 @@ public interface ModelManager<T extends WithNameModel> {
     T get(String name);
     void save(T model) throws IOException;
     void remove(String name) throws IOException;
-    void addModelOnChangeListener(ModelOnChangeListener listener);
-    void fireOnChangeEvent();
 }

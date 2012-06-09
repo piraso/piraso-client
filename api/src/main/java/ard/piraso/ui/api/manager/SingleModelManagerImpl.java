@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 /**
  * Implementation for {@link SingleModelManager}.
  */
-public class SingleModelManagerImpl<T> implements SingleModelManager<T> {
+public class SingleModelManagerImpl<T> extends AbstractModelManager implements SingleModelManager<T> {
 
     private static final Logger LOG = Logger.getLogger(ModelManagerImpl.class.getName());
 
@@ -36,6 +36,8 @@ public class SingleModelManagerImpl<T> implements SingleModelManager<T> {
     public void save(T item) {
         try {
             persistent.setAttribute("value", MAPPER.writeValueAsString(item));
+
+            fireOnChangeEvent();
         } catch (Exception e) {
             LOG.log(Level.WARNING, "Error while writing json", e);
         }

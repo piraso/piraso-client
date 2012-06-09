@@ -21,6 +21,9 @@ package ard.piraso.ui.base;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
 import ard.piraso.ui.api.manager.FontProviderManager;
+import ard.piraso.ui.api.manager.ModelEvent;
+import ard.piraso.ui.api.manager.ModelOnChangeListener;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.api.util.SingleClassInstanceContent;
 import ard.piraso.ui.api.util.WindowUtils;
 import ard.piraso.ui.base.manager.EntryViewProviderManager;
@@ -51,6 +54,19 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     public static final String STOPPED_ICON_PATH = "ard/piraso/ui/base/icons/status-stopped.png";
 
     public static final String STARTED_ICON_PATH = "ard/piraso/ui/base/icons/status-active.png";
+
+    private final ModelOnChangeListener GENERAL_SETTINGS_LISTENER = new ModelOnChangeListener() {
+        @Override
+        public void onChange(ModelEvent evt) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    table.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+                    table.repaint();
+                }
+            });
+        }
+    };
 
     private IOEntryReaderActionProvider actionProvider;
 
@@ -134,7 +150,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         elapseColumn.setHeaderValue("Elapse");
         elapseColumn.setMaxWidth(100);
         elapseColumn.setCellRenderer(renderer);
-
+        
         table.setAutoscrolls(true);
         table.setColumnSelectionAllowed(false);
         table.getTableHeader().setReorderingAllowed(false);
@@ -173,11 +189,13 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     public void componentClosed() {
         actionProvider.getStopCookie().stop();
         entryContent.clear();
+        SingleModelManagers.GENERAL_SETTINGS.removeModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
 
     @Override
     protected void componentOpened() {
         actionProvider.getStartCookie().start();
+        SingleModelManagers.GENERAL_SETTINGS.addModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
     
     @Override

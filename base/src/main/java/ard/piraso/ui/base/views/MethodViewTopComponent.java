@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.base;
+package ard.piraso.ui.base.views;
 
 import ard.piraso.api.entry.MethodCallEntry;
 import ard.piraso.api.entry.ObjectEntry;
@@ -24,6 +24,7 @@ import ard.piraso.api.entry.ObjectEntryUtils;
 import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -83,6 +84,7 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
 
     private void refreshMethodView() {
         try {
+            txtMethod.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtMethod.setText("");
             btnCopy.setEnabled(currentEntry != null);
 

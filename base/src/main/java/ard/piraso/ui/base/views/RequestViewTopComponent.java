@@ -65,6 +65,8 @@ public final class RequestViewTopComponent extends AbstractEntryViewTopComponent
     protected void refreshView() {
         List<EntryTabView> components = new ArrayList<EntryTabView>();
 
+        int selectedIndex = jTabbedPane.getSelectedIndex();
+
         jTabbedPane.removeAll();
 
         if(currentEntry != null) {
@@ -80,12 +82,17 @@ public final class RequestViewTopComponent extends AbstractEntryViewTopComponent
             }
         }
 
+        if(selectedIndex >= 0) {
+            jTabbedPane.setSelectedIndex(selectedIndex);
+        }
+
         repaint();
         revalidate();
     }
 
     private void refreshRequestView() {
         try {
+            txtMessage.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtMessage.setText("");
             btnCopy.setEnabled(currentEntry != null);
 

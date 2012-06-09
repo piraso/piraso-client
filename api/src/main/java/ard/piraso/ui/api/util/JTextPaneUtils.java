@@ -21,7 +21,6 @@ package ard.piraso.ui.api.util;
 import ard.piraso.ui.api.manager.FontProviderManager;
 
 import javax.swing.*;
-import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
@@ -52,7 +51,7 @@ public final class JTextPaneUtils {
     static {
         Font baseFont = FontProviderManager.INSTANCE.getEditorDefaultFont();
 
-        setupCode(CODE_HEADER, Color.BLACK, true, 14);
+        setupCode(CODE_HEADER, Color.BLACK, true, baseFont.getSize());
         setupCode(CODE_BOLD, Color.BLACK, true, baseFont.getSize());
         setupCode(CODE, Color.BLACK, false, baseFont.getSize());
         setupCode(CODE_BLUE, Color.BLUE, false, baseFont.getSize());
@@ -84,8 +83,14 @@ public final class JTextPaneUtils {
         StyleConstants.setFontSize(set, fontSize);
     }
 
-    public static void insertText(JEditorPane textPane, String text, AttributeSet set) throws BadLocationException {
-        textPane.getDocument().insertString(textPane.getDocument().getLength(), text, set);
+    public static void insertText(JEditorPane textPane, String text, SimpleAttributeSet set) throws BadLocationException {
+        SimpleAttributeSet copy = (SimpleAttributeSet) set.copyAttributes();
+
+        Font baseFont = FontProviderManager.INSTANCE.getEditorDefaultFont();
+        StyleConstants.setFontFamily(copy, baseFont.getFamily());
+        StyleConstants.setFontSize(copy, baseFont.getSize());
+
+        textPane.getDocument().insertString(textPane.getDocument().getLength(), text, copy);
     }
 
     public static void insertHeaderCode(JEditorPane textPane, String text) throws BadLocationException {

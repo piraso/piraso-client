@@ -87,6 +87,7 @@ public final class ResponseViewTopComponent extends AbstractEntryViewTopComponen
 
     private void refreshRequestView() {
         try {
+            txtMessage.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtMessage.setText("");
             btnCopy.setEnabled(currentEntry != null);
 

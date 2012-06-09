@@ -19,6 +19,9 @@
 package ard.piraso.ui.api.extension;
 
 import ard.piraso.api.entry.Entry;
+import ard.piraso.ui.api.manager.ModelEvent;
+import ard.piraso.ui.api.manager.ModelOnChangeListener;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.apache.commons.collections.CollectionUtils;
 import org.openide.util.Lookup;
 import org.openide.util.LookupEvent;
@@ -26,12 +29,26 @@ import org.openide.util.LookupListener;
 import org.openide.util.Utilities;
 import org.openide.windows.TopComponent;
 
+import javax.swing.*;
 import java.util.Collection;
 
 /**
  * Base class for Entry View Top Component.
  */
 public abstract class AbstractEntryViewTopComponent<T extends Entry> extends TopComponent implements LookupListener {
+
+    private final ModelOnChangeListener GENERAL_SETTINGS_LISTENER = new ModelOnChangeListener() {
+        @Override
+        public void onChange(ModelEvent evt) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    refreshOnSettingsChange();
+                }
+            });
+        }
+    };
+
     protected Lookup.Result result = null;
 
     protected T currentEntry;
@@ -46,6 +63,10 @@ public abstract class AbstractEntryViewTopComponent<T extends Entry> extends Top
      * Refresh the view since new entry was available.
      */
     protected abstract void refreshView();
+
+    protected void refreshOnSettingsChange() {
+        refreshView();
+    }
 
     @Override
     @SuppressWarnings("unchecked")
@@ -63,11 +84,13 @@ public abstract class AbstractEntryViewTopComponent<T extends Entry> extends Top
     public void componentOpened() {
         result = Utilities.actionsGlobalContext().lookupResult(typeClass);
         result.addLookupListener(this);
+        SingleModelManagers.GENERAL_SETTINGS.addModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
 
     @Override
     public void componentClosed() {
         result.removeLookupListener(this);
         result = null;
+        SingleModelManagers.GENERAL_SETTINGS.removeModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
 }

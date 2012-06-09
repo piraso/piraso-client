@@ -22,7 +22,7 @@ import ard.piraso.api.entry.HttpRequestEntry;
 import ard.piraso.api.entry.HttpResponseEntry;
 import ard.piraso.api.entry.MethodCallEntry;
 import ard.piraso.ui.api.EntryViewProvider;
-import ard.piraso.ui.base.MethodViewTopComponent;
+import ard.piraso.ui.base.views.MethodViewTopComponent;
 import ard.piraso.ui.base.views.RequestViewTopComponent;
 import ard.piraso.ui.base.views.ResponseViewTopComponent;
 import org.openide.util.lookup.ServiceProvider;

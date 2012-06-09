@@ -13,7 +13,7 @@ public class ModelEvent extends EventObject {
      * @param source The object on which the Event initially occurred.
      * @throws IllegalArgumentException if source is null.
      */
-    public ModelEvent(ModelManager source) {
+    public ModelEvent(AbstractModelManager source) {
         super(source);
     }
 }

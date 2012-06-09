@@ -89,6 +89,8 @@ public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent
 
     @Override
     protected void refreshView() {
+        jTable1.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+        jTable2.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         btnCopy.setEnabled(currentEntry != null);
 
         table2Model.setRowCount(0);

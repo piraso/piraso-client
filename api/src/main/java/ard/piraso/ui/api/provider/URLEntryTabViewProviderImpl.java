@@ -37,11 +37,7 @@ public class URLEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<UR
 
     @Override
     protected boolean isSupported(Entry entry) {
-        if(MessageAwareEntry.class.isInstance(entry)) {
-            return CollectionUtils.isNotEmpty(URLParser.parseUrls(((MessageAwareEntry) entry).getMessage()));
-        }
-
-        return false;
+        return MessageAwareEntry.class.isInstance(entry) && CollectionUtils.isNotEmpty(URLParser.parseUrls(((MessageAwareEntry) entry).getMessage()));
     }
 
     @Override

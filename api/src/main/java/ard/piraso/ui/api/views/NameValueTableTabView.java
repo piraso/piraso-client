@@ -70,6 +70,8 @@ public class NameValueTableTabView extends AbstractTabView<Entry> {
     
     @Override
     public void refreshView(Entry entry) {
+        jtable.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+
         List<NameValue> nvs = provider.list(entry);
 
         if(btnAscending.isSelected()) {
