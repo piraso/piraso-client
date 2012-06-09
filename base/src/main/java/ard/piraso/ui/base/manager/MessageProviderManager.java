@@ -82,7 +82,7 @@ public enum MessageProviderManager {
             if(provider.isSupported(entry)) {
                 cache.put(entry.getClass(), provider);
 
-                return provider.toMessage(entry);
+                return provider.toGroupMessage(entry);
             }
         }
 

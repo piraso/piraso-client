@@ -17,6 +17,7 @@ package ard.piraso.ui.base;
 
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import org.openide.ErrorManager;
 
 import java.util.Map;
@@ -77,6 +78,7 @@ public class FailureDialog extends AbstractDialog {
         jLabel1.setText(org.openide.util.NbBundle.getMessage(FailureDialog.class, "FailureDialog.jLabel1.text")); // NOI18N
 
         txtErrors.setEditable(false);
+        txtErrors.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         jScrollPane1.setViewportView(txtErrors);
 
         btnClose.setText(org.openide.util.NbBundle.getMessage(FailureDialog.class, "FailureDialog.btnClose.text")); // NOI18N
