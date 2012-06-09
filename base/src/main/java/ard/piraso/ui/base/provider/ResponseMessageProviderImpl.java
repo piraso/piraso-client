@@ -41,7 +41,6 @@ public class ResponseMessageProviderImpl  extends AbstractMessageProvider {
 
         StringBuilder buf = new StringBuilder("RESPONSE:");
 
-
         if(response.getStatusReason() != null) {
             buf.append(" ").append(response.getStatusReason());
         }

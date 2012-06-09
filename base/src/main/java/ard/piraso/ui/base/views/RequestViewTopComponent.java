@@ -110,7 +110,7 @@ public final class RequestViewTopComponent extends AbstractEntryViewTopComponent
                             continue;
                         }
                         insertCode(txtMessage, "\n    ");
-                        insertUnderline(txtMessage, header.getKey());
+                        insertUnderline(txtMessage, header.getKey().toLowerCase());
                         insertCode(txtMessage, ": " + header.getValue());
                     }
                 }
