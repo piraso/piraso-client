@@ -187,7 +187,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
         switch(columnIndex) {
             case 0: return el.rowNum;
             case 1: return el.shortName;
-            case 2: return el.message;
+            case 2: return el.getActualMessage();
             case 3: return el.elapse;
         }
 

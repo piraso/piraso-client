@@ -49,8 +49,12 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
         JMenu menu = new JMenu("Context Monitor");
 
         final JCheckBoxMenuItem showElapseTime = new JCheckBoxMenuItem("Show Elapse Time");
+        final JCheckBoxMenuItem showRequestId = new JCheckBoxMenuItem("Show Request ID");
+        final JCheckBoxMenuItem showMessageGroup = new JCheckBoxMenuItem("Show Message Group");
 
+        showRequestId.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowRequestId());
         showElapseTime.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime());
+        showMessageGroup.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowMessageGroup());
 
         showElapseTime.addActionListener(new ActionListener() {
             @Override
@@ -62,7 +66,29 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
             }
         });
 
+        showRequestId.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
+                model.toggleRequestId();
+                showElapseTime.setState(model.isShowRequestId());
+                SingleModelManagers.GENERAL_SETTINGS.save(model);
+            }
+        });
+
+        showMessageGroup.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
+                model.toggleShowGroupMessage();
+                showElapseTime.setState(model.isShowMessageGroup());
+                SingleModelManagers.GENERAL_SETTINGS.save(model);
+            }
+        });
+
         menu.add(showElapseTime);
+        menu.add(showRequestId);
+        menu.add(showMessageGroup);
 
         return menu;
     }

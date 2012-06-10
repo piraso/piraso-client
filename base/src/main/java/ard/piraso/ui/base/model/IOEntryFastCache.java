@@ -20,6 +20,7 @@ package ard.piraso.ui.base.model;
 
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.manager.MessageProviderManager;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.io.IOEntry;
@@ -162,6 +163,24 @@ public class IOEntryFastCache {
             this.rowNum = ioEntry.getRowNum();
             this.shortName = PreferenceProviderManager.INSTANCE.getShortName(entry);
             lastUsed = System.currentTimeMillis();
+        }
+
+        public String getActualMessage() {
+            Entry entry = ioEntry.getEntry();
+
+            StringBuilder buf = new StringBuilder();
+
+            if(SingleModelManagers.GENERAL_SETTINGS.get().isShowRequestId()) {
+                buf.append(String.format("[%d]", entry.getRequestId()));
+            }
+
+            if(SingleModelManagers.GENERAL_SETTINGS.get().isShowMessageGroup()) {
+                buf.append(getGroup(entry));
+            }
+
+            buf.append(getMessage(entry));
+
+            return buf.toString();
         }
 
         public void touch() {
