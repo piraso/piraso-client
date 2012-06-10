@@ -76,7 +76,7 @@ public class HttpEntrySource implements IOEntrySource {
 
         // set timeout
         client.getParams().setParameter("http.socket.timeout", 1000 * 60 * 120);
-        client.getParams().setParameter("http.connection.timeout", 5000);
+        client.getParams().setParameter("http.connection.timeout", 3000);
 
         HttpContext context = new BasicHttpContext();
         this.reader = new HttpPirasoEntryReader(client, context);
