@@ -21,6 +21,7 @@ package ard.piraso.ui.base.model;
 import ard.piraso.api.entry.ElapseTimeAware;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.api.util.JTableUtils;
 import ard.piraso.ui.io.IOEntry;
 import ard.piraso.ui.io.IOEntryEvent;
@@ -149,7 +150,7 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
 
     @Override
     public int getColumnCount() {
-        return 4;
+        return SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime() ? 4 : 3;
     }
 
     @Override

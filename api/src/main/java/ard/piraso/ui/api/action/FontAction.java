@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ard.piraso.ui.api;
+package ard.piraso.ui.api.action;
 
+import ard.piraso.ui.api.GeneralSettingsModel;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
@@ -30,10 +31,10 @@ import java.awt.event.ActionListener;
 @ActionID(category = "Font", id = "ard.piraso.ui.base.action.FontAction")
 @ActionRegistration(displayName = "#CTL_FontAction")
 @ActionReferences({
-    @ActionReference(path = "Menu/View", position = 400)
+    @ActionReference(path = "Menu/View", position = 400, separatorAfter = 475)
 })
 @Messages("CTL_FontAction=Font")
-public final class FontAction extends AbstractAction implements ActionListener, Presenter.Menu {
+public final class FontAction extends AbstractAction implements Presenter.Menu {
     
     public FontAction() {
         putValue(Action.SHORT_DESCRIPTION, "New Context Monitor");

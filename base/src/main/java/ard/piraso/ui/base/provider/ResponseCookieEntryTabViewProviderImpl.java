@@ -59,7 +59,7 @@ public class ResponseCookieEntryTabViewProviderImpl extends AbstractEntryTabView
             List<NameValue> nvs = new ArrayList<NameValue>();
 
             for(CookieEntry cookie : request.getCookies()) {
-                nvs.add(new NameValue(cookie.getName().toLowerCase(), cookie.getValue()));
+                nvs.add(new NameValue(cookie.getName(), cookie.getValue()));
             }
 
             return nvs;

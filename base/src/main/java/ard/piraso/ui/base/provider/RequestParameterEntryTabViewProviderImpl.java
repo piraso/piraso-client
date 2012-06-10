@@ -60,7 +60,7 @@ public class RequestParameterEntryTabViewProviderImpl extends AbstractEntryTabVi
             List<NameValue> nvs = new ArrayList<NameValue>();
 
             for(Map.Entry<String, String[]> param : request.getParameters().entrySet()) {
-                nvs.add(new NameValue(param.getKey().toLowerCase(), String.valueOf(Arrays.asList(param.getValue()))));
+                nvs.add(new NameValue(param.getKey(), String.valueOf(Arrays.asList(param.getValue()))));
             }
 
             return nvs;

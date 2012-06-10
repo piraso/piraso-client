@@ -84,11 +84,15 @@ public final class JTextPaneUtils {
     }
 
     public static void insertText(JEditorPane textPane, String text, SimpleAttributeSet set) throws BadLocationException {
-        SimpleAttributeSet copy = (SimpleAttributeSet) set.copyAttributes();
+        SimpleAttributeSet copy = null;
 
-        Font baseFont = FontProviderManager.INSTANCE.getEditorDefaultFont();
-        StyleConstants.setFontFamily(copy, baseFont.getFamily());
-        StyleConstants.setFontSize(copy, baseFont.getSize());
+        if(set != null) {
+            copy = (SimpleAttributeSet) set.copyAttributes();
+
+            Font baseFont = FontProviderManager.INSTANCE.getEditorDefaultFont();
+            StyleConstants.setFontFamily(copy, baseFont.getFamily());
+            StyleConstants.setFontSize(copy, baseFont.getSize());
+        }
 
         textPane.getDocument().insertString(textPane.getDocument().getLength(), text, copy);
     }

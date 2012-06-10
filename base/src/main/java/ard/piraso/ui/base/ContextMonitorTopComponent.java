@@ -62,6 +62,10 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
                 @Override
                 public void run() {
                     table.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+                    tableModel.fireTableStructureChanged();
+                    initColumns();
+
+                    table.invalidate();
                     table.repaint();
                 }
             });
@@ -71,6 +75,8 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     private IOEntryReaderActionProvider actionProvider;
 
     private SingleClassInstanceContent<Entry> entryContent;
+
+    private final ContextMonitorTableCellRenderer CELL_RENDERER = new ContextMonitorTableCellRenderer();
 
     public ContextMonitorTopComponent(IOEntryReader reader, String name) {
         setName(name);
@@ -128,29 +134,35 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         });
     }
 
-    private void initTable() {
+    private void initColumns() {
         TableColumn numColumn = table.getColumnModel().getColumn(0);
         TableColumn typeColumn = table.getColumnModel().getColumn(1);
         TableColumn messageColumn = table.getColumnModel().getColumn(2);
-        TableColumn elapseColumn = table.getColumnModel().getColumn(3);
 
-        ContextMonitorTableCellRenderer renderer = new ContextMonitorTableCellRenderer();
+        if(SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime()) {
+            TableColumn elapseColumn = table.getColumnModel().getColumn(3);
+
+            elapseColumn.setHeaderValue("Elapse");
+            elapseColumn.setMaxWidth(100);
+            elapseColumn.setCellRenderer(CELL_RENDERER);
+        }
+
         numColumn.setHeaderValue("");
         numColumn.setMaxWidth(43);
-        numColumn.setCellRenderer(renderer);
+        numColumn.setCellRenderer(CELL_RENDERER);
 
         typeColumn.setHeaderValue("Type");
         typeColumn.setMaxWidth(125);
-        typeColumn.setCellRenderer(renderer);
+        typeColumn.setCellRenderer(CELL_RENDERER);
 
         messageColumn.setHeaderValue("Message");
         messageColumn.setPreferredWidth(700);
-        messageColumn.setCellRenderer(renderer);
+        messageColumn.setCellRenderer(CELL_RENDERER);
+    }
 
-        elapseColumn.setHeaderValue("Elapse");
-        elapseColumn.setMaxWidth(100);
-        elapseColumn.setCellRenderer(renderer);
-        
+    private void initTable() {
+        initColumns();
+
         table.setAutoscrolls(true);
         table.setColumnSelectionAllowed(false);
         table.getTableHeader().setReorderingAllowed(false);
