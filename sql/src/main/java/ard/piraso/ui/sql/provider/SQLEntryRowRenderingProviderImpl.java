@@ -42,14 +42,15 @@ public class SQLEntryRowRenderingProviderImpl implements EntryRowRenderingProvid
     @Override
     public void render(JLabel cell, Entry entry) {
         if(SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName().equals(entry.getLevel())) {
-            cell.setForeground(Color.BLUE);
+            cell.setBackground(new Color(0xDAE9F6));
+            cell.setForeground(new Color(98, 143, 181));
             cell.setFont(cell.getFont().deriveFont(Font.BOLD));
         } else if(SQLPreferenceEnum.VIEW_SQL_ENABLED.getPropertyName().equals(entry.getLevel())) {
-            cell.setBackground(new Color(189, 230, 170));
+            cell.setBackground(new Color(0xBAEEBA));
+            cell.setForeground(new Color(0x008000));
             cell.setFont(cell.getFont().deriveFont(Font.BOLD));
         } else if(SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName().equals(entry.getLevel())) {
-            cell.setBackground(new Color(224, 232, 241));
-
+            cell.setForeground(new Color(98, 143, 181));
             if (SQLDataViewEntry.class.isInstance(entry)) {
                 cell.setFont(cell.getFont().deriveFont(Font.BOLD));
             }

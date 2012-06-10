@@ -41,15 +41,22 @@ public class Log4jEntryRowRenderingProviderImpl implements EntryRowRenderingProv
         Log4jEntry log4j = (Log4jEntry) entry;
 
         if("ERROR".equals(log4j.getLogLevel()) || "FATAL".equals(log4j.getLogLevel())) {
+            cell.setBackground(new Color(0xFFC8BD));
+
             cell.setForeground(Color.RED);
+            cell.setFont(cell.getFont().deriveFont(Font.BOLD));
         } else if("WARN".equals(log4j.getLogLevel())) {
-            cell.setForeground(new Color(255, 180, 66));
+            cell.setForeground(new Color(0x7A7A2B));
+            cell.setBackground(new Color(0xFFC8BD));
+            cell.setFont(cell.getFont().deriveFont(Font.BOLD));
         } else if("DEBUG".equals(log4j.getLogLevel())) {
             cell.setForeground(Color.DARK_GRAY);
         } else if("TRACE".equals(log4j.getLogLevel())) {
             cell.setForeground(Color.GRAY);
         }  else if("INFO".equals(log4j.getLogLevel())) {
-            cell.setForeground(new Color(0, 128, 0));
+            cell.setBackground(new Color(0xBAEEBA));
+            cell.setForeground(new Color(0x008000));
+            cell.setFont(cell.getFont().deriveFont(Font.BOLD));
         }
     }
 }

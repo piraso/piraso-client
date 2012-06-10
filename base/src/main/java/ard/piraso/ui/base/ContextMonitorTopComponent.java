@@ -61,9 +61,15 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    table.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
-                    tableModel.fireTableStructureChanged();
-                    initColumns();
+                    if(fontSize != FontProviderManager.INSTANCE.getEditorDefaultFont().getSize()) {
+                        table.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+                        fontSize = table.getFont().getSize();
+                    }
+
+                    if(showElapseTime != SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime()) {
+                        tableModel.fireTableStructureChanged();
+                        initColumns();
+                    }
 
                     table.invalidate();
                     table.repaint();
@@ -77,6 +83,10 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     private SingleClassInstanceContent<Entry> entryContent;
 
     private final ContextMonitorTableCellRenderer CELL_RENDERER = new ContextMonitorTableCellRenderer();
+
+    private boolean showElapseTime;
+
+    private int fontSize = FontProviderManager.INSTANCE.getEditorDefaultFont().getSize();
 
     public ContextMonitorTopComponent(IOEntryReader reader, String name) {
         setName(name);
@@ -139,7 +149,8 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         TableColumn typeColumn = table.getColumnModel().getColumn(1);
         TableColumn messageColumn = table.getColumnModel().getColumn(2);
 
-        if(SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime()) {
+        showElapseTime = SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime();
+        if(showElapseTime) {
             TableColumn elapseColumn = table.getColumnModel().getColumn(3);
 
             elapseColumn.setHeaderValue("Elapse");
