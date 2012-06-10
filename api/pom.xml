@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-windows</artifactId>
-            <version>${netbeans.version}</version>
+            <version>RELEASE712</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.netbeans.api</groupId>
             <artifactId>org-openide-util-lookup</artifactId>
-            <version>${netbeans.version}</version>
+            <version>RELEASE712</version>
         </dependency>
         <dependency>
             <groupId>org.netbeans.api</groupId>
@@ -96,6 +96,11 @@
           <groupId>org.apache.httpcomponents</groupId>
           <artifactId>httpclient</artifactId>
           <version>4.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans.api</groupId>
+            <artifactId>org-netbeans-modules-settings</artifactId>
+            <version>RELEASE712</version>
         </dependency>
     </dependencies>
 

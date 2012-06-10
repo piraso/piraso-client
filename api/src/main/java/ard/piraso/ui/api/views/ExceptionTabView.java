@@ -102,6 +102,7 @@ public class ExceptionTabView extends FilteredJTextPaneTabView<ThrowableAwareEnt
                 }
             }
 
+            insertText(txtEditor, "\n\n");
             start(txtEditor);
         } catch (Exception e) {
             btnCopy.setEnabled(false);

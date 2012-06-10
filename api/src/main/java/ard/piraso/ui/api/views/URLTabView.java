@@ -76,6 +76,7 @@ public class URLTabView extends FilteredJTextPaneTabView<MessageAwareEntry> {
                 }
             }
 
+            insertText(txtEditor, "\n\n");
             start(txtEditor);
         } catch (BadLocationException e) {
             btnCopy.setEnabled(false);

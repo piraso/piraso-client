@@ -82,6 +82,7 @@ public class StackTraceTabView extends FilteredJTextPaneTabView<StackTraceAwareE
                 }
             }
 
+            insertText(txtEditor, "\n\n");
             start(txtEditor);
         } catch (BadLocationException e) {
             btnCopy.setEnabled(false);

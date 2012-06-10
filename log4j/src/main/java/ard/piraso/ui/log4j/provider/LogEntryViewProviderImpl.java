@@ -21,7 +21,7 @@ package ard.piraso.ui.log4j.provider;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.log4j.Log4jEntry;
 import ard.piraso.ui.api.EntryViewProvider;
-import ard.piraso.ui.log4j.Log4jViewTopComponent;
+import ard.piraso.ui.log4j.Log4jEntryViewTopComponent;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
 
@@ -33,7 +33,7 @@ public class LogEntryViewProviderImpl implements EntryViewProvider {
     @Override
     public Class<? extends TopComponent> getViewClass(Entry entry) {
         if(Log4jEntry.class.isInstance(entry)) {
-            return Log4jViewTopComponent.class;
+            return Log4jEntryViewTopComponent.class;
         }
 
         return null;
