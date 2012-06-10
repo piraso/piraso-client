@@ -22,6 +22,7 @@ package ard.piraso.ui.api.views;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.ThrowableAwareEntry;
 import ard.piraso.ui.api.StackTraceFilterModel;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
@@ -51,6 +52,7 @@ public class ExceptionTabView extends FilteredJTextPaneTabView<ThrowableAwareEnt
         throwableAwareEntry.getThrown().printStackTrace(new PrintStream(out, true));
 
         try {
+            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtEditor.setText("");
 
             BufferedReader reader = new BufferedReader(new StringReader(out.toString()));

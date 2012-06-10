@@ -2,6 +2,7 @@ package ard.piraso.ui.api.views;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageAwareEntry;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.util.URLParser;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.NameValuePair;
@@ -36,6 +37,7 @@ public class URLTabView extends FilteredJTextPaneTabView<MessageAwareEntry> {
         btnCopy.setEnabled(true);
 
         try {
+            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             btnCopy.setEnabled(true);
             txtEditor.setText("");
             insertBoldBlueCode(txtEditor, "URLS:");

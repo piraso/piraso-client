@@ -21,6 +21,7 @@ package ard.piraso.ui.api.views;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageAwareEntry;
 import ard.piraso.ui.api.formatter.XMLFormatter;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import org.openide.ErrorManager;
 
 /**
@@ -45,6 +46,7 @@ public class XMLTabView extends FilteredSyntaxPaneTabView<MessageAwareEntry> {
         btnCopy.setEnabled(true);
 
         try {
+            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtEditor.setEditable(false);
             txtEditor.setContentType("text/xml");
             txtEditor.setText("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" + XMLFormatter.prettyPrint(m.getMessage()));

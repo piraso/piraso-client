@@ -22,6 +22,7 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.StackTraceAwareEntry;
 import ard.piraso.api.entry.StackTraceElementEntry;
 import ard.piraso.ui.api.StackTraceFilterModel;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.openide.ErrorManager;
 
@@ -46,7 +47,9 @@ public class StackTraceTabView extends FilteredJTextPaneTabView<StackTraceAwareE
     public void refreshView(Entry entry) {
         StackTraceFilterModel model = SingleModelManagers.STACK_TRACE_FILTER.get();
         StackTraceAwareEntry stackTraceAwareEntry = (StackTraceAwareEntry) entry;
+
         try {
+            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             btnCopy.setEnabled(true);
             txtEditor.setText("");
             insertBoldBlueCode(txtEditor, "STACK TRACE:\n");
