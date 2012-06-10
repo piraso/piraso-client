@@ -46,9 +46,9 @@ public class XMLTabView extends FilteredSyntaxPaneTabView<MessageAwareEntry> {
         btnCopy.setEnabled(true);
 
         try {
-            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtEditor.setEditable(false);
             txtEditor.setContentType("text/xml");
+            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtEditor.setText("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" + XMLFormatter.prettyPrint(m.getMessage()));
         } catch (Exception e) {
             btnCopy.setEnabled(false);

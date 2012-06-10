@@ -47,9 +47,9 @@ public class JsonTabView extends FilteredSyntaxPaneTabView<Entry> {
         btnCopy.setEnabled(true);
 
         try {
-            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtEditor.setEditable(false);
             txtEditor.setContentType("text/json");
+            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             txtEditor.setText(JsonFormatter.prettyPrint(MAPPER.writeValueAsString(entry)));
         } catch (Exception e) {
             btnCopy.setEnabled(false);

@@ -63,6 +63,8 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
     protected void refreshView() {
         List<EntryTabView> components = new ArrayList<EntryTabView>();
 
+        int selectedIndex = jTabbedPane.getSelectedIndex();
+
         jTabbedPane.removeAll();
 
         if(currentEntry != null) {
@@ -76,6 +78,10 @@ public final class MethodViewTopComponent extends AbstractEntryViewTopComponent<
             for(EntryTabView tabView : components) {
                 jTabbedPane.addTab(tabView.getTitle(), tabView.getComponent());
             }
+        }
+
+        if(selectedIndex >= 0 && selectedIndex < jTabbedPane.getTabCount()) {
+            jTabbedPane.setSelectedIndex(selectedIndex);
         }
 
         repaint();

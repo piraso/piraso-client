@@ -83,7 +83,7 @@ public final class ResponseViewTopComponent extends AbstractEntryViewTopComponen
             }
         }
 
-        if(selectedIndex >= 0) {
+        if(selectedIndex >= 0 && selectedIndex < jTabbedPane.getTabCount()) {
             jTabbedPane.setSelectedIndex(selectedIndex);
         }
 

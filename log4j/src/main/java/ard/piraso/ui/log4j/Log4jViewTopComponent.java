@@ -82,7 +82,7 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
             }
         }
 
-        if(selectedIndex >= 0) {
+        if(selectedIndex >= 0 && selectedIndex < jTabbedPane.getTabCount()) {
             jTabbedPane.setSelectedIndex(selectedIndex);
         }
 
