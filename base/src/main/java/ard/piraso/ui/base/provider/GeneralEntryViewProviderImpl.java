@@ -17,13 +17,11 @@
  */
 package ard.piraso.ui.base.provider;
 
-import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.HttpRequestEntry;
-import ard.piraso.api.entry.HttpResponseEntry;
-import ard.piraso.api.entry.MethodCallEntry;
+import ard.piraso.api.entry.*;
 import ard.piraso.ui.api.EntryViewProvider;
 import ard.piraso.ui.base.views.HttpRequestViewTopComponent;
 import ard.piraso.ui.base.views.HttpResponseViewTopComponent;
+import ard.piraso.ui.base.views.MessageEntryViewTopComponent;
 import ard.piraso.ui.base.views.MethodCallViewTopComponent;
 import org.openide.util.lookup.ServiceProvider;
 import org.openide.windows.TopComponent;
@@ -37,7 +35,9 @@ public class GeneralEntryViewProviderImpl implements EntryViewProvider {
 
     @Override
     public Class<? extends TopComponent> getViewClass(Entry entry) {
-        if(MethodCallEntry.class.isInstance(entry)) {
+        if(MessageEntry.class.isInstance(entry)) {
+            return MessageEntryViewTopComponent.class;
+        } else if(MethodCallEntry.class.isInstance(entry)) {
             return MethodCallViewTopComponent.class;
         } else if(HttpRequestEntry.class.isInstance(entry)) {
             return HttpRequestViewTopComponent.class;
