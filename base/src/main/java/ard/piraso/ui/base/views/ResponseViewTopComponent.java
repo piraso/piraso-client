@@ -66,6 +66,8 @@ public final class ResponseViewTopComponent extends AbstractEntryViewTopComponen
     protected void refreshView() {
         List<EntryTabView> components = new ArrayList<EntryTabView>();
 
+        int selectedIndex = jTabbedPane.getSelectedIndex();
+
         jTabbedPane.removeAll();
 
         if(currentEntry != null) {
@@ -79,6 +81,10 @@ public final class ResponseViewTopComponent extends AbstractEntryViewTopComponen
             for(EntryTabView tabView : components) {
                 jTabbedPane.addTab(tabView.getTitle(), tabView.getComponent());
             }
+        }
+
+        if(selectedIndex >= 0) {
+            jTabbedPane.setSelectedIndex(selectedIndex);
         }
 
         repaint();

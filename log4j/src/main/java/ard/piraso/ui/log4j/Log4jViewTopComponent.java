@@ -65,6 +65,8 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
     protected void refreshView() {
         List<EntryTabView> components = new ArrayList<EntryTabView>();
 
+        int selectedIndex = jTabbedPane.getSelectedIndex();
+
         jTabbedPane.removeAll();
 
         if(currentEntry != null) {
@@ -78,6 +80,10 @@ public final class Log4jViewTopComponent extends AbstractEntryViewTopComponent<L
             for(EntryTabView tabView : components) {
                 jTabbedPane.addTab(tabView.getTitle(), tabView.getComponent());
             }
+        }
+
+        if(selectedIndex >= 0) {
+            jTabbedPane.setSelectedIndex(selectedIndex);
         }
 
         repaint();
