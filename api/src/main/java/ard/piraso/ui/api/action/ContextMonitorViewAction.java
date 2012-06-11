@@ -71,7 +71,7 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
             public void actionPerformed(ActionEvent e) {
                 GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
                 model.toggleRequestId();
-                showElapseTime.setState(model.isShowRequestId());
+                showRequestId.setState(model.isShowRequestId());
                 SingleModelManagers.GENERAL_SETTINGS.save(model);
             }
         });
@@ -81,7 +81,7 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
             public void actionPerformed(ActionEvent e) {
                 GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
                 model.toggleShowGroupMessage();
-                showElapseTime.setState(model.isShowMessageGroup());
+                showMessageGroup.setState(model.isShowMessageGroup());
                 SingleModelManagers.GENERAL_SETTINGS.save(model);
             }
         });

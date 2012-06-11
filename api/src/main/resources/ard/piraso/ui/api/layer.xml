@@ -19,6 +19,7 @@
 <!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.0//EN" "http://www.netbeans.org/dtds/filesystem-1_0.dtd">
 <filesystem>
   <file name="GeneralSettings"></file>
+  <file name="SVNSyncSettings"></file>
     <folder name="Menu">
         <folder name="View">
             <file name="Separator1.instance_hidden"/>

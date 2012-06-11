@@ -48,8 +48,8 @@ public class MonitorSelectionDialog extends javax.swing.JDialog {
         lstMonitors.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-            if(e.getValueIsAdjusting()) return;
-            btnOk.setEnabled(!lstMonitors.isSelectionEmpty());
+                if(e.getValueIsAdjusting()) return;
+                btnOk.setEnabled(!lstMonitors.isSelectionEmpty());
             }
         });
 
