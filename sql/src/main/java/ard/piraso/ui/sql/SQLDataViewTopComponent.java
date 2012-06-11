@@ -49,12 +49,30 @@ import java.util.Vector;
 @TopComponent.OpenActionRegistration(displayName = "#CTL_SQLDataViewAction",preferredID = "SQLDataViewTopComponent")
 public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent<SQLDataViewEntry> {
     public static final int TABLE_COLUMN_TOLERANCE_SIZE = 7;
+    
+    public static final int DEFAULT_DIVIDER_LOCATION = 300;
+
+    protected int dividerLocation = DEFAULT_DIVIDER_LOCATION;
 
     public SQLDataViewTopComponent() {
         super(SQLDataViewEntry.class);
         initComponents();
+        initSplitPane();
         setName(NbBundle.getMessage(SQLDataViewTopComponent.class, "CTL_SQLDataViewTopComponent"));
         setToolTipText(NbBundle.getMessage(SQLDataViewTopComponent.class, "HINT_SQLDataViewTopComponent"));
+    }
+    
+    private void initSplitPane() {
+        if(btnProperties.isSelected()) {
+            remove(jScrollPane2);
+            add(jSplitPane1, java.awt.BorderLayout.CENTER);
+            jSplitPane1.setRightComponent(jScrollPane2);
+            jSplitPane1.setLeftComponent(jScrollPane1);
+            jSplitPane1.setDividerLocation(dividerLocation);
+        } else {
+            remove(jSplitPane1);
+            add(jScrollPane2, java.awt.BorderLayout.CENTER);
+        }        
     }
     
     private void initTables() {
@@ -80,11 +98,22 @@ public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent
     }
 
     void writeProperties(java.util.Properties p) {
-        p.setProperty("deviderLocation", String.valueOf(jSplitPane1.getDividerLocation()));
+        if(btnProperties.isEnabled()) {
+            dividerLocation = jSplitPane1.getDividerLocation();
+        }
+
+        p.setProperty("properties", String.valueOf(btnProperties.isSelected()));
+        p.setProperty("dividerLocation", String.valueOf(dividerLocation));
     }
 
     void readProperties(java.util.Properties p) {
-        jSplitPane1.setDividerLocation(Integer.parseInt(p.getProperty("deviderLocation", "500")));
+        btnProperties.setSelected(Boolean.parseBoolean(p.getProperty("properties", "true")));
+
+        dividerLocation = Integer.parseInt(p.getProperty("dividerLocation", String.valueOf(DEFAULT_DIVIDER_LOCATION)));
+        if(btnProperties.isEnabled()) {
+            btnPropertiesActionPerformed(null);
+        }
+
     }
 
     @Override
@@ -194,16 +223,7 @@ public final class SQLDataViewTopComponent extends AbstractEntryViewTopComponent
     }//GEN-LAST:event_btnCopyActionPerformed
 
     private void btnPropertiesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPropertiesActionPerformed
-        if(btnProperties.isSelected()) {
-            remove(jScrollPane2);
-            add(jSplitPane1, java.awt.BorderLayout.CENTER);
-            jSplitPane1.setRightComponent(jScrollPane2);
-            jSplitPane1.setLeftComponent(jScrollPane1);
-        } else {
-            remove(jSplitPane1);
-            add(jScrollPane2, java.awt.BorderLayout.CENTER);
-        }
-        
+        initSplitPane();        
         repaint();
         revalidate();
     }//GEN-LAST:event_btnPropertiesActionPerformed

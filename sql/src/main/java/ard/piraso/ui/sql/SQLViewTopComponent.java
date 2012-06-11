@@ -55,6 +55,10 @@ import java.util.List;
 @TopComponent.OpenActionRegistration(displayName = "#CTL_SQLViewAction", preferredID = "SQLViewTopComponent")
 public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQLViewEntry> {
 
+    public static final int DEFAULT_DIVIDER_LOCATION = 300;
+
+    protected int dividerLocation = DEFAULT_DIVIDER_LOCATION;
+
     public SQLViewTopComponent() {
         super(SQLViewEntry.class);
         initComponents();
@@ -68,8 +72,10 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         if(btnProperties.isSelected()) {
             remove(scrollSQLPane);
             add(jSplitPane1, BorderLayout.CENTER);
+
             jSplitPane1.setLeftComponent(scrollTable);
             jSplitPane1.setRightComponent(scrollSQLPane);
+            jSplitPane1.setDividerLocation(dividerLocation);
         } else {
             remove(jSplitPane1);
             add(scrollSQLPane, BorderLayout.CENTER);
@@ -161,17 +167,25 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
     }
     
     void writeProperties(java.util.Properties p) {
+        if(btnProperties.isEnabled()) {
+            dividerLocation = jSplitPane1.getDividerLocation();
+        }
+
         p.setProperty("replaceParameters", String.valueOf(btnReplaceParameters.isSelected()));
         p.setProperty("formatted", String.valueOf(btnFormat.isSelected()));
         p.setProperty("properties", String.valueOf(btnProperties.isSelected()));
-        p.setProperty("deviderLocation", String.valueOf(jSplitPane1.getDividerLocation()));
+        p.setProperty("dividerLocation", String.valueOf(dividerLocation));
     }
 
     void readProperties(java.util.Properties p) {
         btnReplaceParameters.setSelected(Boolean.parseBoolean(p.getProperty("replaceParameters", "false")));
         btnFormat.setSelected(Boolean.parseBoolean(p.getProperty("formatted", "true")));
         btnProperties.setSelected(Boolean.parseBoolean(p.getProperty("properties", "true")));
-        jSplitPane1.setDividerLocation(Integer.parseInt(p.getProperty("deviderLocation", "500")));
+
+        dividerLocation = Integer.parseInt(p.getProperty("dividerLocation", String.valueOf(DEFAULT_DIVIDER_LOCATION)));
+        if(btnProperties.isEnabled()) {
+            btnPropertiesActionPerformed(null);
+        }
     }
 
     /** This method is called from within the constructor to
