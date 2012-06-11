@@ -171,7 +171,7 @@ public class IOEntryFastCache {
             StringBuilder buf = new StringBuilder();
 
             if(SingleModelManagers.GENERAL_SETTINGS.get().isShowRequestId()) {
-                buf.append(String.format("[%d]", entry.getRequestId()));
+                buf.append(String.format("[%d]", entry.getBaseRequestId()));
             }
 
             if(SingleModelManagers.GENERAL_SETTINGS.get().isShowMessageGroup()) {

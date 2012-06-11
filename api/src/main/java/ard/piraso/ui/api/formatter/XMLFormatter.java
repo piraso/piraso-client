@@ -18,6 +18,9 @@
 
 package ard.piraso.ui.api.formatter;
 
+import com.sun.org.apache.xerces.internal.parsers.DOMParser;
+import org.xml.sax.InputSource;
+
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -73,8 +76,6 @@ public class XMLFormatter {
         // WITH THE SAME ELEMENT
         final String XML_PATTERN_STR = "<(\\S+?)(.*?)>(.*?)</\\1>";
 
-
-
         // IF WE HAVE A STRING
         if (inXMLStr != null && inXMLStr.trim().length() > 0) {
 
@@ -89,6 +90,19 @@ public class XMLFormatter {
                 retBool = matcher.matches();
             }
             // ELSE WE ARE FALSE
+        }
+
+        if(!retBool) {
+            try {
+                DOMParser parser = new DOMParser();
+                parser.parse(new InputSource(new StringReader(inXMLStr)));
+
+                parser.getDocument();
+
+                retBool = true;
+            } catch (Exception e) {
+                return false;
+            }
         }
 
         return retBool;

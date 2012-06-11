@@ -208,7 +208,6 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         jToolBar1.setRollover(true);
 
         btnProperties.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/sql/icons/properties.png"))); // NOI18N
-        btnProperties.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(btnProperties, org.openide.util.NbBundle.getMessage(SQLViewTopComponent.class, "SQLViewTopComponent.btnProperties.text")); // NOI18N
         btnProperties.setToolTipText(org.openide.util.NbBundle.getMessage(SQLViewTopComponent.class, "SQLViewTopComponent.btnProperties.toolTipText")); // NOI18N
         btnProperties.setFocusable(false);
