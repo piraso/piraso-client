@@ -1,6 +1,8 @@
 package ard.piraso.ui.log4j;
 
 import ard.piraso.api.log4j.Log4jEntry;
+import ard.piraso.ui.api.manager.FontProviderManager;
+import ard.piraso.ui.api.util.JTextPaneUtils;
 import ard.piraso.ui.api.views.BaseEntryViewTopComponent;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
@@ -10,6 +12,8 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
+import javax.swing.text.SimpleAttributeSet;
+import java.awt.*;
 import java.text.SimpleDateFormat;
 
 import static ard.piraso.ui.api.util.JTextPaneUtils.*;
@@ -25,6 +29,30 @@ public class Log4jEntryViewTopComponent extends BaseEntryViewTopComponent<Log4jE
 
     private final static SimpleDateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
+    public static final SimpleAttributeSet ERROR = new SimpleAttributeSet();
+
+    public static final SimpleAttributeSet WARNING = new SimpleAttributeSet();
+
+    public static final SimpleAttributeSet INFO = new SimpleAttributeSet();
+
+    public static final SimpleAttributeSet DEBUG = new SimpleAttributeSet();
+
+    public static final SimpleAttributeSet TRACE = new SimpleAttributeSet();
+
+    public static final SimpleAttributeSet ALL = new SimpleAttributeSet();
+
+    static {
+        Font baseFont = FontProviderManager.INSTANCE.getEditorDefaultFont();
+
+        JTextPaneUtils.setupCode(ERROR, Color.RED, new Color(0xFFC8BD), true, false, baseFont.getSize());
+        JTextPaneUtils.setupCode(WARNING, new Color(0xFF801D), new Color(0xF7D7C1), true, false, baseFont.getSize());
+        JTextPaneUtils.setupCode(INFO, new Color(0x008000), new Color(0xBAEEBA), true, false, baseFont.getSize());
+        JTextPaneUtils.setupCode(DEBUG, new Color(0x999999), new Color(0xEAF2F5), true, false, baseFont.getSize());
+        JTextPaneUtils.setupCode(TRACE, new Color(0x5D5D5D), new Color(0xF3F3F3), true, false, baseFont.getSize());
+        JTextPaneUtils.setupCode(ALL, new Color(0x999999), new Color(0xEAF2F5), true, false, baseFont.getSize());
+    }
+
+
     public Log4jEntryViewTopComponent() {
         super(Log4jEntry.class, "Log4j");
 
@@ -34,36 +62,51 @@ public class Log4jEntryViewTopComponent extends BaseEntryViewTopComponent<Log4jE
 
     @Override
     protected void populateMessage(Log4jEntry entry) throws Exception {
-        insertBoldCode(txtMessage, "Level: ");
-        insertCode(txtMessage, currentEntry.getLogLevel());
+        insertKeyword(txtMessage, "Level: ");
 
-        if(CollectionUtils.isNotEmpty(currentEntry.getGroup().getGroups())) {
-            insertBoldCode(txtMessage, "\nLogger: ");
-            insertCode(txtMessage, currentEntry.getGroup().getGroups().iterator().next());
+        if("ERROR".equals(currentEntry.getLogLevel()) || "FATAL".equals(currentEntry.getLogLevel())) {
+            insertText(txtMessage, currentEntry.getLogLevel(), ERROR);
+        } else if("WARN".equals(currentEntry.getLogLevel())) {
+            insertText(txtMessage, currentEntry.getLogLevel(), WARNING);
+        } else if("INFO".equals(currentEntry.getLogLevel())) {
+            insertText(txtMessage, currentEntry.getLogLevel(), INFO);
+        } else if("DEBUG".equals(currentEntry.getLogLevel())) {
+            insertText(txtMessage, currentEntry.getLogLevel(), DEBUG);
+        } else if("TRACE".equals(currentEntry.getLogLevel())) {
+            insertText(txtMessage, currentEntry.getLogLevel(), TRACE);
+        } else {
+            insertText(txtMessage, currentEntry.getLogLevel(), ALL);
         }
 
-        insertBoldCode(txtMessage, "\nTime: ");
+        if(CollectionUtils.isNotEmpty(currentEntry.getGroup().getGroups())) {
+            insertKeyword(txtMessage, "\nLogger: ");
+            insertBoldCode(txtMessage, currentEntry.getGroup().getGroups().iterator().next());
+        }
+
+        insertKeyword(txtMessage, "\nTime: ");
         insertCode(txtMessage, FORMATTER.format(currentEntry.getTime()));
 
-        insertBoldCode(txtMessage, "\nThread: ");
-        insertUnderline(txtMessage, "id");
-        insertCode(txtMessage, String.format(": %d, ", currentEntry.getThreadId()));
-        insertUnderline(txtMessage, "name");
-        insertCode(txtMessage, String.format(": %s, ", currentEntry.getThreadName()));
-        insertUnderline(txtMessage, "priority");
-        insertCode(txtMessage, String.format(": %d", currentEntry.getThreadPriority()));
+        insertKeyword(txtMessage, "\nThread: ");
+        insertIdentifier(txtMessage, "id: ");
+        insertCode(txtMessage, String.valueOf(currentEntry.getThreadId()));
+        insertCode(txtMessage, ", ");
+        insertIdentifier(txtMessage, "name: ");
+        insertCode(txtMessage, currentEntry.getThreadName());
+        insertCode(txtMessage, ", ");
+        insertIdentifier(txtMessage, "priority: ");
+        insertCode(txtMessage, String.valueOf(currentEntry.getThreadPriority()));
 
         if(StringUtils.isNotBlank(currentEntry.getNdc())) {
-            insertBoldCode(txtMessage, "\nNDC: ");
+            insertKeyword(txtMessage, "\nNDC: ");
             insertCode(txtMessage, currentEntry.getNdc());
         }
 
         if(currentEntry.getMdc() != null && !StringUtils.equalsIgnoreCase(currentEntry.getMdc(), "null")) {
-            insertBoldCode(txtMessage, "\nMDC: ");
+            insertKeyword(txtMessage, "\nMDC: ");
             insertCode(txtMessage, currentEntry.getMdc());
         }
 
-        insertBoldCode(txtMessage, "\nMessage: ");
+        insertKeyword(txtMessage, "\nMessage: ");
         insertCode(txtMessage, currentEntry.getMessage());
     }
 

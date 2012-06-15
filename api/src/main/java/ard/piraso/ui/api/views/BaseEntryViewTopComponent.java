@@ -113,6 +113,7 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
 
         jPanel1.setLayout(new java.awt.BorderLayout());
 
+        txtMessage.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 6, 6, 6));
         txtMessage.setEditable(false);
         txtMessage.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         jScrollPane1.setViewportView(txtMessage);

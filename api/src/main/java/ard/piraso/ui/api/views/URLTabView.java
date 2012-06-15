@@ -40,22 +40,21 @@ public class URLTabView extends FilteredJTextPaneTabView<MessageAwareEntry> {
             txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             btnCopy.setEnabled(true);
             txtEditor.setText("");
-            insertBoldBlueCode(txtEditor, "URLS:");
             int i = 0;
             for(URI uri : urls) {
                 try {
-                    insertBoldCode(txtEditor, String.format("\n\n[%d] Scheme: ", ++i));
+                    insertKeyword(txtEditor, String.format("\n\n[%d] Scheme: ", ++i));
                     insertCode(txtEditor, uri.getScheme());
 
-                    insertBoldCode(txtEditor, "\n    Host: ");
+                    insertKeyword(txtEditor, "\n    Host: ");
                     insertCode(txtEditor, uri.getHost());
 
                     if(uri.getPort() > 80) {
-                        insertBoldCode(txtEditor, "\n    Port: ");
+                        insertKeyword(txtEditor, "\n    Port: ");
                         insertCode(txtEditor, String.valueOf(uri.getPort()));
                     }
 
-                    insertBoldCode(txtEditor, "\n    Path: ");
+                    insertKeyword(txtEditor, "\n    Path: ");
                     insertCode(txtEditor, uri.getPath());
 
                     String queryString = uri.getQuery();
@@ -63,12 +62,12 @@ public class URLTabView extends FilteredJTextPaneTabView<MessageAwareEntry> {
                     if(StringUtils.isNotBlank(queryString)) {
                         List<NameValuePair> params = URLEncodedUtils.parse(uri, "UTF-8");
 
-                        insertBoldCode(txtEditor, "\n    Query String: ");
+                        insertKeyword(txtEditor, "\n    Query String: ");
 
                         for(NameValuePair nvp : params) {
                             insertCode(txtEditor, "\n       ");
-                            insertUnderline(txtEditor, nvp.getName());
-                            insertCode(txtEditor, ": " + nvp.getValue());
+                            insertIdentifier(txtEditor, nvp.getName() + ": ");
+                            insertCode(txtEditor, nvp.getValue());
                         }
                     }
                 } catch (Exception e) {

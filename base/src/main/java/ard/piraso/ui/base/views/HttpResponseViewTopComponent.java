@@ -34,7 +34,7 @@ public final class HttpResponseViewTopComponent extends BaseEntryViewTopComponen
 
     @Override
     protected void populateMessage(HttpResponseEntry entry) throws Exception {
-        insertBoldCode(txtMessage, "Status: ");
+        insertKeyword(txtMessage, "Status: ");
 
         if(currentEntry.getStatusReason() != null) {
             insertCode(txtMessage, currentEntry.getStatusReason());
@@ -49,7 +49,7 @@ public final class HttpResponseViewTopComponent extends BaseEntryViewTopComponen
         if(MapUtils.isNotEmpty(currentEntry.getDateHeader()) ||
                 MapUtils.isNotEmpty(currentEntry.getIntHeader()) ||
                 MapUtils.isNotEmpty(currentEntry.getStringHeader())) {
-            insertBoldCode(txtMessage, "\n\nHeaders: ");
+            insertKeyword(txtMessage, "\n\nHeaders: ");
 
             if(MapUtils.isNotEmpty(currentEntry.getStringHeader())) {
                 for(Map.Entry<String, HeaderEntry<String>> header : currentEntry.getStringHeader().entrySet()) {
@@ -60,8 +60,8 @@ public final class HttpResponseViewTopComponent extends BaseEntryViewTopComponen
                     HeaderEntry<String> h = header.getValue();
 
                     insertCode(txtMessage, "\n    ");
-                    insertUnderline(txtMessage, h.getName());
-                    insertCode(txtMessage, ": " + h.getValue());
+                    insertIdentifier(txtMessage, h.getName() + ": ");
+                    insertCode(txtMessage, h.getValue());
                 }
             }
 
@@ -70,8 +70,8 @@ public final class HttpResponseViewTopComponent extends BaseEntryViewTopComponen
                     HeaderEntry<Integer> h = header.getValue();
 
                     insertCode(txtMessage, "\n    ");
-                    insertUnderline(txtMessage, h.getName());
-                    insertCode(txtMessage, ": " + h.getValue());
+                    insertIdentifier(txtMessage, h.getName() + ": ");
+                    insertCode(txtMessage, String.valueOf(h.getValue()));
                 }
             }
 
@@ -80,19 +80,19 @@ public final class HttpResponseViewTopComponent extends BaseEntryViewTopComponen
                     HeaderEntry<Long> h = header.getValue();
 
                     insertCode(txtMessage, "\n    ");
-                    insertUnderline(txtMessage, h.getName());
-                    insertCode(txtMessage, ": " + new Date(h.getValue()));
+                    insertIdentifier(txtMessage, h.getName() + ": ");
+                    insertCode(txtMessage, String.valueOf(new Date(h.getValue())));
                 }
             }
         }
 
         if(CollectionUtils.isNotEmpty(currentEntry.getCookies())) {
-            insertBoldCode(txtMessage, "\n\nCookies: ");
+            insertKeyword(txtMessage, "\n\nCookies: ");
 
             for(CookieEntry cookie : currentEntry.getCookies()) {
                 insertCode(txtMessage, "\n    ");
-                insertUnderline(txtMessage, cookie.getName());
-                insertCode(txtMessage, ": " + cookie.getValue());
+                insertIdentifier(txtMessage, cookie.getName() + ": ");
+                insertCode(txtMessage, cookie.getValue());
             }
         }
     }

@@ -38,13 +38,13 @@ public class MethodCallViewTopComponent extends BaseEntryViewTopComponent<Method
         if(currentEntry.getArguments() != null && currentEntry.getArguments().length > 0) {
             for(int i = 0; i < currentEntry.getArguments().length; i++) {
                 ObjectEntry argument = currentEntry.getArguments()[i];
-                insertBoldCode(txtMessage, String.format("\nArgument[%d]: ", i));
+                insertKeyword(txtMessage, String.format("\nArgument[%d]: ", i));
                 insertCode(txtMessage, ObjectEntryUtils.toString(argument));
             }
         }
 
         if(!currentEntry.getReturnClassName().equals("void")) {
-            insertBoldCode(txtMessage, "\nReturn: ");
+            insertKeyword(txtMessage, "\nReturn: ");
             insertCode(txtMessage, ObjectEntryUtils.toString(currentEntry.getReturnedValue()));
         }
     }

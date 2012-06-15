@@ -57,20 +57,20 @@ public class ExceptionTabView extends FilteredJTextPaneTabView<ThrowableAwareEnt
 
             BufferedReader reader = new BufferedReader(new StringReader(out.toString()));
 
-            insertBoldBlueCode(txtEditor, "EXCEPTION:\n");
             String value;
             boolean insertedEllipsis = false;
             boolean firstLine = true;
             while((value = reader.readLine()) != null) {
+                value = StringUtils.replace(value, "\t", "    ");
+
                 if(firstLine) {
-                    insertCode(txtEditor, "\n    ");
-                    insertUnderline(txtEditor, value);
+                    insertBoldCode(txtEditor, value);
 
                     firstLine = false;
                     continue;
                 } else if(StringUtils.startsWith(value.trim(), "Caused by: ")) {
-                    insertCode(txtEditor, "\n    ");
-                    insertUnderline(txtEditor, value);
+                    insertCode(txtEditor, "\n");
+                    insertBoldCode(txtEditor, value);
                     insertedEllipsis = false;
 
                     continue;
@@ -78,24 +78,24 @@ public class ExceptionTabView extends FilteredJTextPaneTabView<ThrowableAwareEnt
 
                 if(btnFilter.isSelected()) {
                     if(model.isBold(value)) {
-                        insertBoldCode(txtEditor, "\n    " + value);
+                        insertBoldCode(txtEditor, "\n" + value);
                         insertedEllipsis = false;
                     } else if(model.isMatch(value)) {
-                        insertCode(txtEditor, "\n    " + value);
+                        insertCode(txtEditor, "\n" + value);
                         insertedEllipsis = false;
                     } else {
                         if(!insertedEllipsis) {
-                            insertGrayCode(txtEditor, "\n    ...");
+                            insertGrayCode(txtEditor, "\n...");
                             insertedEllipsis = true;
                         }
                     }
                 } else {
                     if(model.isBold(value)) {
-                        insertBoldCode(txtEditor, "\n    " + value);
+                        insertBoldCode(txtEditor, "\n" + value);
                     } else if(model.isMatch(value)) {
-                        insertCode(txtEditor, "\n    " + value);
+                        insertCode(txtEditor, "\n" + value);
                     } else {
-                        insertGrayCode(txtEditor, "\n    " + value);
+                        insertGrayCode(txtEditor, "\n" + value);
                     }
 
                     insertedEllipsis = false;

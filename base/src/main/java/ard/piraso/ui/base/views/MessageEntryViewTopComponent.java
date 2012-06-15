@@ -9,8 +9,8 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
-import static ard.piraso.ui.api.util.JTextPaneUtils.insertBoldCode;
 import static ard.piraso.ui.api.util.JTextPaneUtils.insertCode;
+import static ard.piraso.ui.api.util.JTextPaneUtils.insertKeyword;
 
 @ActionID(category = "Window", id = "ard.piraso.ui.base.MessageEntryViewTopComponent")
 @ActionReference(path = "Menu/Window", position = 334)
@@ -29,11 +29,11 @@ public class MessageEntryViewTopComponent extends BaseEntryViewTopComponent<Mess
     @Override
     protected void populateMessage(MessageEntry entry) throws Exception {
         if(currentEntry.getGroup() != null && CollectionUtils.isNotEmpty(currentEntry.getGroup().getGroups())) {
-            insertBoldCode(txtMessage, "Group: ");
+            insertKeyword(txtMessage, "Group: ");
             insertCode(txtMessage, String.valueOf(currentEntry.getGroup().getGroups()));
         }
 
-        insertBoldCode(txtMessage, "\nMessage: ");
+        insertKeyword(txtMessage, "\nMessage: ");
         insertCode(txtMessage, currentEntry.getMessage());
     }
 

@@ -52,48 +52,48 @@ public final class HttpRequestViewTopComponent extends BaseEntryViewTopComponent
 
     @Override
     protected void populateMessage(HttpRequestEntry entry) throws BadLocationException {
-        insertBoldCode(txtMessage, "Server: ");
+        insertKeyword(txtMessage, "Server: ");
         insertCode(txtMessage, currentEntry.getServerName());
 
-        insertBoldCode(txtMessage, "\nURL: ");
+        insertKeyword(txtMessage, "\nURL: ");
         insertCode(txtMessage, currentEntry.getUri());
 
-        insertBoldCode(txtMessage, "\nMethod: ");
+        insertKeyword(txtMessage, "\nMethod: ");
         insertCode(txtMessage, currentEntry.getMethod());
 
-        insertBoldCode(txtMessage, "\nRemote Address: ");
+        insertKeyword(txtMessage, "\nRemote Address: ");
         insertCode(txtMessage, currentEntry.getRemoteAddr());
 
         if(MapUtils.isNotEmpty(currentEntry.getHeaders())) {
-            insertBoldCode(txtMessage, "\n\nHeaders: ");
+            insertKeyword(txtMessage, "\n\nHeaders: ");
 
             for(Map.Entry<String, String> header : currentEntry.getHeaders().entrySet()) {
                 if("cookie".equals(header.getKey())) {
                     continue;
                 }
                 insertCode(txtMessage, "\n    ");
-                insertUnderline(txtMessage, header.getKey().toLowerCase());
-                insertCode(txtMessage, ": " + header.getValue());
+                insertIdentifier(txtMessage, header.getKey().toLowerCase() + ": ");
+                insertCode(txtMessage, header.getValue());
             }
         }
 
         if(MapUtils.isNotEmpty(currentEntry.getParameters())) {
-            insertBoldCode(txtMessage, "\n\nParameters: ");
+            insertKeyword(txtMessage, "\n\nParameters: ");
 
             for(Map.Entry<String, String[]> param : currentEntry.getParameters().entrySet()) {
                 insertCode(txtMessage, "\n    ");
-                insertUnderline(txtMessage, param.getKey());
-                insertCode(txtMessage, ": " + Arrays.asList(param.getValue()));
+                insertIdentifier(txtMessage, param.getKey() + ": ");
+                insertCode(txtMessage, String.valueOf(Arrays.asList(param.getValue())));
             }
         }
 
         if(CollectionUtils.isNotEmpty(currentEntry.getCookies())) {
-            insertBoldCode(txtMessage, "\n\nCookies: ");
+            insertKeyword(txtMessage, "\n\nCookies: ");
 
             for(CookieEntry cookie : currentEntry.getCookies()) {
                 insertCode(txtMessage, "\n    ");
-                insertUnderline(txtMessage, cookie.getName());
-                insertCode(txtMessage, ": " + cookie.getValue());
+                insertIdentifier(txtMessage, cookie.getName() + ": ");
+                insertCode(txtMessage, cookie.getValue());
             }
         }
     }

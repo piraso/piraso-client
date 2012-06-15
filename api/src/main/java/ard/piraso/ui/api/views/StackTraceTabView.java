@@ -24,6 +24,7 @@ import ard.piraso.api.entry.StackTraceElementEntry;
 import ard.piraso.ui.api.StackTraceFilterModel;
 import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.manager.SingleModelManagers;
+import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
 
 import javax.swing.text.BadLocationException;
@@ -43,6 +44,12 @@ public class StackTraceTabView extends FilteredJTextPaneTabView<StackTraceAwareE
         super(entry, "Stack trace is now copied to clipboard.");
     }
 
+    public void insertNewLine() throws BadLocationException {
+        if(StringUtils.isNotBlank(txtEditor.getText())) {
+            insertBoldCode(txtEditor, "\n");
+        }
+    }
+
     @Override
     public void refreshView(Entry entry) {
         StackTraceFilterModel model = SingleModelManagers.STACK_TRACE_FILTER.get();
@@ -52,30 +59,35 @@ public class StackTraceTabView extends FilteredJTextPaneTabView<StackTraceAwareE
             txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
             btnCopy.setEnabled(true);
             txtEditor.setText("");
-            insertBoldBlueCode(txtEditor, "STACK TRACE:\n");
             boolean insertedEllipsis = false;
             for(StackTraceElementEntry st : stackTraceAwareEntry.getStackTrace()) {
                 String value = st.toString();
                 if(btnFilter.isSelected()) {
                     if(model.isBold(value)) {
-                        insertBoldCode(txtEditor, "\n    " + value);
+                        insertNewLine();
+                        insertBoldCode(txtEditor, value);
                         insertedEllipsis = false;
                     } else if(model.isMatch(value)) {
-                        insertCode(txtEditor, "\n    " + value);
+                        insertNewLine();
+                        insertCode(txtEditor, value);
                         insertedEllipsis = false;
                     } else {
                         if(!insertedEllipsis) {
-                            insertGrayCode(txtEditor, "\n    ...");
+                            insertNewLine();
+                            insertGrayCode(txtEditor, "...");
                             insertedEllipsis = true;
                         }
                     }
                 } else {
                     if(model.isBold(value)) {
-                        insertBoldCode(txtEditor, "\n    " + value);
+                        insertNewLine();
+                        insertBoldCode(txtEditor, value);
                     } else if(model.isMatch(value)) {
-                        insertCode(txtEditor, "\n    " + value);
+                        insertNewLine();
+                        insertCode(txtEditor, value);
                     } else {
-                        insertGrayCode(txtEditor, "\n    " + value);
+                        insertNewLine();
+                        insertGrayCode(txtEditor, value);
                     }
 
                     insertedEllipsis = false;
