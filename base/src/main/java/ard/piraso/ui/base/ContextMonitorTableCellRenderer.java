@@ -20,6 +20,7 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MethodCallEntry;
+import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.base.manager.EntryRowRenderingProviderManager;
 import ard.piraso.ui.base.model.IOEntryTableModel;
 
@@ -33,6 +34,7 @@ import java.awt.*;
 public class ContextMonitorTableCellRenderer extends JLabel implements TableCellRenderer {
     private static final int ROWNUM_INDEX = 0;
     private static final int ELAPSE_INDEX = 3;
+    public static final int ROW_NUM_FONT_SIZE = 10;
 
     public ContextMonitorTableCellRenderer() {
         setOpaque(true);
@@ -78,8 +80,11 @@ public class ContextMonitorTableCellRenderer extends JLabel implements TableCell
         }
 
         if (column == ROWNUM_INDEX) {
+            int fontSize = FontProviderManager.INSTANCE.getEditorDefaultFont().getSize();
+            fontSize = fontSize < ROW_NUM_FONT_SIZE ? fontSize : ROW_NUM_FONT_SIZE;
+
             setBackground(new Color(233, 232, 226));
-            setFont(getFont().deriveFont(Font.PLAIN, 10));
+            setFont(getFont().deriveFont(Font.PLAIN, fontSize));
             setForeground(Color.BLACK);
             setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 4));
         } else {
@@ -87,7 +92,8 @@ public class ContextMonitorTableCellRenderer extends JLabel implements TableCell
         }
 
         if (data != null) {
-            setText(String.valueOf(data));
+            String text = String.valueOf(data);
+            setText(text);
         } else {
             setText("");
             setToolTipText("");
