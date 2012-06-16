@@ -43,7 +43,11 @@ public class URLTabView extends FilteredJTextPaneTabView<MessageAwareEntry> {
             int i = 0;
             for(URI uri : urls) {
                 try {
-                    insertKeyword(txtEditor, String.format("\n\n[%d] Scheme: ", ++i));
+                    if(i != 0) {
+                        insertKeyword(txtEditor, "\n\n");
+                    }
+
+                    insertKeyword(txtEditor, String.format("[%d] Scheme: ", ++i));
                     insertCode(txtEditor, uri.getScheme());
 
                     insertKeyword(txtEditor, "\n    Host: ");

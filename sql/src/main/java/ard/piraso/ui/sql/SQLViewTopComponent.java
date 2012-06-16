@@ -113,12 +113,12 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
                     currentEntry.getSql();
             
             if(StringUtils.isNotEmpty(sql)) {
+                txtSQL.setContentType("text/sql");
+
                 if(btnFormat.isSelected()) {
                     SQLForm form = createSQLInForm();
-                    txtSQL.setContentType("text/sql");
                     txtSQL.setText(form.formatSQLAsString(sql));
                 } else {
-                    txtSQL.setContentType("text/plain");
                     txtSQL.setText(sql);
                 }
             }

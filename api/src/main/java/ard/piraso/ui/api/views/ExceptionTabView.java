@@ -85,7 +85,7 @@ public class ExceptionTabView extends FilteredJTextPaneTabView<ThrowableAwareEnt
                         insertedEllipsis = false;
                     } else {
                         if(!insertedEllipsis) {
-                            insertGrayCode(txtEditor, "\n...");
+                            insertGrayCode(txtEditor, "\n    ...");
                             insertedEllipsis = true;
                         }
                     }
