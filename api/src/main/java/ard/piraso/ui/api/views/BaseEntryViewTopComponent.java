@@ -19,17 +19,14 @@ import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.EntryTabView;
 import ard.piraso.ui.api.extension.AbstractEntryViewTopComponent;
 import ard.piraso.ui.api.manager.EntryTabViewProviderManager;
-import ard.piraso.ui.api.manager.FontProviderManager;
-import ard.piraso.ui.api.util.ClipboardUtils;
-import ard.piraso.ui.api.util.NotificationUtils;
 import org.apache.commons.collections.CollectionUtils;
-import org.openide.ErrorManager;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-
-import static ard.piraso.ui.api.util.JTextPaneUtils.insertCode;
-import static ard.piraso.ui.api.util.JTextPaneUtils.start;
 
 
 /**
@@ -39,63 +36,82 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
 
     private String shortName;
     
+    private List<EntryTabView> components;
+    
+    private JToggleButton[] buttons;
+    
+    private int selectedIndex = -1;
+
+    private boolean enableFilter = false;
+        
     protected BaseEntryViewTopComponent(Class<T> typeClass, String shortName) {
         super(typeClass);
         
         this.shortName = shortName;
         initComponents();
     }
+
+    public void setEnableFilter(boolean enableFilter) {
+        this.enableFilter = enableFilter;
+    }
+
+    public void clear() {
+        if(CollectionUtils.isNotEmpty(components)) {
+            for (EntryTabView view : components) {
+                view.getComponent().removeToolbarComponents(toolbar);
+                remove(view.getComponent());
+            }
+        }        
+    }
     
     @Override
     protected void refreshView() {
-        List<EntryTabView> components = new ArrayList<EntryTabView>();
-
-        int selectedIndex = jTabbedPane.getSelectedIndex();
-
-        jTabbedPane.removeAll();
-
-        if(currentEntry != null) {
-            components.add(new EntryTabView(jPanel1, shortName));
-            components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(BaseEntryViewTopComponent.class, currentEntry));
-        }
-
-        refreshRequestView();
-
-        if(CollectionUtils.isNotEmpty(components)) {
-            for(EntryTabView tabView : components) {
-                jTabbedPane.addTab(tabView.getTitle(), tabView.getComponent());
-            }
-        }
-
-        if(selectedIndex >= 0 && selectedIndex < jTabbedPane.getTabCount()) {
-            jTabbedPane.setSelectedIndex(selectedIndex);
-        }
-
-        repaint();
-        revalidate();
-    }
-    
-    
-    protected abstract void populateMessage(T entry) throws Exception;
-    
-    protected void refreshRequestView() {
-        try {
-            txtMessage.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
-            txtMessage.setText("");
-            btnCopy.setEnabled(currentEntry != null);
+        synchronized (getTreeLock()) {
+            clear();
+            selectedIndex = 0;
+            components = new ArrayList<EntryTabView>();
 
             if(currentEntry != null) {
-                populateMessage(currentEntry);
-                insertCode(txtMessage, "\n\n\n");
+                components.add(new EntryTabView(new BaseMessageView(currentEntry)));
+                components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(BaseEntryViewTopComponent.class, currentEntry));
+
+                buttons = new JToggleButton[components.size()];
             }
 
-            start(txtMessage);
-        } catch (Exception e) {
-            ErrorManager.getDefault().notify(e);
+            toolbar.removeAll();
+
+            if(CollectionUtils.isNotEmpty(components)) {
+                ActionListener initialViewAction = null;
+                for(int i = 0; i < components.size(); i++) {
+                    EntryTabView view = components.get(i);
+                    buttons[i] = new JToggleButton(view.getTitle());
+
+                    buttonGroup1.add(buttons[i]);
+
+                    ActionListener buttonListener = new SwitchEntryView(i, view);
+                    buttons[i].addActionListener(buttonListener);
+
+                    if(initialViewAction == null) {
+                        initialViewAction = buttonListener;
+                        buttons[i].setSelected(true);
+                    }
+
+                    toolbar.add(buttons[i]);
+                }
+
+                toolbar.add(jSeparator1);
+
+                // fire initial action
+                if(initialViewAction != null) {
+                    initialViewAction.actionPerformed(new ActionEvent(this, 1, "initial"));
+                }
+            }
         }
     }
-
-
+    
+    
+    protected abstract void populateMessage(JTextPane txtMessage, T entry) throws Exception;
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,62 +120,60 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtMessage = new javax.swing.JTextPane();
-        jToolBar1 = new javax.swing.JToolBar();
-        btnCopy = new javax.swing.JButton();
-        jTabbedPane = new javax.swing.JTabbedPane();
-
-        jPanel1.setLayout(new java.awt.BorderLayout());
-
-        txtMessage.setBorder(javax.swing.BorderFactory.createEmptyBorder(6, 6, 6, 6));
-        txtMessage.setEditable(false);
-        txtMessage.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
-        jScrollPane1.setViewportView(txtMessage);
-
-        jPanel1.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-
-        jToolBar1.setBackground(new java.awt.Color(226, 226, 226));
-        jToolBar1.setFloatable(false);
-        jToolBar1.setOrientation(1);
-        jToolBar1.setRollover(true);
-
-        btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/copy.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnCopy, org.openide.util.NbBundle.getMessage(BaseEntryViewTopComponent.class, "BaseEntryViewTopComponent.btnCopy.text")); // NOI18N
-        btnCopy.setToolTipText(org.openide.util.NbBundle.getMessage(BaseEntryViewTopComponent.class, "BaseEntryViewTopComponent.btnCopy.toolTipText")); // NOI18N
-        btnCopy.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
-        btnCopy.setEnabled(false);
-        btnCopy.setFocusable(false);
-        btnCopy.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnCopy.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnCopy.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCopyActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btnCopy);
-
-        jPanel1.add(jToolBar1, java.awt.BorderLayout.WEST);
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        buttonGroup1 = new javax.swing.ButtonGroup();
+        toolbar = new javax.swing.JToolBar();
 
         setLayout(new java.awt.BorderLayout());
-        add(jTabbedPane, java.awt.BorderLayout.CENTER);
+
+        toolbar.setBackground(new java.awt.Color(226, 226, 226));
+        toolbar.setFloatable(false);
+        toolbar.setRollover(true);
+        add(toolbar, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCopyActionPerformed
-        if (currentEntry != null) {
-            ClipboardUtils.copy(txtMessage.getText());
-            NotificationUtils.info(String.format("%s is now copied to clipboard.", getName()));
-        }
-    }//GEN-LAST:event_btnCopyActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    protected javax.swing.JButton btnCopy;
-    protected javax.swing.JPanel jPanel1;
-    protected javax.swing.JScrollPane jScrollPane1;
-    protected javax.swing.JTabbedPane jTabbedPane;
-    protected javax.swing.JToolBar jToolBar1;
-    protected javax.swing.JTextPane txtMessage;
+    protected javax.swing.ButtonGroup buttonGroup1;
+    protected javax.swing.JToolBar.Separator jSeparator1;
+    protected javax.swing.JToolBar toolbar;
     // End of variables declaration//GEN-END:variables
+    
+    private class SwitchEntryView implements ActionListener {
+        
+        private EntryTabView tabView;
+        
+        private int index;
+        
+        private SwitchEntryView(int index, EntryTabView tabView) {
+            this.tabView = tabView;
+            this.index = index;
+        }
 
+        @Override
+        public void actionPerformed(ActionEvent evt) {
+            synchronized (getTreeLock()) {
+                clear();
+                selectedIndex = index;
+
+                tabView.getComponent().addToolbarComponents(toolbar);
+                add(tabView.getComponent(), BorderLayout.CENTER);
+
+                repaint();
+                revalidate();
+            }
+        }
+    }
+    
+    private class BaseMessageView extends FilteredJTextPaneTabView<T> {
+        
+        public BaseMessageView(T entry) {
+            super(shortName, entry, String.format("%s is now copied to clipboard.", shortName));
+            btnFilter.setVisible(enableFilter);
+        }
+
+        @Override
+        protected void populateMessage(T entry) throws Exception {
+            BaseEntryViewTopComponent.this.populateMessage(txtEditor, entry);
+        }
+    }
 }

@@ -38,7 +38,7 @@ public class JsonTabView extends FilteredSyntaxPaneTabView<Entry> {
      * @param entry       the entry
      */
     public JsonTabView(Entry entry) {
-        super(entry, "JSON is now copied to clipboard.");
+        super("JSON Raw", entry, "JSON is now copied to clipboard.");
     }
 
     @Override
@@ -55,9 +55,5 @@ public class JsonTabView extends FilteredSyntaxPaneTabView<Entry> {
             btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);
         }
-    }
-
-    @Override
-    protected void btnFilterClickHandle() {
     }
 }

@@ -26,6 +26,7 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
+import javax.swing.*;
 import javax.swing.text.BadLocationException;
 import java.util.Arrays;
 import java.util.Map;
@@ -51,7 +52,7 @@ public final class HttpRequestViewTopComponent extends BaseEntryViewTopComponent
     }
 
     @Override
-    protected void populateMessage(HttpRequestEntry entry) throws BadLocationException {
+    protected void populateMessage(JTextPane txtMessage, HttpRequestEntry entry) throws BadLocationException {
         insertKeyword(txtMessage, "Server: ");
         insertCode(txtMessage, currentEntry.getServerName());
 

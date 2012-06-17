@@ -28,9 +28,6 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
 public class JsonEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<JsonTabView> {
-    public JsonEntryTabViewProviderImpl() {
-        super("JSON Raw");
-    }
 
     @Override
     protected boolean isSupported(Entry entry) {

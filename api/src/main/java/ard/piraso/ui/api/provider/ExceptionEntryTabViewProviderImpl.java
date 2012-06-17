@@ -30,10 +30,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service=EntryTabViewProvider.class)
 public class ExceptionEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<ExceptionTabView> {
 
-    public ExceptionEntryTabViewProviderImpl() {
-        super("Exception");
-    }
-
     @Override
     protected boolean isSupported(Entry entry) {
         if(!ThrowableAwareEntry.class.isInstance(entry)) {

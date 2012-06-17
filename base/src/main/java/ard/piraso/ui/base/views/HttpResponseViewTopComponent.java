@@ -12,6 +12,7 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
+import javax.swing.*;
 import java.util.Date;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public final class HttpResponseViewTopComponent extends BaseEntryViewTopComponen
     }
 
     @Override
-    protected void populateMessage(HttpResponseEntry entry) throws Exception {
+    protected void populateMessage(JTextPane txtMessage, HttpResponseEntry entry) throws Exception {
         insertKeyword(txtMessage, "Status: ");
 
         if(currentEntry.getStatusReason() != null) {

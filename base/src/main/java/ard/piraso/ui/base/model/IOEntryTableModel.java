@@ -150,7 +150,17 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
 
     @Override
     public int getColumnCount() {
-        return SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime() ? 4 : 3;
+        int columnSize = 4;
+
+        if(!SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime()) {
+            columnSize--;
+        }
+
+        if(!SingleModelManagers.GENERAL_SETTINGS.get().isShowType()) {
+            columnSize--;
+        }
+
+        return columnSize;
     }
 
     @Override
@@ -186,8 +196,8 @@ public class IOEntryTableModel extends AbstractTableModel implements IOEntryRece
 
         switch(columnIndex) {
             case 0: return el.rowNum;
-            case 1: return el.shortName;
-            case 2: return el.getActualMessage();
+            case 1: return SingleModelManagers.GENERAL_SETTINGS.get().isShowType() ? el.shortName : el.getActualMessage();
+            case 2: return !SingleModelManagers.GENERAL_SETTINGS.get().isShowType() && SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime() ? el.elapse : el.getActualMessage();
             case 3: return el.elapse;
         }
 

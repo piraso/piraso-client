@@ -37,9 +37,6 @@ import java.util.Map;
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
 public class RequestHeaderEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<NameValueTableTabView> {
-    public RequestHeaderEntryTabViewProviderImpl() {
-        super("Headers");
-    }
 
     @Override
     protected boolean isSupported(Entry entry) {
@@ -48,7 +45,7 @@ public class RequestHeaderEntryTabViewProviderImpl extends AbstractEntryTabViewP
 
     @Override
     protected NameValueTableTabView createView(Entry entry) {
-        return new NameValueTableTabView(entry, new Provider());
+        return new NameValueTableTabView("Headers", entry, new Provider());
     }
 
     private class Provider implements NameValueTableProvider {

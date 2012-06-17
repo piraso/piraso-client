@@ -18,27 +18,24 @@
 
 package ard.piraso.ui.api;
 
-import javax.swing.*;
+import ard.piraso.ui.api.views.AbstractTabView;
 
 /**
  *
  * @author adeleon
  */
 public class EntryTabView {
-    private JComponent component;
+    private AbstractTabView component;
     
-    private String title;
-
-    public EntryTabView(JComponent component, String title) {
+    public EntryTabView(AbstractTabView component) {
         this.component = component;
-        this.title = title;
     }
 
-    public JComponent getComponent() {
+    public AbstractTabView getComponent() {
         return component;
     }
 
     public String getTitle() {
-        return title;
+        return component.getDisplayName();
     }
 }

@@ -37,9 +37,6 @@ import java.util.List;
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
 public class RequestCookieEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<NameValueTableTabView> {
-    public RequestCookieEntryTabViewProviderImpl() {
-        super("Cookies");
-    }
 
     @Override
     protected boolean isSupported(Entry entry) {
@@ -48,7 +45,7 @@ public class RequestCookieEntryTabViewProviderImpl extends AbstractEntryTabViewP
 
     @Override
     protected NameValueTableTabView createView(Entry entry) {
-        return new NameValueTableTabView(entry, new Provider());
+        return new NameValueTableTabView("Cookies", entry, new Provider());
     }
 
     private class Provider implements NameValueTableProvider {

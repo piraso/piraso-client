@@ -66,7 +66,8 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
                         fontSize = table.getFont().getSize();
                     }
 
-                    if(showElapseTime != SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime()) {
+                    if(showElapseTime != SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime() ||
+                            showType != SingleModelManagers.GENERAL_SETTINGS.get().isShowType()) {
                         tableModel.fireTableStructureChanged();
                         initColumns();
                     }
@@ -78,6 +79,33 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         }
     };
 
+    private final IOEntryListener ICON_CHANGER = new IOEntryListener() {
+        @Override
+        public void started(IOEntryEvent evt) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    setIcon(ImageUtilities.loadImage(STARTED_ICON_PATH, true));
+                }
+            });
+        }
+        @Override
+        public void stopped(IOEntryEvent evt) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    if(isOpened()) {
+                        setIcon(ImageUtilities.loadImage(STOPPED_ICON_PATH, true));
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void receivedEntry(IOEntryEvent evt) {
+        }
+    };
+
     private IOEntryReaderActionProvider actionProvider;
 
     private SingleClassInstanceContent<Entry> entryContent;
@@ -85,6 +113,8 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     private final ContextMonitorTableCellRenderer CELL_RENDERER = new ContextMonitorTableCellRenderer();
 
     private boolean showElapseTime;
+
+    private boolean showType;
 
     private int fontSize = FontProviderManager.INSTANCE.getEditorDefaultFont().getSize();
 
@@ -102,31 +132,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         this.comboBoxModel = tableModel.getComboBoxModel();
 
         // added icon listeners
-        reader.addListener(new IOEntryListener() {
-            @Override
-            public void started(IOEntryEvent evt) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        setIcon(ImageUtilities.loadImage(STARTED_ICON_PATH, true));
-                    }
-                });
-            }
-            @Override
-            public void stopped(IOEntryEvent evt) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if(isOpened()) {
-                            setIcon(ImageUtilities.loadImage(STOPPED_ICON_PATH, true));
-                        }
-                    }
-                });
-            }
-            @Override
-            public void receivedEntry(IOEntryEvent evt) {
-            }
-        });
+        reader.addListener(ICON_CHANGER);
         
         initComponents();
         initTable();
@@ -146,25 +152,37 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
     private void initColumns() {
         TableColumn numColumn = table.getColumnModel().getColumn(0);
-        TableColumn typeColumn = table.getColumnModel().getColumn(1);
-        TableColumn messageColumn = table.getColumnModel().getColumn(2);
-
-        showElapseTime = SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime();
-        if(showElapseTime) {
-            TableColumn elapseColumn = table.getColumnModel().getColumn(3);
-
-            elapseColumn.setHeaderValue("Elapse");
-            elapseColumn.setMaxWidth(100);
-            elapseColumn.setCellRenderer(CELL_RENDERER);
-        }
+        TableColumn messageColumn;
+        TableColumn elapseColumn;
 
         numColumn.setHeaderValue("");
         numColumn.setMaxWidth(43);
         numColumn.setCellRenderer(CELL_RENDERER);
 
-        typeColumn.setHeaderValue("Type");
-        typeColumn.setMaxWidth(125);
-        typeColumn.setCellRenderer(CELL_RENDERER);
+        showType = SingleModelManagers.GENERAL_SETTINGS.get().isShowType();
+        if(showType) {
+            TableColumn typeColumn = table.getColumnModel().getColumn(1);
+            messageColumn = table.getColumnModel().getColumn(2);
+
+            typeColumn.setHeaderValue("Type");
+            typeColumn.setMaxWidth(125);
+            typeColumn.setCellRenderer(CELL_RENDERER);
+        } else {
+            messageColumn = table.getColumnModel().getColumn(1);
+        }
+
+        showElapseTime = SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime();
+        if(showElapseTime) {
+            if(showType) {
+                elapseColumn = table.getColumnModel().getColumn(3);
+            } else {
+                elapseColumn = table.getColumnModel().getColumn(2);
+            }
+
+            elapseColumn.setHeaderValue("Elapse");
+            elapseColumn.setMaxWidth(100);
+            elapseColumn.setCellRenderer(CELL_RENDERER);
+        }
 
         messageColumn.setHeaderValue("Message");
         messageColumn.setPreferredWidth(700);

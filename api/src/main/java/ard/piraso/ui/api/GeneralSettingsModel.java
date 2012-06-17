@@ -15,6 +15,8 @@ public class GeneralSettingsModel {
 
     private boolean showMessageGroup = true;
 
+    private boolean showType = true;
+
     public GeneralSettingsModel() {
         fontSize = FontProviderManager.INSTANCE.getDefaultFont().getSize();
     }
@@ -43,8 +45,20 @@ public class GeneralSettingsModel {
         this.showElapseTime = showElapseTime;
     }
 
+    public boolean isShowType() {
+        return showType;
+    }
+
+    public void setShowType(boolean showType) {
+        this.showType = showType;
+    }
+
     public void toggleElapseTime() {
         showElapseTime = !showElapseTime;
+    }
+
+    public void toggleType() {
+        showType = !showType;
     }
 
     public void toggleRequestId() {

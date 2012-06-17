@@ -33,11 +33,8 @@ import java.util.Map;
 public abstract class AbstractEntryTabViewProvider<T extends AbstractTabView> implements EntryTabViewProvider {
 
     private Map<Class, T> views = new HashMap<Class, T>(4);
-    
-    private String title;
 
-    protected AbstractEntryTabViewProvider(String title) {
-        this.title = title;
+    protected AbstractEntryTabViewProvider() {
     }
     
     public void add(Class clazz, T view) {
@@ -69,14 +66,14 @@ public abstract class AbstractEntryTabViewProvider<T extends AbstractTabView> im
             if(contains(owner)) {
                 T view = getView(owner);
                 view.refreshView(entry);
-
-                return new EntryTabView(view, title);
+                
+                return new EntryTabView(view);
             }
 
             T view = createView(entry);
             add(owner, view);
 
-            return new EntryTabView(view, title);
+            return new EntryTabView(view);
         }
     }
 }

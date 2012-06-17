@@ -18,6 +18,7 @@ package ard.piraso.ui.api.views;
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.manager.FontProviderManager;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.util.Collections;
@@ -41,8 +42,8 @@ public class NameValueTableTabView extends AbstractTabView<Entry> {
     /**
      * Creates new form NameValueTabView
      */
-    public NameValueTableTabView(Entry entry, NameValueTableProvider provider) {
-        super(entry);
+    public NameValueTableTabView(String displayName, Entry entry, NameValueTableProvider provider) {
+        super(displayName, entry);
 
         this.provider = provider;
         initComponents();
@@ -50,6 +51,18 @@ public class NameValueTableTabView extends AbstractTabView<Entry> {
 
         refreshView(entry);
     }
+
+    @Override
+    public void addToolbarComponents(JToolBar toolbar) {
+        toolbar.add(btnAscending);
+        toolbar.add(btnDescending);
+    }
+
+    @Override
+    public void removeToolbarComponents(JToolBar toolbar) {
+        toolbar.remove(btnAscending);
+        toolbar.remove(btnDescending);
+    }       
 
     private void initTable() {
         TableColumn nameColumn = jtable.getColumnModel().getColumn(0);
@@ -96,18 +109,10 @@ public class NameValueTableTabView extends AbstractTabView<Entry> {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
-        jToolBar1 = new javax.swing.JToolBar();
         btnAscending = new javax.swing.JToggleButton();
         btnDescending = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtable = new javax.swing.JTable();
-
-        setLayout(new java.awt.BorderLayout());
-
-        jToolBar1.setBackground(new java.awt.Color(226, 226, 226));
-        jToolBar1.setFloatable(false);
-        jToolBar1.setOrientation(1);
-        jToolBar1.setRollover(true);
 
         buttonGroup1.add(btnAscending);
         btnAscending.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/sort_ascend.png"))); // NOI18N
@@ -122,7 +127,6 @@ public class NameValueTableTabView extends AbstractTabView<Entry> {
                 btnAscendingActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnAscending);
 
         buttonGroup1.add(btnDescending);
         btnDescending.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/sort_descend.png"))); // NOI18N
@@ -135,9 +139,8 @@ public class NameValueTableTabView extends AbstractTabView<Entry> {
                 btnDescendingActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnDescending);
 
-        add(jToolBar1, java.awt.BorderLayout.WEST);
+        setLayout(new java.awt.BorderLayout());
 
         jtable.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         jtable.setModel(tableModel);
@@ -159,7 +162,6 @@ public class NameValueTableTabView extends AbstractTabView<Entry> {
     private javax.swing.JToggleButton btnDescending;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JTable jtable;
     // End of variables declaration//GEN-END:variables
 }

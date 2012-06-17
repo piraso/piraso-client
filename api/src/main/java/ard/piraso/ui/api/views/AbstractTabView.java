@@ -28,10 +28,23 @@ import javax.swing.*;
 public abstract class AbstractTabView<T> extends JPanel {
 
     protected T entry;
+    
+    protected String displayName;
 
-    protected AbstractTabView(T entry) {
+    protected AbstractTabView(String displayName, T entry) {
         this.entry = entry;
+        this.displayName = displayName;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }    
+
     public abstract void refreshView(Entry entry);
+    
+    public void addToolbarComponents(JToolBar toolbar) {        
+    }
+    
+    public void removeToolbarComponents(JToolBar toolbar) {
+    }
 }

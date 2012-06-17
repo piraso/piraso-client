@@ -19,13 +19,10 @@
 
 package ard.piraso.ui.api.views;
 
-import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.ThrowableAwareEntry;
 import ard.piraso.ui.api.StackTraceFilterModel;
-import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.apache.commons.lang.StringUtils;
-import org.openide.ErrorManager;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
@@ -41,77 +38,62 @@ import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 public class ExceptionTabView extends FilteredJTextPaneTabView<ThrowableAwareEntry> {
     
     public ExceptionTabView(ThrowableAwareEntry entry) {
-        super(entry, "Exception information is now copied to clipboard.");
+        super("Exception", entry, "Exception information is now copied to clipboard.");
     }
-
+    
     @Override
-    public void refreshView(Entry entry) {
+    protected void populateMessage(ThrowableAwareEntry entry) throws Exception {
         StackTraceFilterModel model = SingleModelManagers.STACK_TRACE_FILTER.get();
         ThrowableAwareEntry throwableAwareEntry = (ThrowableAwareEntry) entry;
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         throwableAwareEntry.getThrown().printStackTrace(new PrintStream(out, true));
 
-        try {
-            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
-            txtEditor.setText("");
+        BufferedReader reader = new BufferedReader(new StringReader(out.toString()));
 
-            BufferedReader reader = new BufferedReader(new StringReader(out.toString()));
+        String value;
+        boolean insertedEllipsis = false;
+        boolean firstLine = true;
+        while((value = reader.readLine()) != null) {
+            value = StringUtils.replace(value, "\t", "    ");
 
-            String value;
-            boolean insertedEllipsis = false;
-            boolean firstLine = true;
-            while((value = reader.readLine()) != null) {
-                value = StringUtils.replace(value, "\t", "    ");
+            if(firstLine) {
+                insertBoldCode(txtEditor, value);
 
-                if(firstLine) {
-                    insertBoldCode(txtEditor, value);
+                firstLine = false;
+                continue;
+            } else if(StringUtils.startsWith(value.trim(), "Caused by: ")) {
+                insertCode(txtEditor, "\n");
+                insertBoldCode(txtEditor, value);
+                insertedEllipsis = false;
 
-                    firstLine = false;
-                    continue;
-                } else if(StringUtils.startsWith(value.trim(), "Caused by: ")) {
-                    insertCode(txtEditor, "\n");
-                    insertBoldCode(txtEditor, value);
-                    insertedEllipsis = false;
-
-                    continue;
-                }
-
-                if(btnFilter.isSelected()) {
-                    if(model.isBold(value)) {
-                        insertBoldCode(txtEditor, "\n" + value);
-                        insertedEllipsis = false;
-                    } else if(model.isMatch(value)) {
-                        insertCode(txtEditor, "\n" + value);
-                        insertedEllipsis = false;
-                    } else {
-                        if(!insertedEllipsis) {
-                            insertGrayCode(txtEditor, "\n    ...");
-                            insertedEllipsis = true;
-                        }
-                    }
-                } else {
-                    if(model.isBold(value)) {
-                        insertBoldCode(txtEditor, "\n" + value);
-                    } else if(model.isMatch(value)) {
-                        insertCode(txtEditor, "\n" + value);
-                    } else {
-                        insertGrayCode(txtEditor, "\n" + value);
-                    }
-
-                    insertedEllipsis = false;
-                }
+                continue;
             }
 
-            insertText(txtEditor, "\n\n");
-            start(txtEditor);
-        } catch (Exception e) {
-            btnCopy.setEnabled(false);
-            ErrorManager.getDefault().notify(e);
-        }
-    }
+            if(btnFilter.isSelected()) {
+                if(model.isBold(value)) {
+                    insertBoldCode(txtEditor, "\n" + value);
+                    insertedEllipsis = false;
+                } else if(model.isMatch(value)) {
+                    insertCode(txtEditor, "\n" + value);
+                    insertedEllipsis = false;
+                } else {
+                    if(!insertedEllipsis) {
+                        insertGrayCode(txtEditor, "\n    ...");
+                        insertedEllipsis = true;
+                    }
+                }
+            } else {
+                if(model.isBold(value)) {
+                    insertBoldCode(txtEditor, "\n" + value);
+                } else if(model.isMatch(value)) {
+                    insertCode(txtEditor, "\n" + value);
+                } else {
+                    insertGrayCode(txtEditor, "\n" + value);
+                }
 
-    @Override
-    protected void btnFilterClickHandle() {
-        refreshView((Entry) entry);
+                insertedEllipsis = false;
+            }
+        }
+        
     }
 }

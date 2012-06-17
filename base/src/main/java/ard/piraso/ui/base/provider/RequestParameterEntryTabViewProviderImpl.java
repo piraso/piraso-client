@@ -38,9 +38,6 @@ import java.util.Map;
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
 public class RequestParameterEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<NameValueTableTabView> {
-    public RequestParameterEntryTabViewProviderImpl() {
-        super("Parameters");
-    }
 
     @Override
     protected boolean isSupported(Entry entry) {
@@ -49,7 +46,7 @@ public class RequestParameterEntryTabViewProviderImpl extends AbstractEntryTabVi
 
     @Override
     protected NameValueTableTabView createView(Entry entry) {
-        return new NameValueTableTabView(entry, new Provider());
+        return new NameValueTableTabView("Parameters", entry, new Provider());
     }
 
     private class Provider implements NameValueTableProvider {

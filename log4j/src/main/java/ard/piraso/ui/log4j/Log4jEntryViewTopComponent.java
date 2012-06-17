@@ -12,6 +12,7 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
+import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import java.awt.*;
 import java.text.SimpleDateFormat;
@@ -61,7 +62,7 @@ public class Log4jEntryViewTopComponent extends BaseEntryViewTopComponent<Log4jE
     }
 
     @Override
-    protected void populateMessage(Log4jEntry entry) throws Exception {
+    protected void populateMessage(JTextPane txtMessage, Log4jEntry entry) throws Exception {
         insertKeyword(txtMessage, "Level: ");
 
         if("ERROR".equals(currentEntry.getLogLevel()) || "FATAL".equals(currentEntry.getLogLevel())) {

@@ -49,9 +49,11 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
         JMenu menu = new JMenu("Context Monitor");
 
         final JCheckBoxMenuItem showElapseTime = new JCheckBoxMenuItem("Show Elapse Time");
+        final JCheckBoxMenuItem showType = new JCheckBoxMenuItem("Show Type");
         final JCheckBoxMenuItem showRequestId = new JCheckBoxMenuItem("Show Request ID");
         final JCheckBoxMenuItem showMessageGroup = new JCheckBoxMenuItem("Show Message Group");
 
+        showType.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowType());
         showRequestId.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowRequestId());
         showElapseTime.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime());
         showMessageGroup.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowMessageGroup());
@@ -62,6 +64,16 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
                 GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
                 model.toggleElapseTime();
                 showElapseTime.setState(model.isShowElapseTime());
+                SingleModelManagers.GENERAL_SETTINGS.save(model);
+            }
+        });
+
+        showType.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
+                model.toggleType();
+                showType.setState(model.isShowType());
                 SingleModelManagers.GENERAL_SETTINGS.save(model);
             }
         });
@@ -87,6 +99,7 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
         });
 
         menu.add(showElapseTime);
+        menu.add(showType);
         menu.add(showRequestId);
         menu.add(showMessageGroup);
 

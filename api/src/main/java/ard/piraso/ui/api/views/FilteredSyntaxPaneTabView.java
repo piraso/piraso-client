@@ -23,6 +23,8 @@ import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.util.ClipboardUtils;
 import ard.piraso.ui.api.util.NotificationUtils;
 
+import javax.swing.*;
+
 /**
  *
  * @author adeleon
@@ -36,15 +38,28 @@ public abstract class FilteredSyntaxPaneTabView<T> extends AbstractTabView<T> {
      * @param entry the entry
      * @param copyMessage the copy message
      */
-    public FilteredSyntaxPaneTabView(T entry, String copyMessage) {
-        super(entry);
+    public FilteredSyntaxPaneTabView(String displayName, T entry, String copyMessage) {
+        super(displayName, entry);
         initComponents();
         
         this.copyMessage = copyMessage;
         refreshView((Entry) entry);
     }
 
-    protected abstract void btnFilterClickHandle();
+    protected void btnFilterClickHandle() {
+    }
+    
+    @Override
+    public void addToolbarComponents(JToolBar toolbar) {
+        toolbar.add(btnFilter);
+        toolbar.add(btnCopy);
+    }
+    
+    @Override
+    public void removeToolbarComponents(JToolBar toolbar) {
+        toolbar.remove(btnFilter);
+        toolbar.remove(btnCopy);
+    }
     
     /** This method is called from within the constructor to
      * initialize the form.
@@ -55,18 +70,10 @@ public abstract class FilteredSyntaxPaneTabView<T> extends AbstractTabView<T> {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jToolBar1 = new javax.swing.JToolBar();
         btnFilter = new javax.swing.JToggleButton();
         btnCopy = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtEditor = new javax.swing.JEditorPane();
-
-        setLayout(new java.awt.BorderLayout());
-
-        jToolBar1.setBackground(new java.awt.Color(226, 226, 226));
-        jToolBar1.setFloatable(false);
-        jToolBar1.setOrientation(1);
-        jToolBar1.setRollover(true);
 
         btnFilter.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/filter.png"))); // NOI18N
         btnFilter.setText(org.openide.util.NbBundle.getMessage(FilteredSyntaxPaneTabView.class, "FilteredSyntaxPaneTabView.btnFilter.text")); // NOI18N
@@ -79,7 +86,6 @@ public abstract class FilteredSyntaxPaneTabView<T> extends AbstractTabView<T> {
                 btnFilterActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnFilter);
 
         btnCopy.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/copy.png"))); // NOI18N
         btnCopy.setText(org.openide.util.NbBundle.getMessage(FilteredSyntaxPaneTabView.class, "FilteredSyntaxPaneTabView.btnCopy.text")); // NOI18N
@@ -94,9 +100,9 @@ public abstract class FilteredSyntaxPaneTabView<T> extends AbstractTabView<T> {
                 btnCopyActionPerformed(evt);
             }
         });
-        jToolBar1.add(btnCopy);
 
-        add(jToolBar1, java.awt.BorderLayout.WEST);
+        setOpaque(false);
+        setLayout(new java.awt.BorderLayout());
 
         txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         jScrollPane1.setViewportView(txtEditor);
@@ -119,7 +125,6 @@ public abstract class FilteredSyntaxPaneTabView<T> extends AbstractTabView<T> {
     protected javax.swing.JButton btnCopy;
     protected javax.swing.JToggleButton btnFilter;
     protected javax.swing.JScrollPane jScrollPane1;
-    protected javax.swing.JToolBar jToolBar1;
     protected javax.swing.JEditorPane txtEditor;
     // End of variables declaration//GEN-END:variables
 }

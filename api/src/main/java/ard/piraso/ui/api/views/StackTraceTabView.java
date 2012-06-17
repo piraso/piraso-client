@@ -18,14 +18,11 @@
 
 package ard.piraso.ui.api.views;
 
-import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.StackTraceAwareEntry;
 import ard.piraso.api.entry.StackTraceElementEntry;
 import ard.piraso.ui.api.StackTraceFilterModel;
-import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import org.apache.commons.lang.StringUtils;
-import org.openide.ErrorManager;
 
 import javax.swing.text.BadLocationException;
 
@@ -41,7 +38,7 @@ public class StackTraceTabView extends FilteredJTextPaneTabView<StackTraceAwareE
      * @param entry the entry
      */
     public StackTraceTabView(StackTraceAwareEntry entry) {
-        super(entry, "Stack trace is now copied to clipboard.");
+        super("Stacktrace", entry, "Stack trace is now copied to clipboard.");
     }
 
     public void insertNewLine() throws BadLocationException {
@@ -49,61 +46,45 @@ public class StackTraceTabView extends FilteredJTextPaneTabView<StackTraceAwareE
             insertBoldCode(txtEditor, "\n");
         }
     }
-
+    
     @Override
-    public void refreshView(Entry entry) {
+    protected void populateMessage(StackTraceAwareEntry entry) throws Exception {
         StackTraceFilterModel model = SingleModelManagers.STACK_TRACE_FILTER.get();
         StackTraceAwareEntry stackTraceAwareEntry = (StackTraceAwareEntry) entry;
 
-        try {
-            txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
-            btnCopy.setEnabled(true);
-            txtEditor.setText("");
-            boolean insertedEllipsis = false;
-            for(StackTraceElementEntry st : stackTraceAwareEntry.getStackTrace()) {
-                String value = st.toString();
-                if(btnFilter.isSelected()) {
-                    if(model.isBold(value)) {
-                        insertNewLine();
-                        insertBoldCode(txtEditor, value);
-                        insertedEllipsis = false;
-                    } else if(model.isMatch(value)) {
-                        insertNewLine();
-                        insertCode(txtEditor, value);
-                        insertedEllipsis = false;
-                    } else {
-                        if(!insertedEllipsis) {
-                            insertNewLine();
-                            insertGrayCode(txtEditor, "...");
-                            insertedEllipsis = true;
-                        }
-                    }
-                } else {
-                    if(model.isBold(value)) {
-                        insertNewLine();
-                        insertBoldCode(txtEditor, value);
-                    } else if(model.isMatch(value)) {
-                        insertNewLine();
-                        insertCode(txtEditor, value);
-                    } else {
-                        insertNewLine();
-                        insertGrayCode(txtEditor, value);
-                    }
-
+        boolean insertedEllipsis = false;
+        for(StackTraceElementEntry st : stackTraceAwareEntry.getStackTrace()) {
+            String value = st.toString();
+            if(btnFilter.isSelected()) {
+                if(model.isBold(value)) {
+                    insertNewLine();
+                    insertBoldCode(txtEditor, value);
                     insertedEllipsis = false;
+                } else if(model.isMatch(value)) {
+                    insertNewLine();
+                    insertCode(txtEditor, value);
+                    insertedEllipsis = false;
+                } else {
+                    if(!insertedEllipsis) {
+                        insertNewLine();
+                        insertGrayCode(txtEditor, "...");
+                        insertedEllipsis = true;
+                    }
                 }
+            } else {
+                if(model.isBold(value)) {
+                    insertNewLine();
+                    insertBoldCode(txtEditor, value);
+                } else if(model.isMatch(value)) {
+                    insertNewLine();
+                    insertCode(txtEditor, value);
+                } else {
+                    insertNewLine();
+                    insertGrayCode(txtEditor, value);
+                }
+
+                insertedEllipsis = false;
             }
-
-            insertText(txtEditor, "\n\n");
-            start(txtEditor);
-        } catch (BadLocationException e) {
-            btnCopy.setEnabled(false);
-            ErrorManager.getDefault().notify(e);
         }
-    }
-
-    @Override
-    protected void btnFilterClickHandle() {
-        refreshView((Entry) entry);
     }
 }

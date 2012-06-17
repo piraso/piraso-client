@@ -9,6 +9,8 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
+import javax.swing.*;
+
 import static ard.piraso.ui.api.util.JTextPaneUtils.insertCode;
 import static ard.piraso.ui.api.util.JTextPaneUtils.insertKeyword;
 
@@ -27,7 +29,7 @@ public class MessageEntryViewTopComponent extends BaseEntryViewTopComponent<Mess
     }
 
     @Override
-    protected void populateMessage(MessageEntry entry) throws Exception {
+    protected void populateMessage(JTextPane txtMessage, MessageEntry entry) throws Exception {
         if(currentEntry.getGroup() != null && CollectionUtils.isNotEmpty(currentEntry.getGroup().getGroups())) {
             insertKeyword(txtMessage, "Group: ");
             insertCode(txtMessage, String.valueOf(currentEntry.getGroup().getGroups()));

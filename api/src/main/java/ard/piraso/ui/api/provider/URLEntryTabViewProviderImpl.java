@@ -27,13 +27,10 @@ import org.apache.commons.collections.CollectionUtils;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * json tab view
+ * url tab view
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
 public class URLEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<URLTabView> {
-    public URLEntryTabViewProviderImpl() {
-        super("URLS");
-    }
 
     @Override
     protected boolean isSupported(Entry entry) {

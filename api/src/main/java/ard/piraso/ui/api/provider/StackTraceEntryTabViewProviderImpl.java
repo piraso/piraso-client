@@ -30,10 +30,6 @@ import org.openide.util.lookup.ServiceProvider;
 @ServiceProvider(service=EntryTabViewProvider.class)
 public class StackTraceEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<StackTraceTabView> {
 
-    public StackTraceEntryTabViewProviderImpl() {
-        super("Stack Trace");
-    }
-
     @Override
     protected boolean isSupported(Entry entry) {
         if(!StackTraceAwareEntry.class.isInstance(entry)) {

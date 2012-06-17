@@ -31,10 +31,6 @@ import org.openide.util.lookup.ServiceProvider;
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
 public class Log4jXMLEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<XMLTabView> {
-    public Log4jXMLEntryTabViewProviderImpl() {
-        super("XML");
-    }
-
     @Override
     protected boolean isSupported(Entry entry) {
         if(Log4jEntry.class.isInstance(entry)) {

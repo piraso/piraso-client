@@ -35,7 +35,7 @@ public class XMLTabView extends FilteredSyntaxPaneTabView<MessageAwareEntry> {
      * @param entry       the entry
      */
     public XMLTabView(MessageAwareEntry entry) {
-        super(entry, "XML is now copied to clipboard.");
+        super("XML", entry, "XML is now copied to clipboard.");
     }
 
     @Override
@@ -54,9 +54,5 @@ public class XMLTabView extends FilteredSyntaxPaneTabView<MessageAwareEntry> {
             btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);
         }
-    }
-
-    @Override
-    protected void btnFilterClickHandle() {
     }
 }

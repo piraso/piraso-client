@@ -10,6 +10,8 @@ import org.openide.awt.ActionReference;
 import org.openide.util.NbBundle;
 import org.openide.windows.TopComponent;
 
+import javax.swing.*;
+
 import static ard.piraso.ui.api.util.JTextPaneUtils.*;
 
 /**
@@ -31,7 +33,7 @@ public class MethodCallViewTopComponent extends BaseEntryViewTopComponent<Method
     }
 
     @Override
-    protected void populateMessage(MethodCallEntry entry) throws Exception {
+    protected void populateMessage(JTextPane txtMessage, MethodCallEntry entry) throws Exception {
         insertHeaderCode(txtMessage, currentEntry.getGenericString());
         insertCode(txtMessage, "\n");
 
