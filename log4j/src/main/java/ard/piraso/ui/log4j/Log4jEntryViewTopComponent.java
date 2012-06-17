@@ -66,17 +66,17 @@ public class Log4jEntryViewTopComponent extends BaseEntryViewTopComponent<Log4jE
         insertKeyword(txtMessage, "Level: ");
 
         if("ERROR".equals(currentEntry.getLogLevel()) || "FATAL".equals(currentEntry.getLogLevel())) {
-            insertText(txtMessage, currentEntry.getLogLevel(), ERROR);
+            insertText(txtMessage, String.format(" %s ", currentEntry.getLogLevel()), ERROR);
         } else if("WARN".equals(currentEntry.getLogLevel())) {
-            insertText(txtMessage, currentEntry.getLogLevel(), WARNING);
+            insertText(txtMessage, String.format(" %s ", currentEntry.getLogLevel()), WARNING);
         } else if("INFO".equals(currentEntry.getLogLevel())) {
-            insertText(txtMessage, currentEntry.getLogLevel(), INFO);
+            insertText(txtMessage, String.format(" %s ", currentEntry.getLogLevel()), INFO);
         } else if("DEBUG".equals(currentEntry.getLogLevel())) {
-            insertText(txtMessage, currentEntry.getLogLevel(), DEBUG);
+            insertText(txtMessage, String.format(" %s ", currentEntry.getLogLevel()), DEBUG);
         } else if("TRACE".equals(currentEntry.getLogLevel())) {
-            insertText(txtMessage, currentEntry.getLogLevel(), TRACE);
+            insertText(txtMessage, String.format(" %s ", currentEntry.getLogLevel()), TRACE);
         } else {
-            insertText(txtMessage, currentEntry.getLogLevel(), ALL);
+            insertText(txtMessage, String.format(" %s ", currentEntry.getLogLevel()), ALL);
         }
 
         if(CollectionUtils.isNotEmpty(currentEntry.getGroup().getGroups())) {

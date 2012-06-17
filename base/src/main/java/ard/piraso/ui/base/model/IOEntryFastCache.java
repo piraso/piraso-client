@@ -42,8 +42,6 @@ public class IOEntryFastCache {
 
     public static final int MAX_CACHE_SIZE = 1000;
 
-    public static final int MAX_GROUP_SIZE = 2;
-
     private Map<Long, Element> cache = new HashMap<Long, Element>(MAX_CACHE_SIZE);
 
     private Long currentRequestId;
