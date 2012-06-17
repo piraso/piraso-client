@@ -139,6 +139,10 @@ public class IOEntryReader implements EntryReadListener {
         listeners.add(IOEntryListener.class, listener);
     }
 
+    public void removeListener(IOEntryListener listener) {
+        listeners.remove(IOEntryListener.class, listener);
+    }
+
     public void addLiveCycleListener(IOEntryLifecycleListener listener) {
         listeners.add(IOEntryLifecycleListener.class, listener);
     }

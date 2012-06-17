@@ -118,6 +118,10 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
     private int fontSize = FontProviderManager.INSTANCE.getEditorDefaultFont().getSize();
 
+    private RequestTreeTopComponent.ContextMonitorHandler treeHandler;
+
+    private IOEntryReader reader;
+
     public ContextMonitorTopComponent(IOEntryReader reader, String name) {
         setName(name);
         setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
@@ -126,6 +130,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         InstanceContent content = new InstanceContent();
         associateLookup(new AbstractLookup(content));
 
+        this.reader = reader;
         this.entryContent = new SingleClassInstanceContent<Entry>(content);
         this.actionProvider = new IOEntryReaderActionProvider(reader, content);
         this.tableModel = new IOEntryTableModel(reader);
@@ -133,11 +138,20 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
         // added icon listeners
         reader.addListener(ICON_CHANGER);
+        iniTreeRequest();
         
         initComponents();
         initTable();
         initComboBox();
         refreshUIStates();
+    }
+
+    public void iniTreeRequest() {
+        RequestTreeTopComponent component = RequestTreeTopComponent.get();
+        if(component != null && treeHandler == null) {
+            treeHandler = component.createHandler(this);
+            reader.addListener(treeHandler);
+        }
     }
 
     private void initComboBox() {
@@ -230,6 +244,10 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     public void componentClosed() {
         actionProvider.getStopCookie().stop();
         entryContent.clear();
+        if(treeHandler != null) {
+            treeHandler.close();
+            reader.removeListener(treeHandler);
+        }
         SingleModelManagers.GENERAL_SETTINGS.removeModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
 

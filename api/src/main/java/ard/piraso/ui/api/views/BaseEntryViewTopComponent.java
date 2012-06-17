@@ -39,8 +39,6 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
     private List<EntryTabView> components;
     
     private JToggleButton[] buttons;
-    
-    private int selectedIndex = -1;
 
     private boolean enableFilter = false;
         
@@ -68,7 +66,6 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
     protected void refreshView() {
         synchronized (getTreeLock()) {
             clear();
-            selectedIndex = 0;
             components = new ArrayList<EntryTabView>();
 
             if(currentEntry != null) {
@@ -88,7 +85,7 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
 
                     buttonGroup1.add(buttons[i]);
 
-                    ActionListener buttonListener = new SwitchEntryView(i, view);
+                    ActionListener buttonListener = new SwitchEntryView(view);
                     buttons[i].addActionListener(buttonListener);
 
                     if(initialViewAction == null) {
@@ -141,19 +138,15 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
     private class SwitchEntryView implements ActionListener {
         
         private EntryTabView tabView;
-        
-        private int index;
-        
-        private SwitchEntryView(int index, EntryTabView tabView) {
+
+        private SwitchEntryView(EntryTabView tabView) {
             this.tabView = tabView;
-            this.index = index;
         }
 
         @Override
         public void actionPerformed(ActionEvent evt) {
             synchronized (getTreeLock()) {
                 clear();
-                selectedIndex = index;
 
                 tabView.getComponent().addToolbarComponents(toolbar);
                 add(tabView.getComponent(), BorderLayout.CENTER);

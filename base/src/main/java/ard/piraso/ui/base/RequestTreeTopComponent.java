@@ -15,39 +15,83 @@
  */
 package ard.piraso.ui.base;
 
+import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.RequestEntry;
+import ard.piraso.api.entry.ResponseEntry;
+import ard.piraso.ui.api.manager.FontProviderManager;
+import ard.piraso.ui.api.manager.ModelEvent;
+import ard.piraso.ui.api.manager.ModelOnChangeListener;
+import ard.piraso.ui.api.manager.SingleModelManagers;
+import ard.piraso.ui.io.IOEntryEvent;
+import ard.piraso.ui.io.IOEntryListener;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
+import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle.Messages;
 import org.openide.windows.TopComponent;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
+import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Top component which displays something.
  */
 @ConvertAsProperties(dtd = "-//ard.piraso.ui.base//RequestTree//EN", autostore = false)
-@TopComponent.Description(preferredID = "RequestTreeTopComponent", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
+@TopComponent.Description(preferredID = "RequestTreeTopComponent", iconBase="ard/piraso/ui/base/icons/folders-explorer-icon.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "leftSlidingSide", openAtStartup = true)
 @ActionID(category = "Window", id = "ard.piraso.ui.base.RequestTreeTopComponent")
 @ActionReference(path = "Menu/Window")
 @TopComponent.OpenActionRegistration(displayName = "#CTL_RequestTreeAction",
 preferredID = "RequestTreeTopComponent")
 @Messages({
-    "CTL_RequestTreeAction=RequestTree",
-    "CTL_RequestTreeTopComponent=RequestTree Window",
-    "HINT_RequestTreeTopComponent=This is a RequestTree window"
+    "CTL_RequestTreeAction=Request Explorer",
+    "CTL_RequestTreeTopComponent=Request Explorer",
+    "HINT_RequestTreeTopComponent=This is a Request Explorer window"
 })
 public final class RequestTreeTopComponent extends TopComponent {
-    
-    private DefaultMutableTreeNode root;
+
+    public static RequestTreeTopComponent get() {
+        Set<TopComponent> opened = TopComponent.getRegistry().getOpened();
+        for(TopComponent component : opened) {
+            if(RequestTreeTopComponent.class.isInstance(component)) {
+                return (RequestTreeTopComponent) component;
+            }
+        }
+
+        return null;
+    }
+
+    private final ModelOnChangeListener GENERAL_SETTINGS_LISTENER = new ModelOnChangeListener() {
+        @Override
+        public void onChange(ModelEvent evt) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    repaint();
+                    invalidate();
+                }
+            });
+        }
+    };
+
+
+    private DefaultMutableTreeNode root = new DefaultMutableTreeNode();
+
+    private DefaultTreeModel model = new DefaultTreeModel(root);
 
     public RequestTreeTopComponent() {
         initComponents();
+        jTree.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         setName(Bundle.CTL_RequestTreeTopComponent());
         setToolTipText(Bundle.HINT_RequestTreeTopComponent());
-
     }
 
     /**
@@ -58,28 +102,125 @@ public final class RequestTreeTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTree = new JTree(root);
+        jTree = new javax.swing.JTree();
+        toolbar = new javax.swing.JToolBar();
+        btnAscending = new javax.swing.JToggleButton();
+        btnDescending = new javax.swing.JToggleButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnColorLatest = new javax.swing.JToggleButton();
+        btnTarget = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
+        jTree.setModel(model);
+        jTree.setCellRenderer(new TreeCellRenderer());
         jTree.setRootVisible(false);
+        jTree.setShowsRootHandles(true);
         jScrollPane1.setViewportView(jTree);
 
         add(jScrollPane1, java.awt.BorderLayout.CENTER);
+
+        toolbar.setBackground(new java.awt.Color(226, 226, 226));
+        toolbar.setFloatable(false);
+        toolbar.setRollover(true);
+        toolbar.setOpaque(false);
+
+        buttonGroup1.add(btnAscending);
+        btnAscending.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/sort_ascend.png"))); // NOI18N
+        btnAscending.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(btnAscending, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnAscending.text")); // NOI18N
+        btnAscending.setToolTipText(org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnAscending.toolTipText")); // NOI18N
+        btnAscending.setFocusable(false);
+        btnAscending.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAscending.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAscending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAscendingActionPerformed(evt);
+            }
+        });
+        toolbar.add(btnAscending);
+
+        buttonGroup1.add(btnDescending);
+        btnDescending.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/sort_descend.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnDescending, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnDescending.text")); // NOI18N
+        btnDescending.setFocusable(false);
+        btnDescending.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnDescending.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnDescending.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDescendingActionPerformed(evt);
+            }
+        });
+        toolbar.add(btnDescending);
+        toolbar.add(jSeparator1);
+
+        btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time-go-icon.png"))); // NOI18N
+        btnColorLatest.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(btnColorLatest, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnColorLatest.text")); // NOI18N
+        btnColorLatest.setFocusable(false);
+        btnColorLatest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnColorLatest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnColorLatest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnColorLatestActionPerformed(evt);
+            }
+        });
+        toolbar.add(btnColorLatest);
+
+        btnTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/target_arrow.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnTarget, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnTarget.text")); // NOI18N
+        btnTarget.setToolTipText(org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnTarget.toolTipText")); // NOI18N
+        btnTarget.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        btnTarget.setFocusable(false);
+        btnTarget.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnTarget.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnTarget.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTargetActionPerformed(evt);
+            }
+        });
+        toolbar.add(Box.createHorizontalGlue());
+        toolbar.add(btnTarget);
+
+        add(toolbar, java.awt.BorderLayout.NORTH);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTargetActionPerformed
+
+    }//GEN-LAST:event_btnTargetActionPerformed
+
+    private void btnAscendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAscendingActionPerformed
+    }//GEN-LAST:event_btnAscendingActionPerformed
+
+    private void btnDescendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDescendingActionPerformed
+    }//GEN-LAST:event_btnDescendingActionPerformed
+
+    private void btnColorLatestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorLatestActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnColorLatestActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton btnAscending;
+    private javax.swing.JToggleButton btnColorLatest;
+    private javax.swing.JToggleButton btnDescending;
+    private javax.swing.JButton btnTarget;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JTree jTree;
+    private javax.swing.JToolBar toolbar;
     // End of variables declaration//GEN-END:variables
 
     @Override
     public void componentOpened() {
+        SingleModelManagers.GENERAL_SETTINGS.addModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
 
     @Override
     public void componentClosed() {
+        SingleModelManagers.GENERAL_SETTINGS.removeModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
 
     void writeProperties(java.util.Properties p) {
@@ -88,5 +229,170 @@ public final class RequestTreeTopComponent extends TopComponent {
 
     void readProperties(java.util.Properties p) {
         String version = p.getProperty("version");
+    }
+
+    public ContextMonitorHandler createHandler(TopComponent component) {
+        return new ContextMonitorHandler(component);
+    }
+
+    public class ContextMonitorHandler implements IOEntryListener {
+
+        private TopComponent component;
+
+        private DefaultMutableTreeNode node;
+
+        private Parent parent;
+
+        private Map<Long, Child> childMap = new HashMap<Long, Child>();
+
+        public ContextMonitorHandler(TopComponent component) {
+            this.component = component;
+            parent = new Parent(component.getName());
+            node = new DefaultMutableTreeNode(parent);
+            node.setAllowsChildren(true);
+            root.add(node);
+
+            model.nodeStructureChanged(root);
+        }
+
+        @Override
+        public void started(IOEntryEvent evt) {
+            parent.start();
+            model.nodeChanged(node);
+        }
+
+        @Override
+        public void stopped(IOEntryEvent evt) {
+            parent.stop();
+            model.nodeChanged(node);
+        }
+
+        @Override
+        public void receivedEntry(IOEntryEvent evt) {
+            Entry entry = evt.getEntry().getEntry();
+            if(RequestEntry.class.isInstance(entry)) {
+                Child childObj = new Child(entry.toString());
+                DefaultMutableTreeNode child = new DefaultMutableTreeNode(childObj);
+                childObj.setNode(child);
+                child.setAllowsChildren(false);
+                node.add(child);
+                childObj.start();
+
+                childMap.put(entry.getBaseRequestId(), childObj);
+
+                model.nodeStructureChanged(node);
+                if(node.getChildCount() > 0) {
+                    jTree.expandPath(new TreePath(node.getPath()));
+                }
+            } else if(ResponseEntry.class.isInstance(entry)) {
+                Child child = childMap.remove(entry.getBaseRequestId());
+
+                if(child != null) {
+                    child.stop();
+                    model.nodeChanged(child.node);
+                }
+            }
+        }
+
+        public void close() {
+            root.remove(node);
+            model.nodeStructureChanged(root);
+        }
+    }
+
+    private class Parent {
+        private String displayName;
+
+        private boolean alive;
+
+        public Parent(String displayName) {
+            this.displayName = displayName;
+            alive = false;
+        }
+
+        public void start() {
+            alive = true;
+        }
+
+        public void stop() {
+            alive = false;
+        }
+
+        @Override
+        public String toString() {
+            return displayName;
+        }
+    }
+
+    private class Child {
+        private String displayName;
+
+        private boolean done;
+
+        private DefaultMutableTreeNode node;
+
+        public Child(String displayName) {
+            this.displayName = displayName;
+            done = false;
+        }
+
+        public void setNode(DefaultMutableTreeNode node) {
+            this.node = node;
+        }
+
+        public void start() {
+            done = false;
+        }
+
+        public void stop() {
+            done = true;
+        }
+
+        @Override
+        public String toString() {
+            return displayName;
+        }
+    }
+
+    private class TreeCellRenderer extends DefaultTreeCellRenderer {
+        public static final String STOPPED_ICON_PATH = "ard/piraso/ui/base/icons/status-stopped.png";
+
+        public static final String STARTED_ICON_PATH = "ard/piraso/ui/base/icons/status-active.png";
+
+        public static final String DONE_ICON_PATH = "ard/piraso/ui/base/icons/tick.png";
+
+        public static final String IN_PROGRESS_ICON_PATH = "ard/piraso/ui/base/icons/ui-progress-bar-icon.png";
+
+        @Override
+        public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
+            JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+            if(Parent.class.isInstance(node.getUserObject())) {
+                Parent parent = (Parent) node.getUserObject();
+
+                if(parent.alive) {
+                    label.setIcon(ImageUtilities.loadImageIcon(STARTED_ICON_PATH, true));
+                } else {
+                    label.setIcon(ImageUtilities.loadImageIcon(STOPPED_ICON_PATH, true));
+                }
+
+                label.setFont(FontProviderManager.INSTANCE.getBoldEditorDefaultFont());
+            }
+
+            if(Child.class.isInstance(node.getUserObject())) {
+                Child child = (Child) node.getUserObject();
+
+                if(child.done) {
+                    label.setIcon(ImageUtilities.loadImageIcon(DONE_ICON_PATH, true));
+                } else {
+                    label.setIcon(ImageUtilities.loadImageIcon(IN_PROGRESS_ICON_PATH, true));
+                }
+
+                label.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+            }
+
+            return label;
+        }
     }
 }

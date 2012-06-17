@@ -33,4 +33,10 @@ public enum FontProviderManager {
     public Font getEditorDefaultFont() {
         return DEFAULT_FONT.deriveFont((float) SingleModelManagers.GENERAL_SETTINGS.get().getFontSize());
     }
+
+    public Font getBoldEditorDefaultFont() {
+        Font font = getEditorDefaultFont();
+
+        return font.deriveFont(Font.BOLD);
+    }
 }
