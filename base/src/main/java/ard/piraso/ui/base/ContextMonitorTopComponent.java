@@ -24,6 +24,7 @@ import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.manager.ModelEvent;
 import ard.piraso.ui.api.manager.ModelOnChangeListener;
 import ard.piraso.ui.api.manager.SingleModelManagers;
+import ard.piraso.ui.api.util.JTableUtils;
 import ard.piraso.ui.api.util.SingleClassInstanceContent;
 import ard.piraso.ui.api.util.WindowUtils;
 import ard.piraso.ui.base.manager.EntryViewProviderManager;
@@ -48,7 +49,7 @@ import java.awt.event.ActionListener;
 /**
  * Top component which displays something.
  */
-public final class ContextMonitorTopComponent extends TopComponent implements ListSelectionListener {
+public final class ContextMonitorTopComponent extends TopComponent implements ListSelectionListener, ContextMonitorDelegate {
     public static final String INACTIVE_ICON_PATH = "ard/piraso/ui/base/icons/status-inactive.png";
 
     public static final String STOPPED_ICON_PATH = "ard/piraso/ui/base/icons/status-stopped.png";
@@ -162,6 +163,15 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
                 tableModel.setCurrentRequestId(entry.getRequestId());
             }
         });
+    }
+
+    @Override
+    public void selectRequest(RequestEntry request) {
+        requestVisible();
+        btnLockUrl.setSelected(true);
+        refreshUIStates();
+        tableModel.setCurrentRequestId(request.getRequestId());
+        JTableUtils.scrollTo(table, 0);
     }
 
     private void initColumns() {

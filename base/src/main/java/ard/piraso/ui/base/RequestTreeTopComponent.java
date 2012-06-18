@@ -22,24 +22,27 @@ import ard.piraso.ui.api.manager.FontProviderManager;
 import ard.piraso.ui.api.manager.ModelEvent;
 import ard.piraso.ui.api.manager.ModelOnChangeListener;
 import ard.piraso.ui.api.manager.SingleModelManagers;
+import ard.piraso.ui.api.util.SingleClassInstanceContent;
+import ard.piraso.ui.api.util.WindowUtils;
+import ard.piraso.ui.base.manager.EntryViewProviderManager;
 import ard.piraso.ui.io.IOEntryEvent;
 import ard.piraso.ui.io.IOEntryListener;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.util.ImageUtilities;
+import org.openide.util.NbBundle;
 import org.openide.util.NbBundle.Messages;
+import org.openide.util.lookup.AbstractLookup;
+import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeCellRenderer;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.*;
 
 /**
  * Top component which displays something.
@@ -57,6 +60,11 @@ preferredID = "RequestTreeTopComponent")
     "HINT_RequestTreeTopComponent=This is a Request Explorer window"
 })
 public final class RequestTreeTopComponent extends TopComponent {
+
+    public static final long LATEST_TIME_THRESHOLD = 10000;
+
+    public static final long SOME_HOW_LATEST_TIME_THRESHOLD = 30000;
+
 
     public static RequestTreeTopComponent get() {
         Set<TopComponent> opened = TopComponent.getRegistry().getOpened();
@@ -87,11 +95,43 @@ public final class RequestTreeTopComponent extends TopComponent {
 
     private DefaultTreeModel model = new DefaultTreeModel(root);
 
+    private SingleClassInstanceContent<Entry> entryContent;
+
+    final private Set<Child> latestChildren = new HashSet<Child>();
+
     public RequestTreeTopComponent() {
-        initComponents();
-        jTree.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
         setName(Bundle.CTL_RequestTreeTopComponent());
         setToolTipText(Bundle.HINT_RequestTreeTopComponent());
+
+        initComponents();
+
+        InstanceContent content = new InstanceContent();
+        associateLookup(new AbstractLookup(content));
+
+        this.entryContent = new SingleClassInstanceContent<Entry>(content);
+
+        jTree.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+        jTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
+        jTree.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int selRow = jTree.getRowForLocation(e.getX(), e.getY());
+                TreePath selPath = jTree.getPathForLocation(e.getX(), e.getY());
+                if(selRow != -1 && selPath != null) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
+                    Child child = null;
+                    if(Child.class.isInstance(node.getUserObject())) {
+                        child = (Child) node.getUserObject();
+                    }
+
+                    if(child != null && e.getClickCount() == 1) {
+                        child.showRequestView();
+                    } else if(child != null && e.getClickCount() == 2) {
+                        child.select();
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -102,14 +142,12 @@ public final class RequestTreeTopComponent extends TopComponent {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        buttonGroup1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTree = new javax.swing.JTree();
         toolbar = new javax.swing.JToolBar();
-        btnAscending = new javax.swing.JToggleButton();
-        btnDescending = new javax.swing.JToggleButton();
-        jSeparator1 = new javax.swing.JToolBar.Separator();
+        btnCollapse = new javax.swing.JButton();
         btnColorLatest = new javax.swing.JToggleButton();
+        jSeparator1 = new javax.swing.JToolBar.Separator();
         btnTarget = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
@@ -127,38 +165,24 @@ public final class RequestTreeTopComponent extends TopComponent {
         toolbar.setRollover(true);
         toolbar.setOpaque(false);
 
-        buttonGroup1.add(btnAscending);
-        btnAscending.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/sort_ascend.png"))); // NOI18N
-        btnAscending.setSelected(true);
-        org.openide.awt.Mnemonics.setLocalizedText(btnAscending, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnAscending.text")); // NOI18N
-        btnAscending.setToolTipText(org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnAscending.toolTipText")); // NOI18N
-        btnAscending.setFocusable(false);
-        btnAscending.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnAscending.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnAscending.addActionListener(new java.awt.event.ActionListener() {
+        btnCollapse.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/gh-icon-collapse.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCollapse, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnCollapse.text")); // NOI18N
+        btnCollapse.setToolTipText(org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnCollapse.toolTipText")); // NOI18N
+        btnCollapse.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        btnCollapse.setFocusable(false);
+        btnCollapse.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnCollapse.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCollapse.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAscendingActionPerformed(evt);
+                btnCollapseActionPerformed(evt);
             }
         });
-        toolbar.add(btnAscending);
+        toolbar.add(btnCollapse);
 
-        buttonGroup1.add(btnDescending);
-        btnDescending.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/sort_descend.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnDescending, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnDescending.text")); // NOI18N
-        btnDescending.setFocusable(false);
-        btnDescending.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnDescending.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnDescending.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDescendingActionPerformed(evt);
-            }
-        });
-        toolbar.add(btnDescending);
-        toolbar.add(jSeparator1);
-
-        btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time-go-icon.png"))); // NOI18N
+        btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time.png"))); // NOI18N
         btnColorLatest.setSelected(true);
         org.openide.awt.Mnemonics.setLocalizedText(btnColorLatest, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnColorLatest.text")); // NOI18N
+        btnColorLatest.setToolTipText(org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnColorLatest.toolTipText")); // NOI18N
         btnColorLatest.setFocusable(false);
         btnColorLatest.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnColorLatest.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -168,6 +192,7 @@ public final class RequestTreeTopComponent extends TopComponent {
             }
         });
         toolbar.add(btnColorLatest);
+        toolbar.add(jSeparator1);
 
         btnTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/target_arrow.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(btnTarget, org.openide.util.NbBundle.getMessage(RequestTreeTopComponent.class, "RequestTreeTopComponent.btnTarget.text")); // NOI18N
@@ -191,22 +216,30 @@ public final class RequestTreeTopComponent extends TopComponent {
 
     }//GEN-LAST:event_btnTargetActionPerformed
 
-    private void btnAscendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAscendingActionPerformed
-    }//GEN-LAST:event_btnAscendingActionPerformed
-
-    private void btnDescendingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDescendingActionPerformed
-    }//GEN-LAST:event_btnDescendingActionPerformed
-
     private void btnColorLatestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorLatestActionPerformed
-        // TODO add your handling code here:
+        if(btnColorLatest.isSelected()) {
+            btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time.png")));
+            btnColorLatest.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "RequestTreeTopComponent.btnColorLatest.toolTipText"));
+        } else {
+            btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time-minus.png")));
+            btnColorLatest.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "RequestTreeTopComponent.btnColorLatest.toolTipText2"));
+        }
+
+        if(!btnColorLatest.isSelected()) {
+            synchronized (latestChildren) {
+                refreshChildrenColor();
+            }
+        }
     }//GEN-LAST:event_btnColorLatestActionPerformed
 
+    private void btnCollapseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCollapseActionPerformed
+        model.nodeStructureChanged(root);
+    }//GEN-LAST:event_btnCollapseActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton btnAscending;
+    private javax.swing.JButton btnCollapse;
     private javax.swing.JToggleButton btnColorLatest;
-    private javax.swing.JToggleButton btnDescending;
     private javax.swing.JButton btnTarget;
-    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JTree jTree;
@@ -231,13 +264,39 @@ public final class RequestTreeTopComponent extends TopComponent {
         String version = p.getProperty("version");
     }
 
-    public ContextMonitorHandler createHandler(TopComponent component) {
-        return new ContextMonitorHandler(component);
+    public ContextMonitorHandler createHandler(ContextMonitorDelegate delegate) {
+        return new ContextMonitorHandler(delegate);
     }
+
+    public void refreshChildrenColor() {
+        Iterator<Child> itr = latestChildren.iterator();
+
+        while(itr.hasNext()) {
+            Child child = itr.next();
+
+            if(!child.isSomeHowLatest()) {
+                model.nodeChanged(child.node);
+                itr.remove();
+            }
+        }
+    }
+
+    public void refreshChildrenColorToRemove(DefaultMutableTreeNode parent) {
+        Iterator<Child> itr = latestChildren.iterator();
+
+        while(itr.hasNext()) {
+            Child child = itr.next();
+
+            if(child.node.getParent().equals(parent)) {
+                itr.remove();
+            }
+        }
+    }
+
 
     public class ContextMonitorHandler implements IOEntryListener {
 
-        private TopComponent component;
+        private ContextMonitorDelegate delegate;
 
         private DefaultMutableTreeNode node;
 
@@ -245,9 +304,11 @@ public final class RequestTreeTopComponent extends TopComponent {
 
         private Map<Long, Child> childMap = new HashMap<Long, Child>();
 
-        public ContextMonitorHandler(TopComponent component) {
-            this.component = component;
-            parent = new Parent(component.getName());
+        private boolean closed = false;
+
+        public ContextMonitorHandler(ContextMonitorDelegate delegate) {
+            this.delegate = delegate;
+            parent = new Parent(delegate);
             node = new DefaultMutableTreeNode(parent);
             node.setAllowsChildren(true);
             root.add(node);
@@ -263,24 +324,35 @@ public final class RequestTreeTopComponent extends TopComponent {
 
         @Override
         public void stopped(IOEntryEvent evt) {
-            parent.stop();
-            model.nodeChanged(node);
+            synchronized (this) {
+                if(!closed) {
+                    parent.stop();
+                    model.nodeChanged(node);
+                }
+            }
         }
 
         @Override
         public void receivedEntry(IOEntryEvent evt) {
             Entry entry = evt.getEntry().getEntry();
+
             if(RequestEntry.class.isInstance(entry)) {
-                Child childObj = new Child(entry.toString());
+                Child childObj = new Child(delegate, (RequestEntry) entry);
                 DefaultMutableTreeNode child = new DefaultMutableTreeNode(childObj);
+
                 childObj.setNode(child);
+
                 child.setAllowsChildren(false);
                 node.add(child);
                 childObj.start();
 
                 childMap.put(entry.getBaseRequestId(), childObj);
 
-                model.nodeStructureChanged(node);
+                synchronized (this) {
+                    if(!closed) {
+                        model.nodeStructureChanged(node);
+                    }
+                }
                 if(node.getChildCount() > 0) {
                     jTree.expandPath(new TreePath(node.getPath()));
                 }
@@ -289,24 +361,43 @@ public final class RequestTreeTopComponent extends TopComponent {
 
                 if(child != null) {
                     child.stop();
-                    model.nodeChanged(child.node);
+                    synchronized (this) {
+                        if(!closed) {
+                            model.nodeChanged(child.node);
+                        }
+                    }
+                }
+            }
+
+            if(btnColorLatest.isSelected()) {
+                synchronized (latestChildren) {
+                    Child child = childMap.get(entry.getBaseRequestId());
+                    if(child != null) {
+                        child.touch();
+                        latestChildren.add(child);
+                        refreshChildrenColor();
+                    }
                 }
             }
         }
 
         public void close() {
-            root.remove(node);
-            model.nodeStructureChanged(root);
+            synchronized (this) {
+                refreshChildrenColorToRemove(node);
+                root.remove(node);
+                model.nodeStructureChanged(root);
+                closed = true;
+            }
         }
     }
 
     private class Parent {
-        private String displayName;
+        private ContextMonitorDelegate delegate;
 
         private boolean alive;
 
-        public Parent(String displayName) {
-            this.displayName = displayName;
+        public Parent(ContextMonitorDelegate delegate) {
+            this.delegate = delegate;
             alive = false;
         }
 
@@ -320,20 +411,38 @@ public final class RequestTreeTopComponent extends TopComponent {
 
         @Override
         public String toString() {
-            return displayName;
+            return delegate.getName();
         }
     }
 
     private class Child {
-        private String displayName;
+        private ContextMonitorDelegate delegate;
 
         private boolean done;
 
         private DefaultMutableTreeNode node;
 
-        public Child(String displayName) {
-            this.displayName = displayName;
+        private RequestEntry entry;
+        
+        private long timestamp;
+
+        public Child(ContextMonitorDelegate delegate, RequestEntry entry) {
+            this.delegate = delegate;
+            this.entry = entry;
             done = false;
+            touch();
+        }
+        
+        public void touch() {
+            timestamp = System.currentTimeMillis();
+        }
+        
+        public boolean isLatest() {
+            return btnColorLatest.isSelected() && System.currentTimeMillis() - timestamp <= LATEST_TIME_THRESHOLD;
+        }
+
+        public boolean isSomeHowLatest() {
+            return btnColorLatest.isSelected() && System.currentTimeMillis() - timestamp <= SOME_HOW_LATEST_TIME_THRESHOLD;
         }
 
         public void setNode(DefaultMutableTreeNode node) {
@@ -344,13 +453,27 @@ public final class RequestTreeTopComponent extends TopComponent {
             done = false;
         }
 
+        public void showRequestView() {
+            Class<? extends TopComponent> viewClass = EntryViewProviderManager.INSTANCE.getViewClass(entry);
+            entryContent.add(entry);
+
+            if(viewClass != null) {
+                WindowUtils.selectWindow(viewClass);
+            }
+        }
+
+        public void select() {
+            delegate.selectRequest(entry);
+            showRequestView();
+        }
+
         public void stop() {
             done = true;
         }
 
         @Override
         public String toString() {
-            return displayName;
+            return entry.toString();
         }
     }
 
@@ -366,6 +489,12 @@ public final class RequestTreeTopComponent extends TopComponent {
         @Override
         public Component getTreeCellRendererComponent(JTree tree, Object value, boolean sel, boolean expanded, boolean leaf, int row, boolean hasFocus) {
             JLabel label = (JLabel) super.getTreeCellRendererComponent(tree, value, sel, expanded, leaf, row, hasFocus);
+
+            if(sel) {
+                label.setForeground(Color.WHITE);
+            } else {
+                label.setForeground(Color.BLACK);
+            }
 
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
             if(Parent.class.isInstance(node.getUserObject())) {
@@ -390,6 +519,20 @@ public final class RequestTreeTopComponent extends TopComponent {
                 }
 
                 label.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
+
+                if(child.isLatest()) {
+                    if(sel) {
+                        label.setForeground(new Color(0xBAEEBA));
+                    } else {
+                        label.setForeground(new Color(0x008000));
+                    }
+                } else if(child.isSomeHowLatest()) {
+                    if(sel) {
+                        label.setForeground(new Color(0xE2FAFF));
+                    } else {
+                        label.setForeground(new Color(0x000080));
+                    }
+                }
             }
 
             return label;
