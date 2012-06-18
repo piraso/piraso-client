@@ -293,7 +293,6 @@ public final class RequestTreeTopComponent extends TopComponent {
         }
     }
 
-
     public class ContextMonitorHandler implements IOEntryListener {
 
         private ContextMonitorDelegate delegate;
@@ -313,81 +312,117 @@ public final class RequestTreeTopComponent extends TopComponent {
             node.setAllowsChildren(true);
             root.add(node);
 
-            model.nodeStructureChanged(root);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    model.nodeStructureChanged(root);
+                }
+            });
         }
 
         @Override
         public void started(IOEntryEvent evt) {
-            parent.start();
-            model.nodeChanged(node);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    parent.start();
+                    model.nodeChanged(node);
+                }
+            });
         }
 
         @Override
         public void stopped(IOEntryEvent evt) {
-            synchronized (this) {
-                if(!closed) {
-                    parent.stop();
-                    model.nodeChanged(node);
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (this) {
+                        if(!closed) {
+                            parent.stop();
+                            model.nodeChanged(node);
+                        }
+                    }
                 }
-            }
+            });
         }
 
         @Override
         public void receivedEntry(IOEntryEvent evt) {
-            Entry entry = evt.getEntry().getEntry();
+            final Entry entry = evt.getEntry().getEntry();
 
             if(RequestEntry.class.isInstance(entry)) {
-                Child childObj = new Child(delegate, (RequestEntry) entry);
-                DefaultMutableTreeNode child = new DefaultMutableTreeNode(childObj);
+                final Child childObj = new Child(delegate, (RequestEntry) entry);
+                final DefaultMutableTreeNode child = new DefaultMutableTreeNode(childObj);
 
                 childObj.setNode(child);
 
                 child.setAllowsChildren(false);
                 node.add(child);
-                childObj.start();
 
-                childMap.put(entry.getBaseRequestId(), childObj);
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        childObj.start();
 
-                synchronized (this) {
-                    if(!closed) {
-                        model.nodeStructureChanged(node);
+                        childMap.put(entry.getBaseRequestId(), childObj);
+
+                        synchronized (this) {
+                            if(!closed) {
+                                model.nodeStructureChanged(node);
+                            }
+                        }
+                        if(node.getChildCount() > 0) {
+                            jTree.expandPath(new TreePath(node.getPath()));
+                        }
                     }
-                }
-                if(node.getChildCount() > 0) {
-                    jTree.expandPath(new TreePath(node.getPath()));
-                }
+                });
             } else if(ResponseEntry.class.isInstance(entry)) {
-                Child child = childMap.remove(entry.getBaseRequestId());
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Child child = childMap.remove(entry.getBaseRequestId());
 
-                if(child != null) {
-                    child.stop();
-                    synchronized (this) {
-                        if(!closed) {
-                            model.nodeChanged(child.node);
+                        if(child != null) {
+                            child.stop();
+                            synchronized (this) {
+                                if(!closed) {
+                                    model.nodeChanged(child.node);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    if(btnColorLatest.isSelected()) {
+                        synchronized (latestChildren) {
+                            Child child = childMap.get(entry.getBaseRequestId());
+                            if(child != null) {
+                                child.touch();
+                                latestChildren.add(child);
+                                refreshChildrenColor();
+                            }
                         }
                     }
                 }
-            }
-
-            if(btnColorLatest.isSelected()) {
-                synchronized (latestChildren) {
-                    Child child = childMap.get(entry.getBaseRequestId());
-                    if(child != null) {
-                        child.touch();
-                        latestChildren.add(child);
-                        refreshChildrenColor();
-                    }
-                }
-            }
+            });
         }
 
         public void close() {
-            synchronized (this) {
-                refreshChildrenColorToRemove(node);
-                root.remove(node);
-                model.nodeStructureChanged(root);
-                closed = true;
-            }
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (this) {
+                        refreshChildrenColorToRemove(node);
+                        root.remove(node);
+                        model.nodeStructureChanged(root);
+                        closed = true;
+                    }
+                }
+            });
         }
     }
 
