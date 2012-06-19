@@ -20,22 +20,22 @@ package ard.piraso.ui.api.views;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.api.entry.MessageAwareEntry;
-import ard.piraso.ui.api.formatter.XMLFormatter;
+import ard.piraso.ui.api.formatter.HTMLFormatter;
 import ard.piraso.ui.api.manager.FontProviderManager;
 import org.openide.ErrorManager;
 
 /**
  * For html view.
  */
-public class XMLTabView extends FilteredSyntaxPaneTabView<MessageAwareEntry> {
+public class HTMLTabView extends FilteredSyntaxPaneTabView<MessageAwareEntry> {
 
     /**
-     * Creates new form XMLTabView
+     * Creates new form HTMLTabView
      *
      * @param entry       the entry
      */
-    public XMLTabView(MessageAwareEntry entry) {
-        super("XML", entry, "XML is now copied to clipboard.");
+    public HTMLTabView(MessageAwareEntry entry) {
+        super("HTML", entry, "HTML is now copied to clipboard.");
     }
 
     @Override
@@ -47,9 +47,9 @@ public class XMLTabView extends FilteredSyntaxPaneTabView<MessageAwareEntry> {
 
         try {
             txtEditor.setEditable(false);
-            txtEditor.setContentType("text/xml");
+            txtEditor.setContentType("text/xhtml");
             txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
-            txtEditor.setText("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n" + XMLFormatter.prettyPrint(m.getMessage()));
+            txtEditor.setText(HTMLFormatter.prettyPrint(m.getMessage()));
         } catch (Exception e) {
             btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);

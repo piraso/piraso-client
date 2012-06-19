@@ -522,7 +522,7 @@ public final class RequestTreeTopComponent extends TopComponent implements Looku
         }
     }
 
-    public class Child {
+    public final class Child {
         private ContextMonitorDelegate delegate;
 
         private boolean done;
