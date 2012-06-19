@@ -10,4 +10,6 @@ public interface ContextMonitorDelegate {
     public String getName();
 
     public void selectRequest(RequestEntry request);
+    
+    public RequestEntry getSelectedRequest();
 }

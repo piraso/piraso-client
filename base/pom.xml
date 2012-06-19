@@ -143,4 +143,8 @@
             </plugin>
         </plugins>
     </build>
+    <properties>
+        <netbeans.run.params.ide/>
+        <netbeans.run.params>${netbeans.run.params.ide}</netbeans.run.params>
+    </properties>
 </project>

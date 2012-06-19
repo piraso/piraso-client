@@ -27,17 +27,19 @@ import ard.piraso.ui.api.util.WindowUtils;
 import ard.piraso.ui.base.manager.EntryViewProviderManager;
 import ard.piraso.ui.io.IOEntryEvent;
 import ard.piraso.ui.io.IOEntryListener;
+import org.apache.commons.collections.CollectionUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
-import org.openide.util.ImageUtilities;
-import org.openide.util.NbBundle;
+import org.openide.util.*;
 import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
 
 import javax.swing.*;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -59,7 +61,7 @@ preferredID = "RequestTreeTopComponent")
     "CTL_RequestTreeTopComponent=Request Explorer",
     "HINT_RequestTreeTopComponent=This is a Request Explorer window"
 })
-public final class RequestTreeTopComponent extends TopComponent {
+public final class RequestTreeTopComponent extends TopComponent implements LookupListener {
 
     public static final long LATEST_TIME_THRESHOLD = 10000;
 
@@ -97,7 +99,13 @@ public final class RequestTreeTopComponent extends TopComponent {
 
     private SingleClassInstanceContent<Entry> entryContent;
 
-    final private Set<Child> latestChildren = new HashSet<Child>();
+    protected Lookup.Result result = null;
+
+    protected ContextMonitorDelegate lastActiveMonitor;
+
+    private final Set<Child> latestChildren = new HashSet<Child>();
+    
+    private final Map<ContextMonitorDelegate, ContextMonitorHandler> delegateHandlers = new HashMap<ContextMonitorDelegate, ContextMonitorHandler>();
 
     public RequestTreeTopComponent() {
         setName(Bundle.CTL_RequestTreeTopComponent());
@@ -124,10 +132,21 @@ public final class RequestTreeTopComponent extends TopComponent {
                         child = (Child) node.getUserObject();
                     }
 
-                    if(child != null && e.getClickCount() == 1) {
-                        child.showRequestView();
-                    } else if(child != null && e.getClickCount() == 2) {
+                    if(child != null && e.getClickCount() == 2) {
                         child.select();
+                    }
+                }
+            }
+        });
+
+        jTree.getSelectionModel().addTreeSelectionListener(new TreeSelectionListener() {
+            @Override
+            public void valueChanged(TreeSelectionEvent e) {
+                if(e.getPath() != null && e.getPath().getLastPathComponent() != null) {
+                    DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+                    if(node.getUserObject() != null && Child.class.isInstance(node.getUserObject())) {
+                        Child child = (Child) node.getUserObject();
+                        child.showRequestView();
                     }
                 }
             }
@@ -213,23 +232,52 @@ public final class RequestTreeTopComponent extends TopComponent {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTargetActionPerformed
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if(lastActiveMonitor == null || lastActiveMonitor.getSelectedRequest() == null) {
+                    return;
+                }
 
+                if(!((TopComponent) lastActiveMonitor).isOpened()) {
+                    lastActiveMonitor = null;
+                    return;
+                }
+
+                RequestEntry entry = lastActiveMonitor.getSelectedRequest();
+                synchronized (delegateHandlers) {
+                    ContextMonitorHandler handler = delegateHandlers.get(lastActiveMonitor);
+
+                    Child child = handler.childMap.get(entry.getBaseRequestId());
+                    if(child != null) {
+                        TreePath path = new TreePath(child.node.getPath());
+                        jTree.getSelectionModel().setSelectionPath(path);
+                        jTree.expandPath(path);
+                    }
+                }
+            }
+        });
     }//GEN-LAST:event_btnTargetActionPerformed
 
     private void btnColorLatestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnColorLatestActionPerformed
-        if(btnColorLatest.isSelected()) {
-            btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time.png")));
-            btnColorLatest.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "RequestTreeTopComponent.btnColorLatest.toolTipText"));
-        } else {
-            btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time-minus.png")));
-            btnColorLatest.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "RequestTreeTopComponent.btnColorLatest.toolTipText2"));
-        }
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                if(btnColorLatest.isSelected()) {
+                    btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time.png")));
+                    btnColorLatest.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "RequestTreeTopComponent.btnColorLatest.toolTipText"));
+                } else {
+                    btnColorLatest.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/time-minus.png")));
+                    btnColorLatest.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "RequestTreeTopComponent.btnColorLatest.unselected.toolTipText"));
+                }
 
-        if(!btnColorLatest.isSelected()) {
-            synchronized (latestChildren) {
-                refreshChildrenColor();
+                if(!btnColorLatest.isSelected()) {
+                    synchronized (latestChildren) {
+                        refreshChildrenColor();
+                    }
+                }
             }
-        }
+        });
     }//GEN-LAST:event_btnColorLatestActionPerformed
 
     private void btnCollapseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCollapseActionPerformed
@@ -248,11 +296,15 @@ public final class RequestTreeTopComponent extends TopComponent {
 
     @Override
     public void componentOpened() {
+        result = Utilities.actionsGlobalContext().lookupResult(ContextMonitorDelegate.class);
+        result.addLookupListener(this);
         SingleModelManagers.GENERAL_SETTINGS.addModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
 
     @Override
     public void componentClosed() {
+        result.removeLookupListener(this);
+        result = null;
         SingleModelManagers.GENERAL_SETTINGS.removeModelOnChangeListener(GENERAL_SETTINGS_LISTENER);
     }
 
@@ -265,7 +317,13 @@ public final class RequestTreeTopComponent extends TopComponent {
     }
 
     public ContextMonitorHandler createHandler(ContextMonitorDelegate delegate) {
-        return new ContextMonitorHandler(delegate);
+        synchronized(delegateHandlers) {
+            ContextMonitorHandler monitor = new ContextMonitorHandler(delegate);
+
+            delegateHandlers.put(delegate, monitor);
+
+            return monitor;
+        }
     }
 
     public void refreshChildrenColor() {
@@ -293,6 +351,17 @@ public final class RequestTreeTopComponent extends TopComponent {
         }
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    public void resultChanged(LookupEvent evt) {
+        Lookup.Result<ContextMonitorDelegate> r = (Lookup.Result<ContextMonitorDelegate>) evt.getSource();
+        Collection<? extends ContextMonitorDelegate> entries = r.allInstances();
+
+        if(CollectionUtils.isNotEmpty(entries)) {
+            lastActiveMonitor = entries.iterator().next();
+        }
+    }
+
     public class ContextMonitorHandler implements IOEntryListener {
 
         private ContextMonitorDelegate delegate;
@@ -311,7 +380,7 @@ public final class RequestTreeTopComponent extends TopComponent {
             node = new DefaultMutableTreeNode(parent);
             node.setAllowsChildren(true);
             root.add(node);
-
+            
             SwingUtilities.invokeLater(new Runnable() {
                 @Override
                 public void run() {
@@ -351,20 +420,19 @@ public final class RequestTreeTopComponent extends TopComponent {
             final Entry entry = evt.getEntry().getEntry();
 
             if(RequestEntry.class.isInstance(entry)) {
-                final Child childObj = new Child(delegate, (RequestEntry) entry);
-                final DefaultMutableTreeNode child = new DefaultMutableTreeNode(childObj);
+                final Child child = new Child(delegate, (RequestEntry) entry);
+                final DefaultMutableTreeNode childNode = new DefaultMutableTreeNode(child);
+                childNode.setAllowsChildren(false);
 
-                childObj.setNode(child);
-
-                child.setAllowsChildren(false);
-                node.add(child);
+                child.setNode(childNode);
+                node.add(childNode);
 
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        childObj.start();
+                        child.start();
 
-                        childMap.put(entry.getBaseRequestId(), childObj);
+                        childMap.put(entry.getBaseRequestId(), child);
 
                         synchronized (this) {
                             if(!closed) {
@@ -380,7 +448,7 @@ public final class RequestTreeTopComponent extends TopComponent {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        Child child = childMap.remove(entry.getBaseRequestId());
+                        Child child = childMap.get(entry.getBaseRequestId());
 
                         if(child != null) {
                             child.stop();
@@ -420,13 +488,17 @@ public final class RequestTreeTopComponent extends TopComponent {
                         root.remove(node);
                         model.nodeStructureChanged(root);
                         closed = true;
+                        
+                        synchronized(delegateHandlers) {
+                            delegateHandlers.remove(delegate);
+                        }
                     }
                 }
             });
         }
     }
 
-    private class Parent {
+    public class Parent {
         private ContextMonitorDelegate delegate;
 
         private boolean alive;
@@ -450,7 +522,7 @@ public final class RequestTreeTopComponent extends TopComponent {
         }
     }
 
-    private class Child {
+    public class Child {
         private ContextMonitorDelegate delegate;
 
         private boolean done;
@@ -512,7 +584,7 @@ public final class RequestTreeTopComponent extends TopComponent {
         }
     }
 
-    private class TreeCellRenderer extends DefaultTreeCellRenderer {
+    public class TreeCellRenderer extends DefaultTreeCellRenderer {
         public static final String STOPPED_ICON_PATH = "ard/piraso/ui/base/icons/status-stopped.png";
 
         public static final String STARTED_ICON_PATH = "ard/piraso/ui/base/icons/status-active.png";

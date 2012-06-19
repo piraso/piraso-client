@@ -34,23 +34,24 @@
       <SubComponents>
         <Component class="javax.swing.JToolBar$Separator" name="jSeparator1">
         </Component>
-        <Component class="javax.swing.JToggleButton" name="btnLockUrl">
+        <Component class="javax.swing.JToggleButton" name="btnAutoScroll">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/ard/piraso/ui/base/icons/arrow-switch-270.png"/>
             </Property>
+            <Property name="selected" type="boolean" value="true"/>
             <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="ard/piraso/ui/base/Bundle.properties" key="ContextMonitorTopComponent.btnLockUrl.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="ard/piraso/ui/base/Bundle.properties" key="ContextMonitorTopComponent.btnAutoScroll.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-              <ResourceString bundle="ard/piraso/ui/base/Bundle.properties" key="ContextMonitorTopComponent.btnLockUrl.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
+              <ResourceString bundle="ard/piraso/ui/base/Bundle.properties" key="ContextMonitorTopComponent.btnAutoScroll.toolTipText" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
             </Property>
             <Property name="focusable" type="boolean" value="false"/>
             <Property name="horizontalTextPosition" type="int" value="0"/>
             <Property name="verticalTextPosition" type="int" value="3"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnLockUrlActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAutoScrollActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="cboUrl">

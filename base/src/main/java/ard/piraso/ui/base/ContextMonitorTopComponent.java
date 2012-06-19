@@ -111,6 +111,8 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
     private SingleClassInstanceContent<Entry> entryContent;
 
+    private SingleClassInstanceContent<ContextMonitorDelegate> thisContent;
+
     private final ContextMonitorTableCellRenderer CELL_RENDERER = new ContextMonitorTableCellRenderer();
 
     private boolean showElapseTime;
@@ -133,6 +135,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
         this.reader = reader;
         this.entryContent = new SingleClassInstanceContent<Entry>(content);
+        this.thisContent = new SingleClassInstanceContent<ContextMonitorDelegate>(content);
         this.actionProvider = new IOEntryReaderActionProvider(reader, content);
         this.tableModel = new IOEntryTableModel(reader);
         this.comboBoxModel = tableModel.getComboBoxModel();
@@ -164,11 +167,16 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
             }
         });
     }
+    
+    @Override
+    public RequestEntry getSelectedRequest() {
+        return (RequestEntry) comboBoxModel.getSelectedItem();
+    }
 
     @Override
     public void selectRequest(RequestEntry request) {
         requestVisible();
-        btnLockUrl.setSelected(true);
+        btnAutoScroll.setSelected(false);
         refreshUIStates();
         tableModel.setCurrentRequestId(request.getRequestId());
         JTableUtils.scrollTo(table, 0);
@@ -240,16 +248,21 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     }
 
     private void refreshUIStates() {
-        if(btnLockUrl.isSelected()) {
-            btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/arrow-switch-minus-270.png")));
-            btnLockUrl.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnLockUrl.toolTipText2"));
+        if(btnAutoScroll.isSelected()) {
+            btnAutoScroll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/arrow-switch-270.png")));
+            btnAutoScroll.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnAutoScroll.toolTipText"));            
         } else {
-            btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/arrow-switch-270.png")));
-            btnLockUrl.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnLockUrl.toolTipText"));
+            btnAutoScroll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/arrow-switch-minus-270.png")));
+            btnAutoScroll.setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnAutoScroll.unselected.toolTipText"));
         }
 
-        cboUrl.setEnabled(btnLockUrl.isSelected());
-        tableModel.setAllowScrolling(!btnLockUrl.isSelected());
+        cboUrl.setEnabled(!btnAutoScroll.isSelected());
+        tableModel.setAllowScrolling(btnAutoScroll.isSelected());
+    }
+
+    @Override
+    protected void componentActivated() {
+        thisContent.add(this);
     }
 
     @Override
@@ -284,7 +297,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
         toolbar = new javax.swing.JToolBar();
         jSeparator1 = new javax.swing.JToolBar.Separator();
-        btnLockUrl = new javax.swing.JToggleButton();
+        btnAutoScroll = new javax.swing.JToggleButton();
         cboUrl = new javax.swing.JComboBox();
         tableScrollPane = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
@@ -296,18 +309,19 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         toolbar.setRollover(true);
         toolbar.add(jSeparator1);
 
-        btnLockUrl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/arrow-switch-270.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnLockUrl, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnLockUrl.text")); // NOI18N
-        btnLockUrl.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnLockUrl.toolTipText")); // NOI18N
-        btnLockUrl.setFocusable(false);
-        btnLockUrl.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnLockUrl.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnLockUrl.addActionListener(new java.awt.event.ActionListener() {
+        btnAutoScroll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/arrow-switch-270.png"))); // NOI18N
+        btnAutoScroll.setSelected(true);
+        org.openide.awt.Mnemonics.setLocalizedText(btnAutoScroll, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnAutoScroll.text")); // NOI18N
+        btnAutoScroll.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnAutoScroll.toolTipText")); // NOI18N
+        btnAutoScroll.setFocusable(false);
+        btnAutoScroll.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAutoScroll.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnAutoScroll.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLockUrlActionPerformed(evt);
+                btnAutoScrollActionPerformed(evt);
             }
         });
-        toolbar.add(btnLockUrl);
+        toolbar.add(btnAutoScroll);
 
         cboUrl.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
         cboUrl.setModel(comboBoxModel);
@@ -329,12 +343,12 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         add(tableScrollPane, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnLockUrlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLockUrlActionPerformed
+    private void btnAutoScrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutoScrollActionPerformed
         refreshUIStates();
-    }//GEN-LAST:event_btnLockUrlActionPerformed
+    }//GEN-LAST:event_btnAutoScrollActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    protected javax.swing.JToggleButton btnLockUrl;
+    protected javax.swing.JToggleButton btnAutoScroll;
     protected javax.swing.JComboBox cboUrl;
     protected IOEntryComboBoxModel comboBoxModel;
     protected javax.swing.JToolBar.Separator jSeparator1;
@@ -343,4 +357,5 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     protected javax.swing.JScrollPane tableScrollPane;
     protected javax.swing.JToolBar toolbar;
     // End of variables declaration//GEN-END:variables
+
 }
