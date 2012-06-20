@@ -162,8 +162,33 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         cboUrl.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                RequestEntry entry = (RequestEntry) comboBoxModel.getSelectedItem();
-                tableModel.setCurrentRequestId(entry.getRequestId());
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        RequestEntry selectedEntry = (RequestEntry) comboBoxModel.getSelectedItem();
+                        tableModel.setCurrentRequestId(selectedEntry.getRequestId());
+
+                        if(tableModel.getRowCount() > 0) {
+                            Entry firstEntry = tableModel.getEntryAt(0).getEntry();
+                            if(selectedEntry.getBaseRequestId().equals(firstEntry.getBaseRequestId())) {
+                                JTableUtils.scrollTo(table, 0);
+                                table.getSelectionModel().setSelectionInterval(0, 0);
+                            } else {
+                                comboBoxModel.setSelectedItem(selectedEntry);
+
+                                for(int i = 0; i < tableModel.getRowCount(); i++) {
+                                    Entry entry = tableModel.getEntryAt(i).getEntry();
+
+                                    if(entry.getBaseRequestId().equals(selectedEntry.getBaseRequestId())) {
+                                        table.getSelectionModel().setSelectionInterval(i, i);
+                                        JTableUtils.scrollTo(table, i);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
             }
         });
     }
@@ -179,7 +204,27 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         btnAutoScroll.setSelected(false);
         refreshUIStates();
         tableModel.setCurrentRequestId(request.getRequestId());
-        JTableUtils.scrollTo(table, 0);
+        
+        RequestEntry selectedRequest = (RequestEntry) comboBoxModel.getSelectedItem();
+        if(request.getBaseRequestId().equals(selectedRequest.getBaseRequestId())) {
+            JTableUtils.scrollTo(table, 0);
+
+            if(table.getRowCount() > 0) {
+                table.getSelectionModel().setSelectionInterval(0, 0);
+            }
+        } else {
+            comboBoxModel.setSelectedItem(request);
+
+            for(int i = 0; i < tableModel.getRowCount(); i++) {
+                Entry entry = tableModel.getEntryAt(i).getEntry();
+                
+                if(entry.getBaseRequestId().equals(request.getBaseRequestId())) {
+                    table.getSelectionModel().setSelectionInterval(i, i);
+                    JTableUtils.scrollTo(table, i);
+                    break;
+                }
+            }
+        }
     }
 
     private void initColumns() {
