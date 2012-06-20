@@ -28,16 +28,16 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@ActionID(category = "Font", id = "ard.piraso.ui.base.action.FontAction")
+@ActionID(category = "View", id = "ard.piraso.ui.base.action.FontAction")
 @ActionRegistration(displayName = "#CTL_FontAction")
 @ActionReferences({
-    @ActionReference(path = "Menu/View", position = 400, separatorAfter = 475)
+    @ActionReference(path = "Menu/View", position = 400)
 })
 @Messages("CTL_FontAction=Font")
 public final class FontAction extends AbstractAction implements Presenter.Menu {
     
     public FontAction() {
-        putValue(Action.SHORT_DESCRIPTION, "New Context Monitor");
+        putValue(Action.SHORT_DESCRIPTION, "Font");
     }
 
     @Override

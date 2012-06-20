@@ -1,7 +1,10 @@
 package ard.piraso.ui.base.action;
 
+import ard.piraso.ui.api.GeneralSettingsModel;
+import ard.piraso.ui.api.WorkingSetSettings;
 import ard.piraso.ui.api.manager.ModelEvent;
 import ard.piraso.ui.api.manager.ModelOnChangeListener;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.ContextMonitorDispatcher;
 import ard.piraso.ui.base.NewContextMonitorDialog;
 import ard.piraso.ui.base.manager.ModelManagers;
@@ -49,6 +52,7 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
 
         ModelManagers.MONITORS.addModelOnChangeListener(new SyncMenuItemsHandler(menu));
         ModelManagers.PROFILES.addModelOnChangeListener(new SyncMenuItemsHandler(menu));
+        SingleModelManagers.GENERAL_SETTINGS.addModelOnChangeListener(new SyncMenuItemsHandler(menu));
 
         return menu;
     }
@@ -60,6 +64,7 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
 
         ModelManagers.MONITORS.addModelOnChangeListener(new SyncMenuItemsHandler(popup));
         ModelManagers.PROFILES.addModelOnChangeListener(new SyncMenuItemsHandler(popup));
+        SingleModelManagers.GENERAL_SETTINGS.addModelOnChangeListener(new SyncMenuItemsHandler(popup));
 
         JButton button = DropDownButtonFactory.createDropDownButton(ImageUtilities.loadImageIcon(LARGE_ICON_PATH, false), popup);
         Actions.connect(button, this);
@@ -69,13 +74,27 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
 
     private void addMenuItems(final JComponent menu) {
         List<String> profiles = ModelManagers.PROFILES.getNames();
+        GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
+        WorkingSetSettings workingSet = SingleModelManagers.WORKING_SET.get();
+
         int added = 0;
 
-        for(Iterator<String> itr = profiles.iterator(); itr.hasNext() && added <= MAX_MENU_ITEM_COUNT; added++) {
+        for(Iterator<String> itr = profiles.iterator(); itr.hasNext() && added <= MAX_MENU_ITEM_COUNT;) {
             String profileName = itr.next();
+
+            if(model.getWorkingSetName() != null) {
+                String regex = workingSet.getRegex(model.getWorkingSetName());
+
+                if(!profileName.matches(regex)) {
+                    continue;
+                }
+            }
+
+
             JMenuItem item = new JMenuItem(String.format("Profile: %s", profileName));
             item.addActionListener(new ProfileHandler(profileName));
             menu.add(item);
+            added++;
         }
 
         if(added > 0) {
@@ -83,11 +102,21 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
         }
 
         List<String> monitors = ModelManagers.MONITORS.getNames();
-        for(Iterator<String> itr = monitors.iterator(); itr.hasNext() && added <= MAX_MENU_ITEM_COUNT; added++) {
+        for(Iterator<String> itr = monitors.iterator(); itr.hasNext() && added <= MAX_MENU_ITEM_COUNT;) {
             String monitorName = itr.next();
+
+            if(model.getWorkingSetName() != null) {
+                String regex = workingSet.getRegex(model.getWorkingSetName());
+
+                if(!monitorName.matches(regex)) {
+                    continue;
+                }
+            }
+
             JMenuItem item = new JMenuItem(String.format("Monitor: %s", monitorName));
             item.addActionListener(new MonitorHandler(monitorName));
             menu.add(item);
+            added++;
         }
 
         if(added > 0) {

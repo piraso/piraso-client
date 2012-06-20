@@ -17,8 +17,18 @@ public class GeneralSettingsModel {
 
     private boolean showType = true;
 
+    private String workingSetName = null;
+
     public GeneralSettingsModel() {
         fontSize = FontProviderManager.INSTANCE.getDefaultFont().getSize();
+    }
+
+    public String getWorkingSetName() {
+        return workingSetName;
+    }
+
+    public void setWorkingSetName(String workingSetName) {
+        this.workingSetName = workingSetName;
     }
 
     public boolean isShowMessageGroup() {

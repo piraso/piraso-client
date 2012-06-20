@@ -15,7 +15,7 @@
  */
 package ard.piraso.ui.base.action;
 
-import ard.piraso.ui.api.StackTraceFilterDialog;
+import ard.piraso.ui.api.WorkingSetDialog;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -24,16 +24,16 @@ import org.openide.awt.ActionRegistration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@ActionID(category="Tools", id="ard.piraso.ui.base.action.StackTraceFilterShowAction")
-@ActionRegistration(displayName="Manage Stack Trace Filter")
+@ActionID(category="Tools", id="ard.piraso.ui.base.action.WorkingSetShowAction")
+@ActionRegistration(displayName="Manage Working Set")
 @ActionReferences({
-    @ActionReference(path = "Menu/Tools", position = 610)
+    @ActionReference(path = "Menu/Tools", position = 615)
 })
-public final class StackTraceFilterShowAction1 implements ActionListener {
+public final class WorkingSetShowAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        StackTraceFilterDialog dialog = new StackTraceFilterDialog();
+        WorkingSetDialog dialog = new WorkingSetDialog();
         dialog.setVisible(true);
     }
 }

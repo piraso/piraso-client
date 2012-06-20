@@ -15,7 +15,10 @@
  */
 package ard.piraso.ui.base;
 
+import ard.piraso.ui.api.GeneralSettingsModel;
+import ard.piraso.ui.api.WorkingSetSettings;
 import ard.piraso.ui.api.extension.AbstractDialog;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.manager.ModelManagers;
 
 import javax.swing.*;
@@ -43,14 +46,33 @@ public final class NewContextMonitorDialog extends AbstractDialog {
     }
     
     private void refresh() {
+        GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
+        WorkingSetSettings workingSet = SingleModelManagers.WORKING_SET.get();
+
         cboModel.removeAllElements();
         
         for(String name : ModelManagers.PROFILES.getNames()) {
+            if(chkWorkingSet.isSelected() && model.getWorkingSetName() != null) {
+                String regex = workingSet.getRegex(model.getWorkingSetName());
+
+                if(!name.matches(regex)) {
+                    continue;
+                }
+            }
+
             cboModel.addElement(new ComboItem(Type.PROFILE, name));
         }
         
         if(!chkHide.isSelected()) {
             for(String name : ModelManagers.MONITORS.getNames()) {
+                if(chkWorkingSet.isSelected() && model.getWorkingSetName() != null) {
+                    String regex = workingSet.getRegex(model.getWorkingSetName());
+
+                    if(!name.matches(regex)) {
+                        continue;
+                    }
+                }
+
                 cboModel.addElement(new ComboItem(Type.MONITOR, name));
             }            
         }
@@ -82,6 +104,7 @@ public final class NewContextMonitorDialog extends AbstractDialog {
         btnSave = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         lblDesc = new javax.swing.JLabel();
+        chkWorkingSet = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -113,6 +136,14 @@ public final class NewContextMonitorDialog extends AbstractDialog {
 
         lblDesc.setText(org.openide.util.NbBundle.getMessage(NewContextMonitorDialog.class, "NewContextMonitorDialog.lblDesc.text")); // NOI18N
 
+        chkWorkingSet.setSelected(true);
+        chkWorkingSet.setText(org.openide.util.NbBundle.getMessage(NewContextMonitorDialog.class, "NewContextMonitorDialog.chkWorkingSet.text")); // NOI18N
+        chkWorkingSet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkWorkingSetActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -127,11 +158,13 @@ public final class NewContextMonitorDialog extends AbstractDialog {
                         .add(jLabel1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(cboMonitor, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .add(layout.createSequentialGroup()
                                 .add(6, 6, 6)
                                 .add(chkHide)
-                                .add(0, 187, Short.MAX_VALUE))
-                            .add(cboMonitor, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(chkWorkingSet)
+                                .add(0, 29, Short.MAX_VALUE)))))
                 .addContainerGap())
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -148,8 +181,10 @@ public final class NewContextMonitorDialog extends AbstractDialog {
                     .add(jLabel1)
                     .add(cboMonitor, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(chkHide)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 31, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(chkHide)
+                    .add(chkWorkingSet))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .add(lblDesc)
                 .add(18, 18, 18)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
@@ -180,11 +215,16 @@ public final class NewContextMonitorDialog extends AbstractDialog {
         refresh();
     }//GEN-LAST:event_chkHideActionPerformed
 
+    private void chkWorkingSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkWorkingSetActionPerformed
+        refresh();
+    }//GEN-LAST:event_chkWorkingSetActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cboMonitor;
     private javax.swing.JCheckBox chkHide;
+    private javax.swing.JCheckBox chkWorkingSet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDesc;
     // End of variables declaration//GEN-END:variables

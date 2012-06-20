@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.0//EN" "http://www.netbeans.org/dtds/filesystem-1_0.dtd">
+
 <!--
   ~ Copyright (c) 2011. Piraso Alvin R. de Leon. All Rights Reserved.
   ~
@@ -16,25 +18,26 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<!DOCTYPE filesystem PUBLIC "-//NetBeans//DTD Filesystem 1.0//EN" "http://www.netbeans.org/dtds/filesystem-1_0.dtd">
+
 <filesystem>
   <file name="GeneralSettings"></file>
   <file name="SVNSyncSettings"></file>
-    <folder name="Menu">
-        <folder name="View">
-            <file name="Separator1.instance_hidden"/>
-            <file name="Separator2.instance_hidden"/>
-            <file name="Separator3.instance_hidden"/>
-            <file name="ToggleFullScreenAction.shadow_hidden"/>
-            <file name="org-netbeans-core-actions-HTMLViewAction.shadow_hidden"/>
-            <file name="org-netbeans-core-multiview-EditorsAction.instance_hidden"/>
-            <file name="org-netbeans-core-windows-actions-ToolbarsListAction.instance_hidden"/>
-            <file name="org-netbeans-modules-editor-NbCodeFoldingAction.instance_hidden"/>
-            <file name="org-netbeans-modules-project-ui-SyncEditorWithViewsAction.shadow_hidden"/>
-            <file name="org-netbeans-modules-versioning-ShowTextAnnotationsAction.shadow_hidden"/>
-            <file name="org-netbeans-modules-versioning-diff-ShowDiffSidebarAction.shadow_hidden"/>
-            <file name="toggle-line-numbers.shadow_hidden"/>
-            <file name="toggle-non-printable-characters.shadow_hidden"/>
-        </folder>
+  <file name="WorkingSetSettings"></file>
+  <folder name="Menu">
+    <folder name="View">
+      <file name="Separator1.instance_hidden"/>
+      <file name="Separator2.instance_hidden"/>
+      <file name="Separator3.instance_hidden"/>
+      <file name="ToggleFullScreenAction.shadow_hidden"/>
+      <file name="org-netbeans-core-actions-HTMLViewAction.shadow_hidden"/>
+      <file name="org-netbeans-core-multiview-EditorsAction.instance_hidden"/>
+      <file name="org-netbeans-core-windows-actions-ToolbarsListAction.instance_hidden"/>
+      <file name="org-netbeans-modules-editor-NbCodeFoldingAction.instance_hidden"/>
+      <file name="org-netbeans-modules-project-ui-SyncEditorWithViewsAction.shadow_hidden"/>
+      <file name="org-netbeans-modules-versioning-ShowTextAnnotationsAction.shadow_hidden"/>
+      <file name="org-netbeans-modules-versioning-diff-ShowDiffSidebarAction.shadow_hidden"/>
+      <file name="toggle-line-numbers.shadow_hidden"/>
+      <file name="toggle-non-printable-characters.shadow_hidden"/>
     </folder>
+  </folder>
 </filesystem>
