@@ -45,6 +45,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableColumn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 /**
  * Top component which displays something.
@@ -148,6 +150,23 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         initTable();
         initComboBox();
         refreshUIStates();
+        initKeyboardActions();
+    }
+
+    private void initKeyboardActions() {
+        Action findAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnSearch.setSelected(!btnSearch.isSelected());
+                btnSearchActionPerformed(e);
+            }
+        };
+
+        KeyStroke stroke = KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.META_MASK);
+        registerKeyboardAction(findAction, stroke, JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+
+        stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
+        txtSearch.registerKeyboardAction(findAction, stroke, JComponent.WHEN_FOCUSED);
     }
 
     public void iniTreeRequest() {
@@ -341,17 +360,59 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     private void initComponents() {
 
         toolbar = new javax.swing.JToolBar();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        btnSearch = new javax.swing.JToggleButton();
+        btnClear = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         btnAutoScroll = new javax.swing.JToggleButton();
         cboUrl = new javax.swing.JComboBox();
         tableScrollPane = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
+        searchBar = new javax.swing.JToolBar();
+        jLabel1 = new javax.swing.JLabel();
+        txtSearch = new javax.swing.JTextField();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
+        btnPrevious = new javax.swing.JToggleButton();
+        btnNext = new javax.swing.JToggleButton();
+        jSeparator5 = new javax.swing.JToolBar.Separator();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jCheckBox2 = new javax.swing.JCheckBox();
+        jCheckBox3 = new javax.swing.JCheckBox();
+        btnTarget = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
         toolbar.setBackground(new java.awt.Color(226, 226, 226));
         toolbar.setFloatable(false);
         toolbar.setRollover(true);
+        toolbar.add(jSeparator2);
+
+        btnSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/find.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnSearch, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnSearch.text")); // NOI18N
+        btnSearch.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnSearch.toolTipText")); // NOI18N
+        btnSearch.setFocusable(false);
+        btnSearch.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnSearch.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+        toolbar.add(btnSearch);
+
+        btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/edit_clear.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnClear, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnClear.text")); // NOI18N
+        btnClear.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnClear.toolTipText")); // NOI18N
+        btnClear.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
+        btnClear.setFocusable(false);
+        btnClear.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnClear.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
+        toolbar.add(btnClear);
         toolbar.add(jSeparator1);
 
         btnAutoScroll.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/arrow-switch-270.png"))); // NOI18N
@@ -386,21 +447,137 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         tableScrollPane.setViewportView(table);
 
         add(tableScrollPane, java.awt.BorderLayout.CENTER);
+
+        searchBar.setBackground(new java.awt.Color(226, 226, 226));
+        searchBar.setFloatable(false);
+        searchBar.setRollover(true);
+        searchBar.setVisible(false);
+
+        org.openide.awt.Mnemonics.setLocalizedText(jLabel1, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.jLabel1.text")); // NOI18N
+        searchBar.add(jLabel1);
+
+        txtSearch.setText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.txtSearch.text")); // NOI18N
+        txtSearch.setMaximumSize(new java.awt.Dimension(200, 2147483647));
+        txtSearch.setPreferredSize(new java.awt.Dimension(200, 28));
+        searchBar.add(txtSearch);
+        searchBar.add(jSeparator3);
+
+        btnPrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/previous.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnPrevious, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnPrevious.text")); // NOI18N
+        btnPrevious.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnPrevious.toolTipText")); // NOI18N
+        btnPrevious.setFocusable(false);
+        btnPrevious.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPrevious.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPrevious.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPreviousActionPerformed(evt);
+            }
+        });
+        searchBar.add(btnPrevious);
+
+        btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/next.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnNext, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnNext.text")); // NOI18N
+        btnNext.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnNext.toolTipText")); // NOI18N
+        btnNext.setFocusable(false);
+        btnNext.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnNext.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNext.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNextActionPerformed(evt);
+            }
+        });
+        searchBar.add(btnNext);
+        searchBar.add(jSeparator5);
+
+        jCheckBox1.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.jCheckBox1.text")); // NOI18N
+        jCheckBox1.setContentAreaFilled(false);
+        jCheckBox1.setFocusable(false);
+        jCheckBox1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        searchBar.add(jCheckBox1);
+
+        jCheckBox2.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.jCheckBox2.text")); // NOI18N
+        jCheckBox2.setContentAreaFilled(false);
+        jCheckBox2.setFocusable(false);
+        jCheckBox2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        searchBar.add(jCheckBox2);
+
+        jCheckBox3.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox3, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.jCheckBox3.text")); // NOI18N
+        jCheckBox3.setContentAreaFilled(false);
+        jCheckBox3.setFocusable(false);
+        jCheckBox3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        searchBar.add(jCheckBox3);
+
+        btnTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/close.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnTarget, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnTarget.text")); // NOI18N
+        btnTarget.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnTarget.toolTipText")); // NOI18N
+        btnTarget.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 2, 7, 2));
+        btnTarget.setFocusable(false);
+        btnTarget.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        btnTarget.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnTarget.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnTarget.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTargetActionPerformed(evt);
+            }
+        });
+        searchBar.add(Box.createHorizontalGlue());
+        searchBar.add(btnTarget);
+
+        add(searchBar, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAutoScrollActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAutoScrollActionPerformed
         refreshUIStates();
     }//GEN-LAST:event_btnAutoScrollActionPerformed
 
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        searchBar.setVisible(btnSearch.isSelected());
+        txtSearch.requestFocus();
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPreviousActionPerformed
+
+    private void btnTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTargetActionPerformed
+        searchBar.setVisible(false);
+        btnSearch.setSelected(false);
+    }//GEN-LAST:event_btnTargetActionPerformed
+
+    private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnNextActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JToggleButton btnAutoScroll;
+    protected javax.swing.JButton btnClear;
+    protected javax.swing.JToggleButton btnNext;
+    protected javax.swing.JToggleButton btnPrevious;
+    protected javax.swing.JToggleButton btnSearch;
+    protected javax.swing.JButton btnTarget;
     protected javax.swing.JComboBox cboUrl;
     protected IOEntryComboBoxModel comboBoxModel;
+    protected javax.swing.JCheckBox jCheckBox1;
+    protected javax.swing.JCheckBox jCheckBox2;
+    protected javax.swing.JCheckBox jCheckBox3;
+    protected javax.swing.JLabel jLabel1;
     protected javax.swing.JToolBar.Separator jSeparator1;
+    protected javax.swing.JToolBar.Separator jSeparator2;
+    protected javax.swing.JToolBar.Separator jSeparator3;
+    protected javax.swing.JToolBar.Separator jSeparator5;
+    protected javax.swing.JToolBar searchBar;
     protected javax.swing.JTable table;
     protected IOEntryTableModel tableModel;
     protected javax.swing.JScrollPane tableScrollPane;
     protected javax.swing.JToolBar toolbar;
+    protected javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
 }
