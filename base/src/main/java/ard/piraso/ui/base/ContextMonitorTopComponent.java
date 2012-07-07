@@ -28,11 +28,14 @@ import ard.piraso.ui.api.util.JTableUtils;
 import ard.piraso.ui.api.util.SingleClassInstanceContent;
 import ard.piraso.ui.api.util.WindowUtils;
 import ard.piraso.ui.base.manager.EntryViewProviderManager;
+import ard.piraso.ui.base.manager.MessageProviderManager;
+import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import ard.piraso.ui.base.model.IOEntryComboBoxModel;
 import ard.piraso.ui.base.model.IOEntryTableModel;
 import ard.piraso.ui.io.IOEntryEvent;
 import ard.piraso.ui.io.IOEntryListener;
 import ard.piraso.ui.io.IOEntryReader;
+import org.apache.commons.lang.StringUtils;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
 import org.openide.util.lookup.AbstractLookup;
@@ -47,6 +50,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * Top component which displays something.
@@ -127,6 +133,8 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
     private IOEntryReader reader;
 
+    private Searcher searcher;
+
     public ContextMonitorTopComponent(IOEntryReader reader, String name) {
         setName(name);
         setToolTipText(NbBundle.getMessage(ContextMonitorTopComponent.class, "HINT_ContextMonitorTopComponent"));
@@ -139,6 +147,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         this.entryContent = new SingleClassInstanceContent<Entry>(content);
         this.thisContent = new SingleClassInstanceContent<ContextMonitorDelegate>(content);
         this.actionProvider = new IOEntryReaderActionProvider(reader, content);
+        this.searcher = new Searcher();
 
         initReader();
         iniTreeRequest();
@@ -189,8 +198,16 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         Action findAction = new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                searcher.reset();
                 btnSearch.setSelected(!btnSearch.isSelected());
                 btnSearchActionPerformed(e);
+            }
+        };
+
+        Action nextAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                btnNextActionPerformed(e);
             }
         };
 
@@ -199,6 +216,9 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
         stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0);
         txtSearch.registerKeyboardAction(findAction, stroke, JComponent.WHEN_FOCUSED);
+
+        stroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
+        txtSearch.registerKeyboardAction(nextAction, stroke, JComponent.WHEN_FOCUSED);
     }
 
     public void iniTreeRequest() {
@@ -219,18 +239,18 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
                         RequestEntry selectedEntry = (RequestEntry) comboBoxModel.getSelectedItem();
                         tableModel.setCurrentRequestId(selectedEntry.getRequestId());
 
-                        if(tableModel.getRowCount() > 0) {
+                        if (tableModel.getRowCount() > 0) {
                             Entry firstEntry = tableModel.getEntryAt(0).getEntry();
-                            if(selectedEntry.getBaseRequestId().equals(firstEntry.getBaseRequestId())) {
+                            if (selectedEntry.getBaseRequestId().equals(firstEntry.getBaseRequestId())) {
                                 JTableUtils.scrollTo(table, 0);
                                 table.getSelectionModel().setSelectionInterval(0, 0);
                             } else {
                                 comboBoxModel.setSelectedItem(selectedEntry);
 
-                                for(int i = 0; i < tableModel.getRowCount(); i++) {
+                                for (int i = 0; i < tableModel.getRowCount(); i++) {
                                     Entry entry = tableModel.getEntryAt(i).getEntry();
 
-                                    if(entry.getBaseRequestId().equals(selectedEntry.getBaseRequestId())) {
+                                    if (entry.getBaseRequestId().equals(selectedEntry.getBaseRequestId())) {
                                         table.getSelectionModel().setSelectionInterval(i, i);
                                         JTableUtils.scrollTo(table, i);
                                         break;
@@ -404,13 +424,13 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         jLabel1 = new javax.swing.JLabel();
         txtSearch = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JToolBar.Separator();
-        btnPrevious = new javax.swing.JToggleButton();
-        btnNext = new javax.swing.JToggleButton();
+        btnPrevious = new javax.swing.JButton();
+        btnNext = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JToolBar.Separator();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        btnTarget = new javax.swing.JButton();
+        chkMatchCase = new javax.swing.JCheckBox();
+        chkWholeWord = new javax.swing.JCheckBox();
+        chkRegex = new javax.swing.JCheckBox();
+        btnCloseSearchBar = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -497,6 +517,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         btnPrevious.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/previous.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(btnPrevious, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnPrevious.text")); // NOI18N
         btnPrevious.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnPrevious.toolTipText")); // NOI18N
+        btnPrevious.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         btnPrevious.setFocusable(false);
         btnPrevious.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnPrevious.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -510,6 +531,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         btnNext.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/next.png"))); // NOI18N
         org.openide.awt.Mnemonics.setLocalizedText(btnNext, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnNext.text")); // NOI18N
         btnNext.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnNext.toolTipText")); // NOI18N
+        btnNext.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 7, 7, 7));
         btnNext.setFocusable(false);
         btnNext.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNext.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -521,42 +543,42 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         searchBar.add(btnNext);
         searchBar.add(jSeparator5);
 
-        jCheckBox1.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox1, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.jCheckBox1.text")); // NOI18N
-        jCheckBox1.setContentAreaFilled(false);
-        jCheckBox1.setFocusable(false);
-        jCheckBox1.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        searchBar.add(jCheckBox1);
+        chkMatchCase.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(chkMatchCase, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.chkMatchCase.text")); // NOI18N
+        chkMatchCase.setContentAreaFilled(false);
+        chkMatchCase.setFocusable(false);
+        chkMatchCase.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        searchBar.add(chkMatchCase);
 
-        jCheckBox2.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox2, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.jCheckBox2.text")); // NOI18N
-        jCheckBox2.setContentAreaFilled(false);
-        jCheckBox2.setFocusable(false);
-        jCheckBox2.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        searchBar.add(jCheckBox2);
+        chkWholeWord.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(chkWholeWord, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.chkWholeWord.text")); // NOI18N
+        chkWholeWord.setContentAreaFilled(false);
+        chkWholeWord.setFocusable(false);
+        chkWholeWord.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        searchBar.add(chkWholeWord);
 
-        jCheckBox3.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(jCheckBox3, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.jCheckBox3.text")); // NOI18N
-        jCheckBox3.setContentAreaFilled(false);
-        jCheckBox3.setFocusable(false);
-        jCheckBox3.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        searchBar.add(jCheckBox3);
+        chkRegex.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(chkRegex, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.chkRegex.text")); // NOI18N
+        chkRegex.setContentAreaFilled(false);
+        chkRegex.setFocusable(false);
+        chkRegex.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        searchBar.add(chkRegex);
 
-        btnTarget.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/close.png"))); // NOI18N
-        org.openide.awt.Mnemonics.setLocalizedText(btnTarget, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnTarget.text")); // NOI18N
-        btnTarget.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnTarget.toolTipText")); // NOI18N
-        btnTarget.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 2, 7, 2));
-        btnTarget.setFocusable(false);
-        btnTarget.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        btnTarget.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
-        btnTarget.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btnTarget.addActionListener(new java.awt.event.ActionListener() {
+        btnCloseSearchBar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/base/icons/close.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnCloseSearchBar, org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnCloseSearchBar.text")); // NOI18N
+        btnCloseSearchBar.setToolTipText(org.openide.util.NbBundle.getMessage(ContextMonitorTopComponent.class, "ContextMonitorTopComponent.btnCloseSearchBar.toolTipText")); // NOI18N
+        btnCloseSearchBar.setBorder(javax.swing.BorderFactory.createEmptyBorder(7, 2, 7, 2));
+        btnCloseSearchBar.setFocusable(false);
+        btnCloseSearchBar.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        btnCloseSearchBar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        btnCloseSearchBar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnCloseSearchBar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTargetActionPerformed(evt);
+                btnCloseSearchBarActionPerformed(evt);
             }
         });
         searchBar.add(Box.createHorizontalGlue());
-        searchBar.add(btnTarget);
+        searchBar.add(btnCloseSearchBar);
 
         add(searchBar, java.awt.BorderLayout.PAGE_END);
     }// </editor-fold>//GEN-END:initComponents
@@ -581,31 +603,41 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         txtSearch.requestFocus();
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPreviousActionPerformed
-
-    private void btnTargetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTargetActionPerformed
+    private void btnCloseSearchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseSearchBarActionPerformed
         searchBar.setVisible(false);
         btnSearch.setSelected(false);
-    }//GEN-LAST:event_btnTargetActionPerformed
+    }//GEN-LAST:event_btnCloseSearchBarActionPerformed
+
+    private void btnPreviousActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPreviousActionPerformed
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                searcher.previous();
+            }
+        });
+    }//GEN-LAST:event_btnPreviousActionPerformed
 
     private void btnNextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNextActionPerformed
-        // TODO add your handling code here:
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                searcher.next();
+            }
+        });
     }//GEN-LAST:event_btnNextActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.JToggleButton btnAutoScroll;
     protected javax.swing.JButton btnClear;
-    protected javax.swing.JToggleButton btnNext;
-    protected javax.swing.JToggleButton btnPrevious;
+    protected javax.swing.JButton btnCloseSearchBar;
+    protected javax.swing.JButton btnNext;
+    protected javax.swing.JButton btnPrevious;
     protected javax.swing.JToggleButton btnSearch;
-    protected javax.swing.JButton btnTarget;
     protected javax.swing.JComboBox cboUrl;
     protected IOEntryComboBoxModel comboBoxModel;
-    protected javax.swing.JCheckBox jCheckBox1;
-    protected javax.swing.JCheckBox jCheckBox2;
-    protected javax.swing.JCheckBox jCheckBox3;
+    protected javax.swing.JCheckBox chkMatchCase;
+    protected javax.swing.JCheckBox chkRegex;
+    protected javax.swing.JCheckBox chkWholeWord;
     protected javax.swing.JLabel jLabel1;
     protected javax.swing.JToolBar.Separator jSeparator1;
     protected javax.swing.JToolBar.Separator jSeparator2;
@@ -619,4 +651,115 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     protected javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 
+    public class Searcher {
+        int index = 0;
+
+        public void reset() {
+            index = table.getSelectedRow();
+
+            if(index < 0 || table.getSelectionModel().isSelectionEmpty() || 
+                    index >= tableModel.getRowCount()) {
+                index = 0;
+            }
+        }
+
+        protected Pattern createPattern(String pattern) {
+            if(chkMatchCase.isSelected()) {
+                return Pattern.compile(pattern);
+            } else {
+                return Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
+            }
+        }
+
+        public boolean isMatch(Entry entry) {
+            String group = MessageProviderManager.INSTANCE.getGroupMessage(entry);
+            String message = MessageProviderManager.INSTANCE.getMessage(entry);
+            String shortName = PreferenceProviderManager.INSTANCE.getShortName(entry);
+
+            String text = txtSearch.getText();
+
+            Pattern pattern = null;
+
+            if(chkWholeWord.isSelected()) {
+                try {
+                    text = "\\b"  + text +  "\\b";
+                    pattern = createPattern(text);
+                } catch (PatternSyntaxException e) {
+                    pattern = null;
+                }
+            }
+
+            if(chkRegex.isSelected()) {
+                try {
+                    pattern = createPattern(text);
+                } catch(PatternSyntaxException e) {
+                    pattern = null;
+                }
+            }
+
+            if(pattern == null) {
+                if(chkMatchCase.isSelected()) {
+                    return StringUtils.contains(group, text) || StringUtils.contains(message, text) || StringUtils.contains(shortName, text);
+                } else {
+                    return StringUtils.containsIgnoreCase(group, text) || StringUtils.containsIgnoreCase(message, text) || StringUtils.containsIgnoreCase(shortName, text);
+                }
+            }
+
+            String searchString = String.format("%s %s %s", group, message, shortName);
+            Matcher matcher = pattern.matcher(searchString);
+            return matcher.find();
+        }
+
+        private boolean select(int i) {
+            Entry entry = tableModel.getEntryAt(i).getEntry();
+
+            if(isMatch(entry)) {
+                table.getSelectionModel().setSelectionInterval(i, i);
+                JTableUtils.scrollTo(table, i);
+                index = i;
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public int computePreviousIndex(int i) {
+            return i - 1 >= 0 ? i - 1 : 0;
+        }
+
+        public int computeNextIndex(int i) {
+            return i + 1 < tableModel.getRowCount() ? i + 1 : 0;
+        }
+
+        public void previous() {
+            int startIndex = computePreviousIndex(index);
+            for(int i = startIndex; i >= 0; i--) {
+                if(select(i)) {
+                    return;
+                }
+            }
+
+            for(int i = tableModel.getRowCount() - 1; i >= startIndex; i--) {
+                if(select(i)) {
+                    return;
+                }
+            }
+        }
+
+        public void next() {
+            int startIndex = computeNextIndex(index);
+            for(int i = startIndex; i < tableModel.getRowCount(); i++) {
+                if(select(i)) {
+                    return;
+                }
+            }
+
+            for(int i = 0; i < startIndex; i++) {
+                if(select(i)) {
+                    return;
+                }
+            }
+        }
+    }
 }
