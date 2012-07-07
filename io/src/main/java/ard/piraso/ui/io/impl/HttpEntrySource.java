@@ -25,6 +25,9 @@ import ard.piraso.ui.io.IOEntrySource;
 import org.apache.http.client.HttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParamBean;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -80,13 +83,16 @@ public class HttpEntrySource implements IOEntrySource {
         manager.setDefaultMaxPerRoute(2);
         manager.setMaxTotal(2);
 
-        HttpClient client = new DefaultHttpClient(manager);
+        HttpParams params = new BasicHttpParams();
 
         // set timeout
-        client.getParams().setParameter("http.socket.timeout", 1000 * 60 * 120);
-        client.getParams().setParameter("http.connection.timeout", 3000);
+        HttpConnectionParamBean connParamBean = new HttpConnectionParamBean(params);
+        connParamBean.setConnectionTimeout(3000);
+        connParamBean.setSoTimeout(1000 * 60 * 120);
 
+        HttpClient client = new DefaultHttpClient(manager, params);
         HttpContext context = new BasicHttpContext();
+
         this.reader = new HttpPirasoEntryReader(client, context);
 
         reader.setUri(uri);
@@ -107,7 +113,7 @@ public class HttpEntrySource implements IOEntrySource {
             initReader();
         }
 
-        return reader.testConnection();
+        return reader != null && reader.testConnection();
     }
 
     @Override
