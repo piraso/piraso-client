@@ -479,6 +479,19 @@ public final class RequestTreeTopComponent extends TopComponent implements Looku
             });
         }
 
+        public void reset() {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    synchronized (this) {
+                        refreshChildrenColorToRemove(node);
+                        node.removeAllChildren();
+                        model.nodeStructureChanged(node);
+                    }
+                }
+            });
+        }
+
         public void close() {
             SwingUtilities.invokeLater(new Runnable() {
                 @Override

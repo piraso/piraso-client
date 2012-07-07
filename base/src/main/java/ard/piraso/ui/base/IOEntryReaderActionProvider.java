@@ -30,15 +30,15 @@ import org.openide.util.lookup.InstanceContent;
  *
  * @author adeleon
  */
-public class IOEntryReaderActionProvider {
+public class IOEntryReaderActionProvider implements IOEntryLifecycleListener {
     
     private IOEntryReader reader;
     
     private InstanceContent content;
     
-    private StartCookie startCookie;
+    private IOEntryReaderStartCookie startCookie;
     
-    private StopCookie stopCookie;
+    private IOEntryReaderStopCookie stopCookie;
     
     public IOEntryReaderActionProvider(IOEntryReader reader, InstanceContent content) {
         this.reader = reader;
@@ -46,26 +46,20 @@ public class IOEntryReaderActionProvider {
         
         this.startCookie = new IOEntryReaderStartCookie(reader);
         this.stopCookie = new IOEntryReaderStopCookie(reader);
-        
-        initEvents();
-    }
-    
-    private void initEvents() {
-        reader.addLiveCycleListener(new IOEntryLifecycleListener() {
-            @Override
-            public void started(IOEntryEvent evt) {
-                content.remove(startCookie);
-                content.add(stopCookie);
-            }
 
-            @Override
-            public void stopped(IOEntryEvent evt) {
-                content.add(startCookie);
-                content.remove(stopCookie);
-            }
-        });
-        
         content.add(startCookie);
+        setReader(reader);
+    }
+
+    public void setReader(IOEntryReader reader) {
+        if(this.reader != null) {
+            this.reader.removeLiveCycleListener(this);
+        }
+
+        this.reader = reader;
+        this.startCookie.setReader(reader);
+        this.stopCookie.setReader(reader);
+        this.reader.addLiveCycleListener(this);
     }
 
     public StartCookie getStartCookie() {
@@ -74,5 +68,17 @@ public class IOEntryReaderActionProvider {
 
     public StopCookie getStopCookie() {
         return stopCookie;
+    }
+
+    @Override
+    public void started(IOEntryEvent evt) {
+        content.remove(startCookie);
+        content.add(stopCookie);
+    }
+
+    @Override
+    public void stopped(IOEntryEvent evt) {
+        content.add(startCookie);
+        content.remove(stopCookie);
     }
 }

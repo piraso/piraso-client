@@ -139,18 +139,50 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         this.entryContent = new SingleClassInstanceContent<Entry>(content);
         this.thisContent = new SingleClassInstanceContent<ContextMonitorDelegate>(content);
         this.actionProvider = new IOEntryReaderActionProvider(reader, content);
-        this.tableModel = new IOEntryTableModel(reader);
-        this.comboBoxModel = tableModel.getComboBoxModel();
 
-        // added icon listeners
-        reader.addListener(ICON_CHANGER);
+        initReader();
         iniTreeRequest();
-        
         initComponents();
         initTable();
         initComboBox();
         refreshUIStates();
         initKeyboardActions();
+    }
+
+    public void reset() {
+        boolean ensureStarted = reader.isAlive();
+        if(ensureStarted) {
+            actionProvider.getStopCookie().stop();
+        }
+
+        if(treeHandler != null) {
+            treeHandler.reset();
+            reader.removeListener(treeHandler);
+        }
+
+        reader.removeListener(ICON_CHANGER);
+
+        this.reader = reader.createNew();
+        this.actionProvider.setReader(reader);
+        initReader();
+
+        reader.addListener(treeHandler);
+        table.setModel(tableModel);
+        cboUrl.setModel(comboBoxModel);
+
+        initTable();
+        refreshUIStates();
+
+        if(ensureStarted) {
+            actionProvider.getStartCookie().start();
+        }
+    }
+
+    public void initReader() {
+        this.tableModel = new IOEntryTableModel(reader);
+        this.comboBoxModel = tableModel.getComboBoxModel();
+
+        reader.addListener(ICON_CHANGER);
     }
 
     private void initKeyboardActions() {
@@ -534,7 +566,14 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
     }//GEN-LAST:event_btnAutoScrollActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                reset();
+                table.invalidate();
+                table.repaint();
+            }
+        });
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed

@@ -31,4 +31,8 @@ public class AbstractIOEntryReaderCookie implements Node.Cookie {
     public AbstractIOEntryReaderCookie(IOEntryReader reader) {
         this.reader = reader;
     }
+
+    public void setReader(IOEntryReader reader) {
+        this.reader = reader;
+    }
 }

@@ -70,6 +70,11 @@ public class FileEntrySource implements IOEntrySource {
     }
 
     @Override
+    public IOEntrySource createNew() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public String getName() {
         return name;
     }
@@ -121,6 +126,11 @@ public class FileEntrySource implements IOEntrySource {
     @Override
     public void addListener(EntryReadListener listener) {
         reader.addListener(listener);
+    }
+
+    @Override
+    public void removeListener(EntryReadListener listener) {
+        reader.removeListener(listener);
     }
 
     @Override

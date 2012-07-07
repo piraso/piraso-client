@@ -26,6 +26,8 @@ import ard.piraso.api.io.EntryReadListener;
  */
 public interface IOEntrySource {
 
+    public IOEntrySource createNew();
+
     public String getName();
     
     public void start();
@@ -41,5 +43,7 @@ public interface IOEntrySource {
     public void reset();
 
     public void addListener(EntryReadListener listener);
+
+    public void removeListener(EntryReadListener listener);
 
 }

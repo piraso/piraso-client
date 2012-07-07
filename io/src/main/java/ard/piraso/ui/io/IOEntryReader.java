@@ -49,6 +49,12 @@ public class IOEntryReader implements EntryReadListener {
         
         this.source = source;
     }
+
+    public IOEntryReader createNew() {
+        source.removeListener(this);
+
+        return new IOEntryReader(source.createNew());
+    }
     
     public String getId() {
         return source.getId();
@@ -145,6 +151,10 @@ public class IOEntryReader implements EntryReadListener {
 
     public void addLiveCycleListener(IOEntryLifecycleListener listener) {
         listeners.add(IOEntryLifecycleListener.class, listener);
+    }
+
+    public void removeLiveCycleListener(IOEntryLifecycleListener listener) {
+        listeners.remove(IOEntryLifecycleListener.class, listener);
     }
 
     public void addReceivedListener(IOEntryReceivedListener listener) {

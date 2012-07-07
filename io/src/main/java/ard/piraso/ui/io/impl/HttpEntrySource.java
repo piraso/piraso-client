@@ -61,6 +61,14 @@ public class HttpEntrySource implements IOEntrySource {
         this.watchedAddr = watchedAddr;
     }
 
+    @Override
+    public IOEntrySource createNew() {
+        HttpEntrySource source =  new HttpEntrySource(preferences, uri, watchedAddr);
+        source.setName(name);
+
+        return source;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -159,7 +167,12 @@ public class HttpEntrySource implements IOEntrySource {
     public void addListener(EntryReadListener listener) {
         reader.getStartHandler().addListener(listener);
     }
-    
+
+    @Override
+    public void removeListener(EntryReadListener listener) {
+        reader.getStartHandler().removeListener(listener);
+    }
+
     @Override
     public String getWatchedAddr() {
         if(reader == null) {
