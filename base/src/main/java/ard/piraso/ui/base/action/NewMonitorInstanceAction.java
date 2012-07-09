@@ -22,21 +22,21 @@ import java.util.List;
 /**
  * New Context monitor action
  */
-@ActionID(category="File", id="ard.piraso.ui.base.action.NewContextMonitorAction")
-@ActionRegistration(displayName="New Context Monitor")
+@ActionID(category="File", id="ard.piraso.ui.base.action.NewMonitorInstanceAction")
+@ActionRegistration(displayName="New Monitor Instance")
 @ActionReferences({
         @ActionReference(path="Menu/File", position=270),
         @ActionReference(path="Toolbars/File", position=270)
 })
-public class NewContextMonitorAction extends AbstractAction implements ActionListener, Presenter.Menu, Presenter.Toolbar {
+public class NewMonitorInstanceAction extends AbstractAction implements ActionListener, Presenter.Menu, Presenter.Toolbar {
     private static final String SMALL_ICON_PATH = "ard/piraso/ui/base/icons/new.png";
     private static final String LARGE_ICON_PATH = "ard/piraso/ui/base/icons/new24.png";
 
     private static final int MAX_MENU_ITEM_COUNT = 25;
 
-    public NewContextMonitorAction() {
+    public NewMonitorInstanceAction() {
         putValue("iconBase", SMALL_ICON_PATH);
-        putValue(Action.SHORT_DESCRIPTION, "New Context Monitor");
+        putValue(Action.SHORT_DESCRIPTION, "New Monitor Instance");
     }
 
     @Override
@@ -46,7 +46,7 @@ public class NewContextMonitorAction extends AbstractAction implements ActionLis
 
     @Override
     public JMenuItem getMenuPresenter() {
-        JMenu menu = new JMenu("New Context Monitor");
+        JMenu menu = new JMenu("New Monitor Instance");
         menu.setIcon(ImageUtilities.loadImageIcon(SMALL_ICON_PATH, true));
         addMenuItems(menu);
 

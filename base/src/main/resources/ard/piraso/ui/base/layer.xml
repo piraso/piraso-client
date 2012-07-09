@@ -20,12 +20,15 @@
 <filesystem>
     <folder name="Menu">
         <folder name="File">
+            <file name="Separator2.instance_hidden"/>
             <file name="Separator4.instance_hidden"/>
             <file name="org-netbeans-modules-print-action-PageSetupAction.shadow_hidden"/>
             <file name="org-netbeans-modules-print-action-PrintAction.shadow_hidden"/>
             <file name="org-openide-actions-PageSetupAction.shadow_hidden"/>
             <file name="org-openide-actions-PrintAction.shadow_hidden"/>
+            <file name="org-openide-actions-SaveAction.shadow_hidden"/>
             <file name="org-openide-actions-SaveAllAction.shadow_hidden"/>
+            <file name="org-openide-actions-SaveAsAction.shadow_hidden"/>
         </folder>
         <file name="Edit_hidden"/>
         <file name="GoTo_hidden"/>
@@ -49,12 +52,6 @@
         <file name="UndoRedo_hidden"/>
     </folder>
     <folder name="Configured_Monitors">
-        <file name="local-8080-sqls">
-            <attr name="value" stringvalue="{&quot;name&quot;:&quot;local-8080-sqls&quot;,&quot;preferences&quot;:{&quot;booleanProperties&quot;:{&quot;sql.view.enabled&quot;:true,&quot;sql.prepared.statement.enabled&quot;:true,&quot;sql.connection.enabled&quot;:true,&quot;general.scoped.enabled&quot;:true},&quot;integerProperties&quot;:null,&quot;urlPatterns&quot;:null},&quot;watchedAddr&quot;:null,&quot;loggingUrl&quot;:&quot;http://127.0.0.1:8080/piraso/logging&quot;,&quot;desc&quot;:null}"/>
-        </file>
-        <file name="local-8080-sqls-data">
-          <attr name="value" stringvalue="{&quot;name&quot;:&quot;local-8080-sqls-data&quot;,&quot;preferences&quot;:{&quot;booleanProperties&quot;:{&quot;sql.view.enabled&quot;:true,&quot;sql.prepared.statement.enabled&quot;:true,&quot;sql.connection.enabled&quot;:true,&quot;general.scoped.enabled&quot;:true,&quot;sql.resultset.enabled&quot;:true},&quot;integerProperties&quot;:null,&quot;urlPatterns&quot;:null},&quot;watchedAddr&quot;:null,&quot;loggingUrl&quot;:&quot;http://127.0.0.1:8080/piraso/logging&quot;,&quot;desc&quot;:null}"/>
-        </file>
     </folder>
     <folder name="Configured_Profiles">
     </folder>

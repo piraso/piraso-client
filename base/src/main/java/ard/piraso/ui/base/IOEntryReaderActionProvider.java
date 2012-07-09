@@ -17,14 +17,12 @@
  */
 package ard.piraso.ui.base;
 
-import ard.piraso.ui.base.cookie.IOEntryReaderStartCookie;
-import ard.piraso.ui.base.cookie.IOEntryReaderStopCookie;
-import ard.piraso.ui.base.cookie.StartCookie;
-import ard.piraso.ui.base.cookie.StopCookie;
+import ard.piraso.ui.base.cookie.*;
 import ard.piraso.ui.io.IOEntryEvent;
 import ard.piraso.ui.io.IOEntryLifecycleListener;
 import ard.piraso.ui.io.IOEntryReader;
 import org.openide.util.lookup.InstanceContent;
+import org.openide.windows.TopComponent;
 
 /**
  *
@@ -35,17 +33,22 @@ public class IOEntryReaderActionProvider implements IOEntryLifecycleListener {
     private IOEntryReader reader;
     
     private InstanceContent content;
+
+    private IOEntryReaderSaveCookie saveCookie;
     
     private IOEntryReaderStartCookie startCookie;
     
     private IOEntryReaderStopCookie stopCookie;
+
+    private boolean savable;
     
-    public IOEntryReaderActionProvider(IOEntryReader reader, InstanceContent content) {
+    public IOEntryReaderActionProvider(TopComponent topComponent, IOEntryReader reader, InstanceContent content) {
         this.reader = reader;
         this.content = content;
         
         this.startCookie = new IOEntryReaderStartCookie(reader);
         this.stopCookie = new IOEntryReaderStopCookie(reader);
+        this.saveCookie = new IOEntryReaderSaveCookie(reader, topComponent);
 
         content.add(startCookie);
         setReader(reader);
@@ -57,6 +60,7 @@ public class IOEntryReaderActionProvider implements IOEntryLifecycleListener {
         }
 
         this.reader = reader;
+        setSavable(false);
         this.startCookie.setReader(reader);
         this.stopCookie.setReader(reader);
         this.reader.addLiveCycleListener(this);
@@ -68,6 +72,23 @@ public class IOEntryReaderActionProvider implements IOEntryLifecycleListener {
 
     public StopCookie getStopCookie() {
         return stopCookie;
+    }
+
+    public IOEntryReaderSaveCookie getSaveCookie() {
+        return saveCookie;
+    }
+
+    public void setSavable(boolean value) {
+        if(savable == value) {
+            return;
+        }
+        savable = value;
+
+        if(savable) {
+            content.add(saveCookie);
+        } else {
+            content.remove(saveCookie);
+        }
     }
 
     @Override

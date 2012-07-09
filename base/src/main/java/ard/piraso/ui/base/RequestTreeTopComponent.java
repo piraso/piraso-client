@@ -51,7 +51,7 @@ import java.util.*;
  */
 @ConvertAsProperties(dtd = "-//ard.piraso.ui.base//RequestTree//EN", autostore = false)
 @TopComponent.Description(preferredID = "RequestTreeTopComponent", iconBase="ard/piraso/ui/base/icons/folders-explorer-icon.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
-@TopComponent.Registration(mode = "leftSlidingSide", openAtStartup = true)
+@TopComponent.Registration(mode = "explorer", openAtStartup = true)
 @ActionID(category = "Window", id = "ard.piraso.ui.base.RequestTreeTopComponent")
 @ActionReference(path = "Menu/Window")
 @TopComponent.OpenActionRegistration(displayName = "#CTL_RequestTreeAction",

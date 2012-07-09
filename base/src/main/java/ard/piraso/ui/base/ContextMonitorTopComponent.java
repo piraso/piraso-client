@@ -112,6 +112,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
 
         @Override
         public void receivedEntry(IOEntryEvent evt) {
+            actionProvider.setSavable(true);
         }
     };
 
@@ -146,7 +147,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         this.reader = reader;
         this.entryContent = new SingleClassInstanceContent<Entry>(content);
         this.thisContent = new SingleClassInstanceContent<ContextMonitorDelegate>(content);
-        this.actionProvider = new IOEntryReaderActionProvider(reader, content);
+        this.actionProvider = new IOEntryReaderActionProvider(this, reader, content);
         this.searcher = new Searcher();
 
         initReader();

@@ -21,7 +21,6 @@ import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
 import org.openide.awt.ActionRegistration;
-import org.openide.util.NbBundle.Messages;
 import org.openide.util.actions.Presenter;
 
 import javax.swing.*;
@@ -29,15 +28,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @ActionID(category = "View", id = "ard.piraso.ui.api.ContextMonitorViewAction")
-@ActionRegistration(displayName = "#CTL_ViewElapseTimeAction")
+@ActionRegistration(displayName = "Monitor Instance")
 @ActionReferences({
     @ActionReference(path = "Menu/View", position = 300)
 })
-@Messages("CTL_ViewElapseTimeAction=Show Elapse Time")
 public final class ContextMonitorViewAction extends AbstractAction implements Presenter.Menu {
 
     public ContextMonitorViewAction() {
-        putValue(Action.SHORT_DESCRIPTION, "Context Monitor");
+        putValue(Action.SHORT_DESCRIPTION, "Monitor Instance");
     }
 
     @Override
@@ -46,7 +44,7 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
 
     @Override
     public JMenuItem getMenuPresenter() {
-        JMenu menu = new JMenu("Context Monitor");
+        JMenu menu = new JMenu("Monitor Instance");
 
         final JCheckBoxMenuItem showElapseTime = new JCheckBoxMenuItem("Show Elapse Time");
         final JCheckBoxMenuItem showType = new JCheckBoxMenuItem("Show Type");
