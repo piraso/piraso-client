@@ -128,7 +128,9 @@ public final class JTextPaneUtils {
     }
 
     public static void insertCode(JEditorPane textPane, String text) throws BadLocationException {
-        if(text.equals("@not-supported")) {
+        if(text == null) {
+            insertText(textPane, "null", CODE_BLUE);
+        } else if(text.equals("@not-supported")) {
             insertText(textPane, "not-supported", CODE_RED);
         } else if(text.equals("@null")) {
             insertText(textPane, "null", CODE_BLUE);

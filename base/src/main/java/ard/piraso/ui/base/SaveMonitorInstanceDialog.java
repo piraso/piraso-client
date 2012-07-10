@@ -226,18 +226,23 @@ public class SaveMonitorInstanceDialog extends AbstractDialog {
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
         File home = new File(System.getProperty("user.home"));
         File pirasoDir = new File(home, "piraso");
-        if (!pirasoDir.isDirectory()) {
-            pirasoDir.mkdirs();
+        File pirasoSaveDir = new File(pirasoDir, "saved");
+        if (!pirasoSaveDir.isDirectory()) {
+            pirasoSaveDir.mkdirs();
         }
 
-        JFileChooser browserFileChooser = new FileChooserBuilder("piraso-dir")
+        JFileChooser browserFileChooser = new FileChooserBuilder("piraso-saved-dir")
                 .setTitle(NbBundle.getMessage(SaveMonitorInstanceDialog.class, "SaveMonitorInstanceDialog.browser.title"))
                 .setFileFilter(new PirasoFileFilter())
-                .setDefaultWorkingDirectory(pirasoDir)
+                .setDefaultWorkingDirectory(pirasoSaveDir)
                 .createFileChooser();
 
         String replaceName = StringUtils.replaceChars(name, "[]", "");
-        browserFileChooser.setSelectedFile(new File(pirasoDir, String.format("%s.%s", replaceName, PirasoFileFilter.EXTENSION)));
+        if(!replaceName.endsWith(String.format(".%s", PirasoFileFilter.EXTENSION))) {
+            replaceName = String.format("%s.%s", replaceName, PirasoFileFilter.EXTENSION);
+        }
+
+        browserFileChooser.setSelectedFile(new File(pirasoSaveDir, replaceName));
         int result = browserFileChooser.showDialog(this, NbBundle.getMessage(SaveMonitorInstanceDialog.class, "SaveMonitorInstanceDialog.browser.approveText"));
 
         if (JFileChooser.APPROVE_OPTION == result) {

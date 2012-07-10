@@ -21,6 +21,7 @@ import ard.piraso.ui.api.ObjectEntrySettings;
 import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.api.util.NotificationUtils;
 import ard.piraso.ui.base.manager.ImportExportProviderManager;
+import ard.piraso.ui.io.impl.PirasoSettingsFileFilter;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
@@ -249,6 +250,7 @@ public class ImportDialog extends AbstractDialog {
         JFileChooser browserFileChooser = new FileChooserBuilder("piraso-dir")
                 .setTitle(NbBundle.getMessage(ImportDialog.class, "ImportDialog.browser.title"))
                 .setDefaultWorkingDirectory(pirasoDir)
+                .setFileFilter(new PirasoSettingsFileFilter())
                 .createFileChooser();
 
         browserFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
