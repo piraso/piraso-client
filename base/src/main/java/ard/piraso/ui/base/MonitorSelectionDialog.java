@@ -18,10 +18,10 @@ package ard.piraso.ui.base;
 import ard.piraso.ui.api.GeneralSettingsModel;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.WorkingSetSettings;
+import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.api.manager.ModelVisitor;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.manager.ModelManagers;
-import org.openide.windows.WindowManager;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -33,7 +33,7 @@ import java.util.List;
  *
  * @author adeleon
  */
-public class MonitorSelectionDialog extends javax.swing.JDialog {
+public class MonitorSelectionDialog extends AbstractDialog {
 
     private DefaultListModel listModel = new DefaultListModel();
 
@@ -45,8 +45,7 @@ public class MonitorSelectionDialog extends javax.swing.JDialog {
      * Creates new form MonitorSelectionDialog
      */
     public MonitorSelectionDialog(boolean showWorkingSet) {
-        super(WindowManager.getDefault().getMainWindow(), true);
-        
+        super();        
         this.showWorkingSet = showWorkingSet;
         initComponents();
         

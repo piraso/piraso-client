@@ -203,26 +203,40 @@ public final class ContextMonitorDialog extends AbstractDialog {
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
+        btnClose = new javax.swing.JButton();
+        jSplitPane1 = new javax.swing.JSplitPane();
+        jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lstMonitors = new javax.swing.JList();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        cboHost = new javax.swing.JComboBox();
-        rdoMyAddress = new javax.swing.JRadioButton();
-        rdoOthers = new javax.swing.JRadioButton();
-        txtAddr = new javax.swing.JTextField();
-        btnClose = new javax.swing.JButton();
-        jtab = new javax.swing.JTabbedPane();
-        jLabel4 = new javax.swing.JLabel();
+        chkWorkingSet = new javax.swing.JCheckBox();
+        jPanel3 = new javax.swing.JPanel();
         txtName = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         btnSave = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
-        chkWorkingSet = new javax.swing.JCheckBox();
+        jtab = new javax.swing.JTabbedPane();
+        jLabel4 = new javax.swing.JLabel();
+        txtAddr = new javax.swing.JTextField();
+        rdoOthers = new javax.swing.JRadioButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        rdoMyAddress = new javax.swing.JRadioButton();
+        cboHost = new javax.swing.JComboBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        btnClose.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.btnClose.text")); // NOI18N
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
+
+        jSplitPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jSplitPane1.setDividerLocation(300);
+        jSplitPane1.setDividerSize(5);
 
         jLabel1.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.jLabel1.text")); // NOI18N
 
@@ -233,41 +247,41 @@ public final class ContextMonitorDialog extends AbstractDialog {
         });
         jScrollPane1.setViewportView(lstMonitors);
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.jLabel2.text")); // NOI18N
-
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.jLabel3.text")); // NOI18N
-
-        cboHost.setEditable(true);
-        cboHost.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        buttonGroup1.add(rdoMyAddress);
-        rdoMyAddress.setSelected(true);
-        rdoMyAddress.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.rdoMyAddress.text")); // NOI18N
-        rdoMyAddress.addActionListener(new java.awt.event.ActionListener() {
+        chkWorkingSet.setSelected(true);
+        chkWorkingSet.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.chkWorkingSet.text")); // NOI18N
+        chkWorkingSet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdoMyAddressActionPerformed(evt);
+                chkWorkingSetActionPerformed(evt);
             }
         });
 
-        buttonGroup1.add(rdoOthers);
-        rdoOthers.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.rdoOthers.text")); // NOI18N
-        rdoOthers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdoOthersActionPerformed(evt);
-            }
-        });
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(6, 6, 6)
+                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE))
+                    .add(jLabel1)
+                    .add(chkWorkingSet))
+                .add(7, 7, 7))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel1)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(chkWorkingSet)
+                .addContainerGap())
+        );
 
-        txtAddr.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.txtAddr.text")); // NOI18N
-        txtAddr.setEnabled(false);
-
-        btnClose.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.btnClose.text")); // NOI18N
-        btnClose.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCloseActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.jLabel4.text")); // NOI18N
+        jSplitPane1.setLeftComponent(jPanel2);
 
         txtName.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.txtName.text")); // NOI18N
 
@@ -313,92 +327,112 @@ public final class ContextMonitorDialog extends AbstractDialog {
                 .addContainerGap())
         );
 
-        chkWorkingSet.setSelected(true);
-        chkWorkingSet.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.chkWorkingSet.text")); // NOI18N
-        chkWorkingSet.addActionListener(new java.awt.event.ActionListener() {
+        jLabel4.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.jLabel4.text")); // NOI18N
+
+        txtAddr.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.txtAddr.text")); // NOI18N
+        txtAddr.setEnabled(false);
+
+        buttonGroup1.add(rdoOthers);
+        rdoOthers.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.rdoOthers.text")); // NOI18N
+        rdoOthers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                chkWorkingSetActionPerformed(evt);
+                rdoOthersActionPerformed(evt);
             }
         });
+
+        jLabel3.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.jLabel3.text")); // NOI18N
+
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.jLabel2.text")); // NOI18N
+
+        buttonGroup1.add(rdoMyAddress);
+        rdoMyAddress.setSelected(true);
+        rdoMyAddress.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.rdoMyAddress.text")); // NOI18N
+        rdoMyAddress.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdoMyAddressActionPerformed(evt);
+            }
+        });
+
+        cboHost.setEditable(true);
+        cboHost.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        org.jdesktop.layout.GroupLayout jPanel3Layout = new org.jdesktop.layout.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jLabel3)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(rdoMyAddress)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(rdoOthers)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(txtAddr, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel4)
+                            .add(jLabel2))
+                        .add(18, 18, 18)
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(cboHost, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .add(txtName))))
+                .add(10, 10, 10)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(9, 9, 9))
+            .add(jtab)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel3Layout.createSequentialGroup()
+                .add(23, 23, 23)
+                .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel3Layout.createSequentialGroup()
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel4)
+                            .add(txtName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel2)
+                            .add(cboHost, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jPanel3Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(rdoMyAddress)
+                            .add(rdoOthers)
+                            .add(txtAddr, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(jLabel3)))
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jtab, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jSplitPane1.setRightComponent(jPanel3);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(14, 14, 14)
+                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel1)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 237, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(layout.createSequentialGroup()
-                                .add(6, 6, 6)
-                                .add(chkWorkingSet)))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                                    .add(layout.createSequentialGroup()
-                                        .add(jLabel3)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                        .add(rdoMyAddress)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(rdoOthers)
-                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                        .add(txtAddr, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))
-                                    .add(layout.createSequentialGroup()
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                            .add(jLabel4)
-                                            .add(jLabel2))
-                                        .add(18, 18, 18)
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                            .add(cboHost, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .add(txtName))))
-                                .add(10, 10, 10)
-                                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(9, 9, 9))
-                            .add(jtab))
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(btnClose)
+                        .add(14, 14, 14))
+                    .add(layout.createSequentialGroup()
+                        .add(jSplitPane1)
                         .addContainerGap())))
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(btnClose)
-                .add(14, 14, 14))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(jLabel1)
+                .add(jSplitPane1)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                                    .add(jLabel4)
-                                    .add(txtName, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                                    .add(jLabel2)
-                                    .add(cboHost, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                                    .add(rdoMyAddress)
-                                    .add(rdoOthers)
-                                    .add(txtAddr, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(jLabel3)))
-                            .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jtab, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(btnClose)
-                        .add(8, 8, 8))
-                    .add(layout.createSequentialGroup()
-                        .add(jScrollPane1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(chkWorkingSet)
-                        .add(51, 51, 51))))
+                .add(btnClose)
+                .add(8, 8, 8))
         );
 
         pack();
@@ -492,7 +526,10 @@ public final class ContextMonitorDialog extends AbstractDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JTabbedPane jtab;
     private javax.swing.JList lstMonitors;
     private javax.swing.JRadioButton rdoMyAddress;

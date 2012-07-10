@@ -339,6 +339,9 @@ public class PreferencePanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         pnlPreferences = new javax.swing.JPanel();
 
+        jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        pnlPreferences.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
         pnlPreferences.setOpaque(false);
         pnlPreferences.setLayout(null);
         pnlPreferences.setLayout(createLayout());

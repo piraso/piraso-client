@@ -27,14 +27,14 @@ import javax.swing.*;
  *
  * @author adeleon
  */
-public final class NewContextMonitorDialog extends AbstractDialog {
+public final class NewMonitorInstanceDialog extends AbstractDialog {
     
     private DefaultComboBoxModel cboModel = new DefaultComboBoxModel();
 
     /**
      * Creates new form NewContextMonitorDialog
      */
-    public NewContextMonitorDialog() {
+    public NewMonitorInstanceDialog() {
         super();
         setTitle("New Context Monitor");
         initComponents();
@@ -108,18 +108,18 @@ public final class NewContextMonitorDialog extends AbstractDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(NewContextMonitorDialog.class, "NewContextMonitorDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(NewMonitorInstanceDialog.class, "NewMonitorInstanceDialog.jLabel1.text")); // NOI18N
 
         cboMonitor.setModel(cboModel);
 
-        chkHide.setText(org.openide.util.NbBundle.getMessage(NewContextMonitorDialog.class, "NewContextMonitorDialog.chkHide.text")); // NOI18N
+        chkHide.setText(org.openide.util.NbBundle.getMessage(NewMonitorInstanceDialog.class, "NewMonitorInstanceDialog.chkHide.text")); // NOI18N
         chkHide.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkHideActionPerformed(evt);
             }
         });
 
-        btnSave.setText(org.openide.util.NbBundle.getMessage(NewContextMonitorDialog.class, "NewContextMonitorDialog.btnSave.text")); // NOI18N
+        btnSave.setText(org.openide.util.NbBundle.getMessage(NewMonitorInstanceDialog.class, "NewMonitorInstanceDialog.btnSave.text")); // NOI18N
         btnSave.setEnabled(false);
         btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,17 +127,17 @@ public final class NewContextMonitorDialog extends AbstractDialog {
             }
         });
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(NewContextMonitorDialog.class, "NewContextMonitorDialog.btnCancel.text")); // NOI18N
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(NewMonitorInstanceDialog.class, "NewMonitorInstanceDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
 
-        lblDesc.setText(org.openide.util.NbBundle.getMessage(NewContextMonitorDialog.class, "NewContextMonitorDialog.lblDesc.text")); // NOI18N
+        lblDesc.setText(org.openide.util.NbBundle.getMessage(NewMonitorInstanceDialog.class, "NewMonitorInstanceDialog.lblDesc.text")); // NOI18N
 
         chkWorkingSet.setSelected(true);
-        chkWorkingSet.setText(org.openide.util.NbBundle.getMessage(NewContextMonitorDialog.class, "NewContextMonitorDialog.chkWorkingSet.text")); // NOI18N
+        chkWorkingSet.setText(org.openide.util.NbBundle.getMessage(NewMonitorInstanceDialog.class, "NewMonitorInstanceDialog.chkWorkingSet.text")); // NOI18N
         chkWorkingSet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 chkWorkingSetActionPerformed(evt);
@@ -164,7 +164,7 @@ public final class NewContextMonitorDialog extends AbstractDialog {
                                 .add(chkHide)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(chkWorkingSet)
-                                .add(0, 37, Short.MAX_VALUE)))))
+                                .add(0, 87, Short.MAX_VALUE)))))
                 .addContainerGap())
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

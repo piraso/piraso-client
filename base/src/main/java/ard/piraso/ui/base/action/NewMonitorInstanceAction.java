@@ -6,7 +6,7 @@ import ard.piraso.ui.api.manager.ModelEvent;
 import ard.piraso.ui.api.manager.ModelOnChangeListener;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.ContextMonitorDispatcher;
-import ard.piraso.ui.base.NewContextMonitorDialog;
+import ard.piraso.ui.base.NewMonitorInstanceDialog;
 import ard.piraso.ui.base.manager.ModelManagers;
 import org.openide.awt.*;
 import org.openide.util.ImageUtilities;
@@ -41,7 +41,7 @@ public class NewMonitorInstanceAction extends AbstractAction implements ActionLi
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new NewContextMonitorDialog().setVisible(true);
+        new NewMonitorInstanceDialog().setVisible(true);
     }
 
     @Override
