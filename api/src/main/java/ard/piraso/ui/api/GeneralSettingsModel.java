@@ -17,10 +17,20 @@ public class GeneralSettingsModel {
 
     private boolean showType = true;
 
+    private boolean showJSONRawView = false;
+
     private String workingSetName = null;
 
     public GeneralSettingsModel() {
         fontSize = FontProviderManager.INSTANCE.getDefaultFont().getSize();
+    }
+
+    public boolean isShowJSONRawView() {
+        return showJSONRawView;
+    }
+
+    public void setShowJSONRawView(boolean showJSONRawView) {
+        this.showJSONRawView = showJSONRawView;
     }
 
     public String getWorkingSetName() {
@@ -65,6 +75,10 @@ public class GeneralSettingsModel {
 
     public void toggleElapseTime() {
         showElapseTime = !showElapseTime;
+    }
+
+    public void toggleJSONRawView() {
+        showJSONRawView = !showJSONRawView;
     }
 
     public void toggleType() {

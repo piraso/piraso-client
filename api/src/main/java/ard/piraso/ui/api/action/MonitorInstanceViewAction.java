@@ -27,14 +27,14 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@ActionID(category = "View", id = "ard.piraso.ui.api.ContextMonitorViewAction")
+@ActionID(category = "View", id = "ard.piraso.ui.api.MonitorInstanceViewAction")
 @ActionRegistration(displayName = "Monitor Instance")
 @ActionReferences({
     @ActionReference(path = "Menu/View", position = 300)
 })
-public final class ContextMonitorViewAction extends AbstractAction implements Presenter.Menu {
+public final class MonitorInstanceViewAction extends AbstractAction implements Presenter.Menu {
 
-    public ContextMonitorViewAction() {
+    public MonitorInstanceViewAction() {
         putValue(Action.SHORT_DESCRIPTION, "Monitor Instance");
     }
 
@@ -50,11 +50,13 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
         final JCheckBoxMenuItem showType = new JCheckBoxMenuItem("Show Type");
         final JCheckBoxMenuItem showRequestId = new JCheckBoxMenuItem("Show Request ID");
         final JCheckBoxMenuItem showMessageGroup = new JCheckBoxMenuItem("Show Message Group");
+        final JCheckBoxMenuItem showJSONRawView = new JCheckBoxMenuItem("Show JSON Raw View");
 
         showType.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowType());
         showRequestId.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowRequestId());
         showElapseTime.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowElapseTime());
         showMessageGroup.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowMessageGroup());
+        showJSONRawView.setState(SingleModelManagers.GENERAL_SETTINGS.get().isShowJSONRawView());
 
         showElapseTime.addActionListener(new ActionListener() {
             @Override
@@ -96,10 +98,21 @@ public final class ContextMonitorViewAction extends AbstractAction implements Pr
             }
         });
 
+        showJSONRawView.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GeneralSettingsModel model = SingleModelManagers.GENERAL_SETTINGS.get();
+                model.toggleJSONRawView();
+                showJSONRawView.setState(model.isShowJSONRawView());
+                SingleModelManagers.GENERAL_SETTINGS.save(model);
+            }
+        });
+
         menu.add(showElapseTime);
         menu.add(showType);
         menu.add(showRequestId);
         menu.add(showMessageGroup);
+        menu.add(showJSONRawView);
 
         return menu;
     }

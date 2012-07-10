@@ -20,6 +20,7 @@ package ard.piraso.ui.api.provider;
 
 import ard.piraso.api.entry.Entry;
 import ard.piraso.ui.api.EntryTabViewProvider;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.api.views.JsonTabView;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -31,7 +32,7 @@ public class JsonEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<J
 
     @Override
     protected boolean isSupported(Entry entry) {
-        return true;
+        return SingleModelManagers.GENERAL_SETTINGS.get().isShowJSONRawView();
     }
 
     @Override

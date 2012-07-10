@@ -71,36 +71,47 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
             if(currentEntry != null) {
                 components.add(new EntryTabView(new BaseMessageView(currentEntry)));
                 components.addAll(EntryTabViewProviderManager.INSTANCE.getTabView(BaseEntryViewTopComponent.class, currentEntry));
-
-                buttons = new JToggleButton[components.size()];
             }
 
-            toolbar.removeAll();
-
             if(CollectionUtils.isNotEmpty(components)) {
-                ActionListener initialViewAction = null;
-                for(int i = 0; i < components.size(); i++) {
-                    EntryTabView view = components.get(i);
-                    buttons[i] = new JToggleButton(view.getTitle());
+                if(components.size() > 1) {
+                    toolbar.removeAll();
+                    buttons = new JToggleButton[components.size()];
 
-                    buttonGroup1.add(buttons[i]);
+                    ActionListener initialViewAction = null;
+                    for(int i = 0; i < components.size(); i++) {
+                        EntryTabView view = components.get(i);
+                        buttons[i] = new JToggleButton(view.getTitle());
 
-                    ActionListener buttonListener = new SwitchEntryView(view);
-                    buttons[i].addActionListener(buttonListener);
+                        buttonGroup1.add(buttons[i]);
 
-                    if(initialViewAction == null) {
-                        initialViewAction = buttonListener;
-                        buttons[i].setSelected(true);
+                        ActionListener buttonListener = new SwitchEntryView(view, toolbar);
+                        buttons[i].addActionListener(buttonListener);
+
+                        if(initialViewAction == null) {
+                            initialViewAction = buttonListener;
+                            buttons[i].setSelected(true);
+                        }
+
+                        toolbar.add(buttons[i]);
                     }
 
-                    toolbar.add(buttons[i]);
-                }
+                    toolbar.add(jSeparator1);
 
-                toolbar.add(jSeparator1);
+                    // fire initial action
+                    if(initialViewAction != null) {
+                        initialViewAction.actionPerformed(new ActionEvent(this, 1, "initial"));
+                    }
+                    toolbar.setVisible(true);
+                    toolbar2.setVisible(false);
+                } else {
+                    toolbar2.removeAll();
 
-                // fire initial action
-                if(initialViewAction != null) {
-                    initialViewAction.actionPerformed(new ActionEvent(this, 1, "initial"));
+                    SwitchEntryView action = new SwitchEntryView(components.iterator().next(), toolbar2);
+                    action.actionPerformed(null);
+
+                    toolbar2.setVisible(true);
+                    toolbar.setVisible(false);
                 }
             }
         }
@@ -120,6 +131,7 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
         jSeparator1 = new javax.swing.JToolBar.Separator();
         buttonGroup1 = new javax.swing.ButtonGroup();
         toolbar = new javax.swing.JToolBar();
+        toolbar2 = new javax.swing.JToolBar();
 
         setLayout(new java.awt.BorderLayout());
 
@@ -127,20 +139,31 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
         toolbar.setFloatable(false);
         toolbar.setRollover(true);
         add(toolbar, java.awt.BorderLayout.NORTH);
+
+        toolbar2.setBackground(new java.awt.Color(226, 226, 226));
+        toolbar2.setFloatable(false);
+        toolbar2.setOrientation(1);
+        toolbar2.setRollover(true);
+        toolbar2.setVisible(false);
+        add(toolbar2, java.awt.BorderLayout.WEST);
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     protected javax.swing.ButtonGroup buttonGroup1;
     protected javax.swing.JToolBar.Separator jSeparator1;
     protected javax.swing.JToolBar toolbar;
+    protected javax.swing.JToolBar toolbar2;
     // End of variables declaration//GEN-END:variables
     
     private class SwitchEntryView implements ActionListener {
         
         private EntryTabView tabView;
 
-        private SwitchEntryView(EntryTabView tabView) {
+        private JToolBar selectedToolbar;
+
+        private SwitchEntryView(EntryTabView tabView, JToolBar selectedToolbar) {
             this.tabView = tabView;
+            this.selectedToolbar = selectedToolbar;
         }
 
         @Override
@@ -148,7 +171,7 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
             synchronized (getTreeLock()) {
                 clear();
 
-                tabView.getComponent().addToolbarComponents(toolbar);
+                tabView.getComponent().addToolbarComponents(selectedToolbar);
                 add(tabView.getComponent(), BorderLayout.CENTER);
 
                 repaint();
