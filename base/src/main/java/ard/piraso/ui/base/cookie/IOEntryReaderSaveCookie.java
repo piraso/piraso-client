@@ -18,6 +18,7 @@
 
 package ard.piraso.ui.base.cookie;
 
+import ard.piraso.ui.base.SaveMonitorInstanceDialog;
 import ard.piraso.ui.io.IOEntryReader;
 import org.openide.cookies.SaveCookie;
 import org.openide.windows.TopComponent;
@@ -31,17 +32,14 @@ public class IOEntryReaderSaveCookie extends AbstractIOEntryReaderCookie impleme
 
     private TopComponent component;
 
-    private String name;
-
     public IOEntryReaderSaveCookie(IOEntryReader reader, TopComponent component) {
         super(reader);
 
         this.component = component;
-        this.name = component.getName();
     }
 
     @Override
     public void save() throws IOException {
-
+        new SaveMonitorInstanceDialog(component.getName(), reader).setVisible(true);
     }
 }

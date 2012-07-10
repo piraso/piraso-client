@@ -43,6 +43,10 @@ public class IOEntryManager {
         
         LOG.log(Level.INFO, "IOManager created for {0}", id);
     }
+
+    public Collection<IOEntryRequest> getRequests() {
+        return requests.values();
+    }
     
     private IOEntryRequest createOrGetRequest(Long requestId) {
         IOEntryRequest request = requests.get(requestId);
