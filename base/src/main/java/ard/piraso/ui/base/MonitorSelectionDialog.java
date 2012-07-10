@@ -15,8 +15,11 @@
  */
 package ard.piraso.ui.base;
 
+import ard.piraso.ui.api.GeneralSettingsModel;
 import ard.piraso.ui.api.NewContextMonitorModel;
+import ard.piraso.ui.api.WorkingSetSettings;
 import ard.piraso.ui.api.manager.ModelVisitor;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.manager.ModelManagers;
 import org.openide.windows.WindowManager;
 
@@ -35,12 +38,16 @@ public class MonitorSelectionDialog extends javax.swing.JDialog {
     private DefaultListModel listModel = new DefaultListModel();
 
     private List<NewContextMonitorModel> selection = new LinkedList<NewContextMonitorModel>();
+    
+    private boolean showWorkingSet;
 
     /**
      * Creates new form MonitorSelectionDialog
      */
-    public MonitorSelectionDialog() {
+    public MonitorSelectionDialog(boolean showWorkingSet) {
         super(WindowManager.getDefault().getMainWindow(), true);
+        
+        this.showWorkingSet = showWorkingSet;
         initComponents();
         
         lstMonitors.setModel(listModel);
@@ -58,10 +65,22 @@ public class MonitorSelectionDialog extends javax.swing.JDialog {
 
     public void showDialog(final List<String> excludes) {
         listModel.clear();
+        
+        final GeneralSettingsModel general = SingleModelManagers.GENERAL_SETTINGS.get();
+        final WorkingSetSettings workingSet = SingleModelManagers.WORKING_SET.get();
+
 
         ModelManagers.MONITORS.visit(new ModelVisitor<NewContextMonitorModel>() {
             @Override
             public void visit(NewContextMonitorModel model) {
+                if(showWorkingSet && general.getWorkingSetName() != null) {
+                    String regex = workingSet.getRegex(general.getWorkingSetName());
+
+                    if(!model.getName().matches(regex)) {
+                        return;
+                    }
+                }
+                
                 if(!excludes.contains(model.getName())) {
                     listModel.addElement(model.getName());
                 }

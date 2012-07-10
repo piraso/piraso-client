@@ -15,9 +15,12 @@
  */
 package ard.piraso.ui.base;
 
+import ard.piraso.ui.api.GeneralSettingsModel;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.ProfileModel;
+import ard.piraso.ui.api.WorkingSetSettings;
 import ard.piraso.ui.api.extension.AbstractDialog;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.manager.ModelManagers;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
@@ -165,6 +168,9 @@ public final class ProfilesDialog extends AbstractDialog {
     }
 
     public void refresh(String name) {
+        GeneralSettingsModel general = SingleModelManagers.GENERAL_SETTINGS.get();
+        WorkingSetSettings workingSet = SingleModelManagers.WORKING_SET.get();
+
         listModel.clear();
 
         List<String> profileNames = ModelManagers.PROFILES.getNames();
@@ -172,6 +178,14 @@ public final class ProfilesDialog extends AbstractDialog {
         for(String profileName : profileNames) {
             if(ModelManagers.PROFILES.get(profileName) == null) {
                 continue;
+            }
+            
+            if(chkWorkingSet.isSelected() && general.getWorkingSetName() != null) {
+                String regex = workingSet.getRegex(general.getWorkingSetName());
+
+                if(!profileName.matches(regex)) {
+                    continue;
+                }
             }
 
             listModel.addElement(profileName);
@@ -220,6 +234,7 @@ public final class ProfilesDialog extends AbstractDialog {
         btnSave = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        chkWorkingSet = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -327,6 +342,14 @@ public final class ProfilesDialog extends AbstractDialog {
                 .addContainerGap())
         );
 
+        chkWorkingSet.setSelected(true);
+        chkWorkingSet.setText(org.openide.util.NbBundle.getMessage(ProfilesDialog.class, "ProfilesDialog.chkWorkingSet.text")); // NOI18N
+        chkWorkingSet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkWorkingSetActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -335,7 +358,9 @@ public final class ProfilesDialog extends AbstractDialog {
                 .add(14, 14, 14)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 237, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 237, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(chkWorkingSet))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
@@ -394,14 +419,19 @@ public final class ProfilesDialog extends AbstractDialog {
                         .add(jLabel2)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .add(layout.createSequentialGroup()
                                 .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(0, 200, Short.MAX_VALUE))))
-                    .add(jScrollPane1))
-                .add(22, 22, 22)
-                .add(btnClose)
-                .add(14, 14, 14))
+                                .add(0, 222, Short.MAX_VALUE))
+                            .add(layout.createSequentialGroup()
+                                .add(jScrollPane3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)))
+                        .add(btnClose)
+                        .add(14, 14, 14))
+                    .add(layout.createSequentialGroup()
+                        .add(jScrollPane1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(chkWorkingSet)
+                        .add(52, 52, 52))))
             .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                 .add(layout.createSequentialGroup()
                     .add(38, 38, 38)
@@ -417,7 +447,7 @@ public final class ProfilesDialog extends AbstractDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnAssociateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssociateActionPerformed
-        MonitorSelectionDialog dialog = new MonitorSelectionDialog();
+        MonitorSelectionDialog dialog = new MonitorSelectionDialog(chkWorkingSet.isSelected());
 
         List<String> excludes = new ArrayList<String>();
         for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -497,6 +527,10 @@ public final class ProfilesDialog extends AbstractDialog {
         txtName.requestFocus();
     }//GEN-LAST:event_btnClearActionPerformed
 
+    private void chkWorkingSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkWorkingSetActionPerformed
+        refresh();
+    }//GEN-LAST:event_chkWorkingSetActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAssociate;
     private javax.swing.JButton btnClear;
@@ -504,6 +538,7 @@ public final class ProfilesDialog extends AbstractDialog {
     private javax.swing.JButton btnDisassociate;
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSave;
+    private javax.swing.JCheckBox chkWorkingSet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

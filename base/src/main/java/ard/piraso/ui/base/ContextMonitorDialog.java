@@ -17,9 +17,12 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.GeneralPreferenceEnum;
 import ard.piraso.api.Preferences;
+import ard.piraso.ui.api.GeneralSettingsModel;
 import ard.piraso.ui.api.NewContextMonitorModel;
 import ard.piraso.ui.api.PreferenceProvider;
+import ard.piraso.ui.api.WorkingSetSettings;
 import ard.piraso.ui.api.extension.AbstractDialog;
+import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.base.manager.ModelManagers;
 import ard.piraso.ui.base.manager.PreferenceProviderManager;
 import org.apache.commons.lang.StringUtils;
@@ -146,6 +149,9 @@ public final class ContextMonitorDialog extends AbstractDialog {
     }
         
     public void refresh(String name) {
+        GeneralSettingsModel general = SingleModelManagers.GENERAL_SETTINGS.get();
+        WorkingSetSettings workingSet = SingleModelManagers.WORKING_SET.get();
+
         listModel.clear();
         cboModel.removeAllElements();
 
@@ -156,6 +162,14 @@ public final class ContextMonitorDialog extends AbstractDialog {
             
             if(model == null) {
                 continue;
+            }
+            
+            if(chkWorkingSet.isSelected() && general.getWorkingSetName() != null) {
+                String regex = workingSet.getRegex(general.getWorkingSetName());
+
+                if(!monitorName.matches(regex)) {
+                    continue;
+                }
             }
 
             listModel.addElement(model.getName());
@@ -206,6 +220,7 @@ public final class ContextMonitorDialog extends AbstractDialog {
         btnSave = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnClear = new javax.swing.JButton();
+        chkWorkingSet = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -298,6 +313,14 @@ public final class ContextMonitorDialog extends AbstractDialog {
                 .addContainerGap())
         );
 
+        chkWorkingSet.setSelected(true);
+        chkWorkingSet.setText(org.openide.util.NbBundle.getMessage(ContextMonitorDialog.class, "ContextMonitorDialog.chkWorkingSet.text")); // NOI18N
+        chkWorkingSet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chkWorkingSetActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -307,7 +330,11 @@ public final class ContextMonitorDialog extends AbstractDialog {
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(jLabel1)
                     .add(layout.createSequentialGroup()
-                        .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 237, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 237, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(layout.createSequentialGroup()
+                                .add(6, 6, 6)
+                                .add(chkWorkingSet)))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
@@ -363,11 +390,15 @@ public final class ContextMonitorDialog extends AbstractDialog {
                                     .add(jLabel3)))
                             .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jtab))
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(btnClose)
-                .add(8, 8, 8))
+                        .add(jtab, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(btnClose)
+                        .add(8, 8, 8))
+                    .add(layout.createSequentialGroup()
+                        .add(jScrollPane1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(chkWorkingSet)
+                        .add(51, 51, 51))))
         );
 
         pack();
@@ -444,6 +475,10 @@ public final class ContextMonitorDialog extends AbstractDialog {
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
+    private void chkWorkingSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkWorkingSetActionPerformed
+        refresh();
+    }//GEN-LAST:event_chkWorkingSetActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnClose;
@@ -451,6 +486,7 @@ public final class ContextMonitorDialog extends AbstractDialog {
     private javax.swing.JButton btnSave;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox cboHost;
+    private javax.swing.JCheckBox chkWorkingSet;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

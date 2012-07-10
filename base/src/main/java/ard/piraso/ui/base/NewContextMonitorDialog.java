@@ -164,7 +164,7 @@ public final class NewContextMonitorDialog extends AbstractDialog {
                                 .add(chkHide)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                                 .add(chkWorkingSet)
-                                .add(0, 29, Short.MAX_VALUE)))))
+                                .add(0, 37, Short.MAX_VALUE)))))
                 .addContainerGap())
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
