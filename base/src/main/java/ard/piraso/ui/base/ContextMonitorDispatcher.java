@@ -88,7 +88,10 @@ public final class ContextMonitorDispatcher {
     }
     
     public static void forward(IOEntrySource source) {
-        IOEntryReader reader = new IOEntryReader(source);
+        forward(new IOEntryReader(source), source);
+    }
+    
+    public static void forward(IOEntryReader reader, IOEntrySource source) {
         ContextMonitorTopComponent editor = new ContextMonitorTopComponent(reader, source.getName());
 
         editor.open();

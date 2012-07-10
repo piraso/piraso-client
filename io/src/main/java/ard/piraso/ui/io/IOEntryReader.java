@@ -78,6 +78,10 @@ public class IOEntryReader implements EntryReadListener {
             fireStoppedEvent(startEvent);
         }
     }
+
+    public boolean isRestartable() {
+        return source.isRestartable();
+    }
     
     public void stop() {
         source.stop();

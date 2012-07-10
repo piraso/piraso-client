@@ -46,4 +46,6 @@ public interface IOEntrySource {
 
     public void removeListener(EntryReadListener listener);
 
+    public boolean isRestartable();
+
 }

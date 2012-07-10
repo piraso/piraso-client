@@ -374,6 +374,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         }
 
         cboUrl.setEnabled(!btnAutoScroll.isSelected());
+        btnClear.setEnabled(reader.isRestartable());
         tableModel.setAllowScrolling(btnAutoScroll.isSelected());
     }
 

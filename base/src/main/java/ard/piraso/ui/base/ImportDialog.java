@@ -247,13 +247,13 @@ public class ImportDialog extends AbstractDialog {
         }
 
         JFileChooser browserFileChooser = new FileChooserBuilder("piraso-dir")
-                .setTitle(NbBundle.getMessage(ExportDialog.class, "ImportDialog.browser.title"))
+                .setTitle(NbBundle.getMessage(ImportDialog.class, "ImportDialog.browser.title"))
                 .setDefaultWorkingDirectory(pirasoDir)
                 .createFileChooser();
 
         browserFileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
 
-        int result = browserFileChooser.showDialog(this, NbBundle.getMessage(ExportDialog.class, "ImportDialog.browser.approveText"));
+        int result = browserFileChooser.showDialog(this, NbBundle.getMessage(ImportDialog.class, "ImportDialog.browser.approveText"));
 
         if (JFileChooser.APPROVE_OPTION == result) {
             selectedFile = browserFileChooser.getSelectedFile();

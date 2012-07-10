@@ -99,7 +99,10 @@ public class IOEntryReaderActionProvider implements IOEntryLifecycleListener {
 
     @Override
     public void stopped(IOEntryEvent evt) {
-        content.add(startCookie);
+        if(reader.isRestartable()) {
+            content.add(startCookie);
+        }
+
         content.remove(stopCookie);
     }
 }

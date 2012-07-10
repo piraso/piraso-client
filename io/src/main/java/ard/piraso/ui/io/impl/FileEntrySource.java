@@ -53,6 +53,8 @@ public class FileEntrySource implements IOEntrySource {
         if(!source.isFile()) {
             throw new FileNotFoundException(String.format("File %s not found.", source.getAbsolutePath()));
         }
+        
+        this.name = source.getName();
     }
 
     public void setName(String name) {
@@ -82,10 +84,6 @@ public class FileEntrySource implements IOEntrySource {
     @Override
     public void start() {
         try {
-            if(reader == null || !alive) {
-                reset();
-            }
-
             if(!alive) {
                 LOG.info("Starting Context Monitor for File : " + source.getAbsolutePath());
                 alive = true;
@@ -131,6 +129,11 @@ public class FileEntrySource implements IOEntrySource {
     @Override
     public void removeListener(EntryReadListener listener) {
         reader.removeListener(listener);
+    }
+
+    @Override
+    public boolean isRestartable() {
+        return false;
     }
 
     @Override

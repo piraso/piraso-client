@@ -15,6 +15,7 @@
  */
 package ard.piraso.ui.base.action;
 
+import ard.piraso.ui.base.OpenMonitorInstanceDialog;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -35,6 +36,6 @@ public final class OpenMonitorInstanceAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO implement action body
+        new OpenMonitorInstanceDialog().setVisible(true);
     }
 }

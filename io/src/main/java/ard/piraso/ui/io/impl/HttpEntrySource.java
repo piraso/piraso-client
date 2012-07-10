@@ -180,6 +180,11 @@ public class HttpEntrySource implements IOEntrySource {
     }
 
     @Override
+    public boolean isRestartable() {
+        return true;
+    }
+
+    @Override
     public String getWatchedAddr() {
         if(reader == null) {
             return null;
