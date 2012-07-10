@@ -41,6 +41,12 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
     private JToggleButton[] buttons;
 
     private boolean enableFilter = false;
+    
+    private EntryTabView selectedTabView;
+    
+    private String selectedTabTitle = null;
+    
+    private Component glue = Box.createHorizontalGlue();
         
     protected BaseEntryViewTopComponent(Class<T> typeClass, String shortName) {
         super(typeClass);
@@ -57,6 +63,8 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
         if(CollectionUtils.isNotEmpty(components)) {
             for (EntryTabView view : components) {
                 view.getComponent().removeToolbarComponents(toolbar);
+                toolbar.remove(glue);
+                toolbar.remove(btnPin);
                 remove(view.getComponent());
             }
         }        
@@ -74,8 +82,10 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
             }
 
             if(CollectionUtils.isNotEmpty(components)) {
+                toolbar2.removeAll();
+                toolbar.removeAll();
+
                 if(components.size() > 1) {
-                    toolbar.removeAll();
                     buttons = new JToggleButton[components.size()];
 
                     ActionListener initialViewAction = null;
@@ -89,6 +99,9 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
                         buttons[i].addActionListener(buttonListener);
 
                         if(initialViewAction == null) {
+                            initialViewAction = buttonListener;
+                            buttons[i].setSelected(true);
+                        } else if(selectedTabTitle != null && selectedTabTitle.equals(view.getTitle())) {
                             initialViewAction = buttonListener;
                             buttons[i].setSelected(true);
                         }
@@ -105,8 +118,6 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
                     toolbar.setVisible(true);
                     toolbar2.setVisible(false);
                 } else {
-                    toolbar2.removeAll();
-
                     SwitchEntryView action = new SwitchEntryView(components.iterator().next(), toolbar2);
                     action.actionPerformed(null);
 
@@ -130,8 +141,21 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
 
         jSeparator1 = new javax.swing.JToolBar.Separator();
         buttonGroup1 = new javax.swing.ButtonGroup();
+        btnPin = new javax.swing.JToggleButton();
         toolbar = new javax.swing.JToolBar();
         toolbar2 = new javax.swing.JToolBar();
+
+        btnPin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ard/piraso/ui/api/icons/pin_small.png"))); // NOI18N
+        org.openide.awt.Mnemonics.setLocalizedText(btnPin, org.openide.util.NbBundle.getMessage(BaseEntryViewTopComponent.class, "BaseEntryViewTopComponent.btnPin.text")); // NOI18N
+        btnPin.setToolTipText(org.openide.util.NbBundle.getMessage(BaseEntryViewTopComponent.class, "BaseEntryViewTopComponent.btnPin.toolTipText")); // NOI18N
+        btnPin.setFocusable(false);
+        btnPin.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPin.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnPin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPinActionPerformed(evt);
+            }
+        });
 
         setLayout(new java.awt.BorderLayout());
 
@@ -148,7 +172,16 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
         add(toolbar2, java.awt.BorderLayout.WEST);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnPinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPinActionPerformed
+        if(btnPin.isSelected()) {
+            selectedTabTitle = selectedTabView.getTitle();
+        } else {
+            selectedTabTitle = null;
+        }
+    }//GEN-LAST:event_btnPinActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    protected javax.swing.JToggleButton btnPin;
     protected javax.swing.ButtonGroup buttonGroup1;
     protected javax.swing.JToolBar.Separator jSeparator1;
     protected javax.swing.JToolBar toolbar;
@@ -170,8 +203,15 @@ public abstract class BaseEntryViewTopComponent<T extends Entry> extends Abstrac
         public void actionPerformed(ActionEvent evt) {
             synchronized (getTreeLock()) {
                 clear();
-
-                tabView.getComponent().addToolbarComponents(selectedToolbar);
+                selectedTabView = tabView;
+                btnPin.setSelected(selectedTabTitle != null && selectedTabTitle.equals(tabView.getTitle()));                
+                tabView.getComponent().addToolbarComponents(selectedToolbar);                
+                
+                if(selectedToolbar == toolbar) {
+                    selectedToolbar.add(glue);
+                    selectedToolbar.add(btnPin);
+                }
+                
                 add(tabView.getComponent(), BorderLayout.CENTER);
 
                 repaint();
