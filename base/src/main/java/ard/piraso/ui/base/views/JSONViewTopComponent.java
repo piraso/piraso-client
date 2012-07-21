@@ -42,7 +42,7 @@ import static ard.piraso.ui.api.util.JTextPaneUtils.insertKeyword;
 public final class JSONViewTopComponent extends BaseEntryViewTopComponent<JSONEntry> {
 
     public JSONViewTopComponent() {
-        super(JSONEntry.class, "JSON");
+        super(JSONEntry.class, "Message");
 
         setName(NbBundle.getMessage(JSONViewTopComponent.class, "CTL_JSONViewTopComponent"));
         setToolTipText(NbBundle.getMessage(JSONViewTopComponent.class, "HINT_JSONViewTopComponent"));

@@ -37,6 +37,11 @@ public class MessageEntryViewTopComponent extends BaseEntryViewTopComponent<Mess
 
         insertKeyword(txtMessage, "\nMessage: ");
         insertCode(txtMessage, currentEntry.getMessage());
+
+        if(entry.getElapseTime() != null) {
+            insertKeyword(txtMessage, "\nElapse Time: ");
+            insertCode(txtMessage, currentEntry.getElapseTime().prettyPrint());
+        }
     }
 
     void writeProperties(java.util.Properties p) {
