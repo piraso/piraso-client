@@ -179,6 +179,7 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         reader.addListener(treeHandler);
         table.setModel(tableModel);
         cboUrl.setModel(comboBoxModel);
+        btnAutoScroll.setSelected(true);
 
         initTable();
         refreshUIStates();
