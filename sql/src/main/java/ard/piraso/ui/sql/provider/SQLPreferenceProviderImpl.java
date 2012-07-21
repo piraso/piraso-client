@@ -44,6 +44,9 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
         NCPreferenceProperty viewSQL = new NCPreferenceProperty(SQLPreferenceEnum.VIEW_SQL_ENABLED.getPropertyName(), Boolean.class);
         NCPreferenceProperty preparedMC = new NCPreferenceProperty(SQLPreferenceEnum.PREPARED_STATEMENT_METHOD_CALL_ENABLED.getPropertyName(), Boolean.class);
         NCPreferenceProperty resultSet = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName(), Boolean.class);
+        NCPreferenceProperty resultSetData = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_DATA_ENABLED.getPropertyName(), Boolean.class);
+        NCPreferenceProperty resultSetAllData = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_ALL_DATA_ENABLED.getPropertyName(), Boolean.class);
+
         NCPreferenceProperty resultSetMC = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_METHOD_CALL_ENABLED.getPropertyName(), Boolean.class);
 
         conn.setParent(true);
@@ -65,7 +68,13 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
         resultSetMC.setChild(true);
         resultSetMC.addDependents(resultSet, prepared, conn);
 
-        return Arrays.asList(conn, connMC, prepared, viewSQL, preparedMC, resultSet, resultSetMC);
+        resultSetData.setChild(true);
+        resultSetData.addDependents(resultSet, prepared, conn);
+
+        resultSetAllData.setChild(true);
+        resultSetAllData.addDependents(resultSetData, resultSet, prepared, conn);
+
+        return Arrays.asList(conn, connMC, prepared, viewSQL, preparedMC, resultSet, resultSetData, resultSetAllData, resultSetMC);
     }
 
     @Override
