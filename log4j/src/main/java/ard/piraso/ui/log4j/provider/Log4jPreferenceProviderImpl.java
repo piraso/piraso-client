@@ -23,7 +23,7 @@ public class Log4jPreferenceProviderImpl implements PreferenceProvider {
 
     @Override
     public Integer getOrder() {
-        return Integer.MAX_VALUE;
+        return 2;
     }
 
     @Override

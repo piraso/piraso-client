@@ -80,7 +80,7 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
 
     @Override
     public Integer getOrder() {
-        return 2;
+        return 3;
     }
 
     @Override

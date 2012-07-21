@@ -20,6 +20,7 @@ package ard.piraso.ui.api.views;
 
 import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.Entry;
+import ard.piraso.api.entry.JSONEntry;
 import ard.piraso.ui.api.formatter.JsonFormatter;
 import ard.piraso.ui.api.manager.FontProviderManager;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -38,7 +39,7 @@ public class JsonTabView extends FilteredSyntaxPaneTabView<Entry> {
      * @param entry       the entry
      */
     public JsonTabView(Entry entry) {
-        super("JSON Raw", entry, "JSON is now copied to clipboard.");
+        super("JSON", entry, "JSON is now copied to clipboard.");
     }
 
     @Override
@@ -50,7 +51,12 @@ public class JsonTabView extends FilteredSyntaxPaneTabView<Entry> {
             txtEditor.setEditable(false);
             txtEditor.setContentType("text/json");
             txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
-            txtEditor.setText(JsonFormatter.prettyPrint(MAPPER.writeValueAsString(entry)));
+
+            if(JSONEntry.class.isInstance(entry)) {
+                txtEditor.setText(JsonFormatter.prettyPrint(((JSONEntry) entry).getJsonString()));
+            } else {
+                txtEditor.setText(JsonFormatter.prettyPrint(MAPPER.writeValueAsString(entry)));
+            }
         } catch (Exception e) {
             btnCopy.setEnabled(false);
             ErrorManager.getDefault().notify(e);
