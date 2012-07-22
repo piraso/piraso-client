@@ -15,7 +15,7 @@
  */
 package ard.piraso.ui.base.action;
 
-import ard.piraso.ui.api.StackTraceFilterDialog;
+import ard.piraso.ui.base.ImportDialog;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -24,15 +24,15 @@ import org.openide.awt.ActionRegistration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@ActionID(category="Tools", id="ard.piraso.ui.base.action.StackTraceFiltersShowAction")
-@ActionRegistration(displayName="Manage Stack Trace Filter")
+@ActionID(category="File", id="ard.piraso.ui.base.action.ImportSettingsAction")
+@ActionRegistration(displayName="Import Settings...")
 @ActionReferences({
-    @ActionReference(path = "Menu/Tools", position = 610)
+        @ActionReference(path="Menu/File", position=1960)
 })
-public final class StackTraceFiltersShowAction implements ActionListener {
+public final class ImportSettingsAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new StackTraceFilterDialog().setVisible(true);
+        new ImportDialog().setVisible(true);
     }
 }

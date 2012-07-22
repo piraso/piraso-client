@@ -36,7 +36,7 @@ public class IOEntryCacheManagerTest {
     public void testAdd() throws Exception {
         IOEntryCacheManager manager = IOEntryCacheManager.INSTANCE;
 
-        ObjectMapper mapper = JacksonUtils.createMapper();
+        ObjectMapper mapper = JacksonUtils.MAPPER;
 
         MessageEntry entry = new MessageEntry(1l, "test");
 

@@ -31,7 +31,7 @@ import org.openide.ErrorManager;
  */
 public class JsonTabView extends FilteredSyntaxPaneTabView<Entry> {
     
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    private static final ObjectMapper MAPPER = JacksonUtils.MAPPER;
     
     /**
      * Creates new form StackTraceTabView

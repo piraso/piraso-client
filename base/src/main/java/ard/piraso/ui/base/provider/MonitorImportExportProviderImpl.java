@@ -24,7 +24,7 @@ public class MonitorImportExportProviderImpl implements ImportExportProvider {
         ObjectConverterRegistry.register(MonitorSettings.class, new TypeConverter<MonitorSettings>(MonitorSettings.class));
     }
 
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    private static final ObjectMapper MAPPER = JacksonUtils.MAPPER;
 
     public static final String OPTION = "Monitors";
 

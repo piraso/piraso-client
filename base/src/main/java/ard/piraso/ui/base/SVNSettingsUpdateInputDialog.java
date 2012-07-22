@@ -22,14 +22,14 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author adeleon
  */
-public final class SVNSyncInputDialog extends AbstractDialog {
+public final class SVNSettingsUpdateInputDialog extends AbstractDialog {
 
     private boolean cancelled;
     
     /**
      * Creates new form Log4jPreferenceInputDialog
      */
-    public SVNSyncInputDialog() {
+    public SVNSettingsUpdateInputDialog() {
         super();
         initComponents();
 
@@ -86,13 +86,13 @@ public final class SVNSyncInputDialog extends AbstractDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(SVNSyncInputDialog.class, "SVNSyncInputDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.jLabel1.text")); // NOI18N
 
-        txtName.setText(org.openide.util.NbBundle.getMessage(SVNSyncInputDialog.class, "SVNSyncInputDialog.txtName.text")); // NOI18N
+        txtName.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.txtName.text")); // NOI18N
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(SVNSyncInputDialog.class, "SVNSyncInputDialog.jLabel2.text")); // NOI18N
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.jLabel2.text")); // NOI18N
 
-        btnOk.setText(org.openide.util.NbBundle.getMessage(SVNSyncInputDialog.class, "SVNSyncInputDialog.btnOk.text")); // NOI18N
+        btnOk.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.btnOk.text")); // NOI18N
         btnOk.setEnabled(false);
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -100,14 +100,14 @@ public final class SVNSyncInputDialog extends AbstractDialog {
             }
         });
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(SVNSyncInputDialog.class, "SVNSyncInputDialog.btnCancel.text")); // NOI18N
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
 
-        txtValue.setText(org.openide.util.NbBundle.getMessage(SVNSyncInputDialog.class, "SVNSyncInputDialog.txtValue.text")); // NOI18N
+        txtValue.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.txtValue.text")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

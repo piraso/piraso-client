@@ -14,7 +14,7 @@ public class SingleModelManagerImpl<T> extends AbstractModelManager implements S
 
     private static final Logger LOG = Logger.getLogger(ModelManagerImpl.class.getName());
 
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    private static final ObjectMapper MAPPER = JacksonUtils.MAPPER;
 
     private final FileObject persistent;
 

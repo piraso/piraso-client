@@ -262,7 +262,7 @@ public class ImportDialog extends AbstractDialog {
             txtSourceFile.setText(browserFileChooser.getSelectedFile().getAbsolutePath());
 
             try {
-                settings = JacksonUtils.createMapper().readValue(selectedFile, ObjectEntrySettings.class);
+                settings = JacksonUtils.MAPPER.readValue(selectedFile, ObjectEntrySettings.class);
             } catch (IOException e) {
                 ErrorManager.getDefault().notify(e);
                 return;

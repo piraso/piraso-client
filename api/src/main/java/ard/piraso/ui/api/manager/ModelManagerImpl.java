@@ -20,7 +20,7 @@ public class ModelManagerImpl<T extends WithNameModel> extends AbstractModelMana
 
     private static final Logger LOG = Logger.getLogger(ModelManagerImpl.class.getName());
 
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    private static final ObjectMapper MAPPER = JacksonUtils.MAPPER;
 
     private final FileObject persistent;
 

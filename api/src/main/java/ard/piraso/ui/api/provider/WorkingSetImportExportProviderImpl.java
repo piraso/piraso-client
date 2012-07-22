@@ -25,7 +25,7 @@ public class WorkingSetImportExportProviderImpl implements ImportExportProvider 
         ObjectConverterRegistry.register(WorkingSetSettings.class, new TypeConverter<WorkingSetSettings>(WorkingSetSettings.class));
     }
 
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    private static final ObjectMapper MAPPER = JacksonUtils.MAPPER;
 
     public static final String OPTION = "Working Set";
 

@@ -23,19 +23,21 @@ import ard.piraso.ui.api.manager.SingleModelManagers;
  *
  * @author adeleon
  */
-public class SVNSyncDialog extends AbstractDialog {
+public class SVNSettingsUpdateDialog extends AbstractDialog {
 
     private SVNSyncModel model;
 
     /**
      * Creates new form SVNSyncDialog
      */
-    public SVNSyncDialog() {
+    public SVNSettingsUpdateDialog() {
         super();
-        setTitle("SVN Synchronize settings");
+        setTitle("SVN Update Settings");
         initComponents();
         
-        getRootPane().setDefaultButton(btnSync);
+        getRootPane().setDefaultButton(btnUpdate);
+        setLocationRelativeTo(getOwner());
+
 
         model = SingleModelManagers.SYNC_SETTINGS.get();
 
@@ -58,25 +60,25 @@ public class SVNSyncDialog extends AbstractDialog {
 
         jLabel1 = new javax.swing.JLabel();
         txtURL = new javax.swing.JTextField();
-        btnSync = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         chkSyncOnStartup = new javax.swing.JCheckBox();
-        btnAuthenticate = new javax.swing.JToggleButton();
+        btnAuthenticate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(SVNSyncDialog.class, "SVNSyncDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.jLabel1.text")); // NOI18N
 
-        txtURL.setText(org.openide.util.NbBundle.getMessage(SVNSyncDialog.class, "SVNSyncDialog.txtURL.text")); // NOI18N
+        txtURL.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.txtURL.text")); // NOI18N
 
-        btnSync.setText(org.openide.util.NbBundle.getMessage(SVNSyncDialog.class, "SVNSyncDialog.btnSync.text")); // NOI18N
-        btnSync.addActionListener(new java.awt.event.ActionListener() {
+        btnUpdate.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.btnUpdate.text")); // NOI18N
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSyncActionPerformed(evt);
+                btnUpdateActionPerformed(evt);
             }
         });
 
-        jButton2.setText(org.openide.util.NbBundle.getMessage(SVNSyncDialog.class, "SVNSyncDialog.jButton2.text")); // NOI18N
+        jButton2.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.jButton2.text")); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -84,9 +86,9 @@ public class SVNSyncDialog extends AbstractDialog {
         });
 
         chkSyncOnStartup.setSelected(true);
-        chkSyncOnStartup.setText(org.openide.util.NbBundle.getMessage(SVNSyncDialog.class, "SVNSyncDialog.chkSyncOnStartup.text")); // NOI18N
+        chkSyncOnStartup.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.chkSyncOnStartup.text")); // NOI18N
 
-        btnAuthenticate.setText(org.openide.util.NbBundle.getMessage(SVNSyncDialog.class, "SVNSyncDialog.btnAuthenticate.text")); // NOI18N
+        btnAuthenticate.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.btnAuthenticate.text")); // NOI18N
         btnAuthenticate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAuthenticateActionPerformed(evt);
@@ -103,18 +105,20 @@ public class SVNSyncDialog extends AbstractDialog {
                         .addContainerGap()
                         .add(btnAuthenticate)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .add(btnSync)
+                        .add(btnUpdate)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(jButton2))
-                    .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                    .add(layout.createSequentialGroup()
                         .add(17, 17, 17)
                         .add(jLabel1)
-                        .add(15, 15, 15)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                             .add(layout.createSequentialGroup()
+                                .add(15, 15, 15)
                                 .add(chkSyncOnStartup)
-                                .add(0, 128, Short.MAX_VALUE))
-                            .add(txtURL))))
+                                .add(0, 154, Short.MAX_VALUE))
+                            .add(layout.createSequentialGroup()
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                                .add(txtURL)))))
                 .add(14, 14, 14))
         );
         layout.setVerticalGroup(
@@ -128,7 +132,7 @@ public class SVNSyncDialog extends AbstractDialog {
                 .add(chkSyncOnStartup)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 42, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(btnSync)
+                    .add(btnUpdate)
                     .add(jButton2)
                     .add(btnAuthenticate))
                 .addContainerGap())
@@ -141,19 +145,19 @@ public class SVNSyncDialog extends AbstractDialog {
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void btnSyncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSyncActionPerformed
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         SingleModelManagers.SYNC_SETTINGS.save(model);
 
 
-    }//GEN-LAST:event_btnSyncActionPerformed
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnAuthenticateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAuthenticateActionPerformed
-
+        // TODO add your handling code here:
     }//GEN-LAST:event_btnAuthenticateActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JToggleButton btnAuthenticate;
-    private javax.swing.JButton btnSync;
+    private javax.swing.JButton btnAuthenticate;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBox chkSyncOnStartup;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;

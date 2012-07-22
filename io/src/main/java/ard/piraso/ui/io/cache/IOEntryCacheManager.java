@@ -24,7 +24,7 @@ public class IOEntryCacheManager {
     private IOEntryCacheManager() {
         CacheManager manager = CacheManager.getInstance();
 
-        mapper = JacksonUtils.createMapper();
+        mapper = JacksonUtils.MAPPER;
         cache = manager.getCache(IOEntrySerializable.class.getName());
     }
 

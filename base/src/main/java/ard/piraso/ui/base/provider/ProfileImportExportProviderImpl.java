@@ -24,7 +24,7 @@ public class ProfileImportExportProviderImpl implements ImportExportProvider {
         ObjectConverterRegistry.register(ProfileSettings.class, new TypeConverter<ProfileSettings>(ProfileSettings.class));
     }
 
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    private static final ObjectMapper MAPPER = JacksonUtils.MAPPER;
     public static final String OPTION = "Profiles";
 
     private final ExportHandler exportHandler = new Export();

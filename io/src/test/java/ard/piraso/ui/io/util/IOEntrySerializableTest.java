@@ -17,7 +17,7 @@ import static junit.framework.Assert.assertNotNull;
 public class IOEntrySerializableTest {
     @Test
     public void testJackson() throws Exception {
-        ObjectMapper mapper = JacksonUtils.createMapper();
+        ObjectMapper mapper = JacksonUtils.MAPPER;
 
         IOEntrySerializable serializable = new IOEntrySerializable(new EntryReadEvent(this, 12l, new MessageEntry("test"), new Date()));
 

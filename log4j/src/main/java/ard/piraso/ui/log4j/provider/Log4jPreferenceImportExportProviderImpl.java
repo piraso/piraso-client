@@ -28,7 +28,7 @@ public class Log4jPreferenceImportExportProviderImpl implements ImportExportProv
 
     private final ImportHandler importHandler = new Import();
 
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    private static final ObjectMapper MAPPER = JacksonUtils.MAPPER;
 
     @Override
     public ExportHandler getExportHandler() {

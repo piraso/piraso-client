@@ -50,7 +50,7 @@ public class IOEntrySerializable {
         this.date = evt.getDate();
         this.classType = evt.getEntry().getClass().getName();
         
-        this.entryValue = JacksonUtils.createMapper().writeValueAsString(evt.getEntry());
+        this.entryValue = JacksonUtils.MAPPER.writeValueAsString(evt.getEntry());
     }
 
     public Long getRowNum() {

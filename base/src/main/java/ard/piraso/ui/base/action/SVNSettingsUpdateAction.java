@@ -15,7 +15,7 @@
  */
 package ard.piraso.ui.base.action;
 
-import ard.piraso.ui.base.ExportDialog;
+import ard.piraso.ui.base.SVNSettingsUpdateDialog;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -24,15 +24,15 @@ import org.openide.awt.ActionRegistration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@ActionID(category="File", id="ard.piraso.ui.base.action.ExportAction")
-@ActionRegistration(displayName="Export...")
+@ActionID(category = "File", id = "ard.piraso.ui.base.action.SVNSettingsUpdateAction")
+@ActionRegistration(displayName = "SVN Settings Update...")
 @ActionReferences({
-        @ActionReference(path="Menu/File", position=1950, separatorAfter = 2025)
+    @ActionReference(path = "Menu/File", position = 1992)
 })
-public final class ExportAction implements ActionListener {
+public final class SVNSettingsUpdateAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new ExportDialog().setVisible(true);
+        new SVNSettingsUpdateDialog().setVisible(true);
     }
 }

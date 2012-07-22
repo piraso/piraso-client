@@ -25,7 +25,7 @@ public class StackTraceFilterImportExportProviderImpl implements ImportExportPro
         ObjectConverterRegistry.register(StackTraceFilterModel.class, new TypeConverter<StackTraceFilterModel>(StackTraceFilterModel.class));
     }
 
-    private static final ObjectMapper MAPPER = JacksonUtils.createMapper();
+    private static final ObjectMapper MAPPER = JacksonUtils.MAPPER;
 
     public static final String OPTION = "Stack Trace Filters";
 

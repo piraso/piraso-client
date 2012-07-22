@@ -15,7 +15,7 @@
  */
 package ard.piraso.ui.base.action;
 
-import ard.piraso.ui.base.ImportDialog;
+import ard.piraso.ui.base.ExportDialog;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -24,15 +24,15 @@ import org.openide.awt.ActionRegistration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@ActionID(category="File", id="ard.piraso.ui.base.action.ImportAction")
-@ActionRegistration(displayName="Import...")
+@ActionID(category="File", id="ard.piraso.ui.base.action.ExportSettingsAction")
+@ActionRegistration(displayName="Export Settings...")
 @ActionReferences({
-        @ActionReference(path="Menu/File", position=1960)
+        @ActionReference(path="Menu/File", position=1950, separatorAfter = 2025)
 })
-public final class ImportAction implements ActionListener {
+public final class ExportSettingsAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new ImportDialog().setVisible(true);
+        new ExportDialog().setVisible(true);
     }
 }
