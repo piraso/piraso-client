@@ -14,29 +14,26 @@
  * limitations under the License.
  */
 
-package ard.piraso.ui.api.provider;
+package ard.piraso.ui.spring.provider;
 
 import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.JSONAwareEntry;
-import ard.piraso.ui.api.EntryTabViewProvider;
-import ard.piraso.ui.api.manager.SingleModelManagers;
-import ard.piraso.ui.api.views.JsonTabView;
+import ard.piraso.api.spring.SpringRemotingEntry;
+import ard.piraso.ui.api.EntryViewProvider;
+import ard.piraso.ui.spring.SpringEntryViewTopComponent;
 import org.openide.util.lookup.ServiceProvider;
+import org.openide.windows.TopComponent;
 
 /**
- * json tab view
+ * Provides the view for {@link SpringRemotingEntry} entry types.
  */
-@ServiceProvider(service=EntryTabViewProvider.class)
-public class JsonEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<JsonTabView> {
-
+@ServiceProvider(service=EntryViewProvider.class)
+public class SpringEntryViewProviderImpl implements EntryViewProvider {
     @Override
-    protected boolean isSupported(Entry entry) {
-        return SingleModelManagers.GENERAL_SETTINGS.get().isShowJSONRawView() || JSONAwareEntry.class.isInstance(entry);
-    }
+    public Class<? extends TopComponent> getViewClass(Entry entry) {
+        if(SpringRemotingEntry.class.isInstance(entry)) {
+            return SpringEntryViewTopComponent.class;
+        }
 
-    @Override
-    protected JsonTabView createView(Entry entry) {
-        return new JsonTabView(entry);
+        return null;
     }
-
 }

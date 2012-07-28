@@ -17,26 +17,24 @@
 package ard.piraso.ui.api.provider;
 
 import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.JSONAwareEntry;
+import ard.piraso.api.entry.XMLAwareEntry;
 import ard.piraso.ui.api.EntryTabViewProvider;
-import ard.piraso.ui.api.manager.SingleModelManagers;
-import ard.piraso.ui.api.views.JsonTabView;
+import ard.piraso.ui.api.views.XMLTabView;
 import org.openide.util.lookup.ServiceProvider;
 
 /**
- * json tab view
+ * xml tab view
  */
 @ServiceProvider(service=EntryTabViewProvider.class)
-public class JsonEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<JsonTabView> {
+public class XMLEntryTabViewProviderImpl extends AbstractEntryTabViewProvider<XMLTabView> {
 
     @Override
     protected boolean isSupported(Entry entry) {
-        return SingleModelManagers.GENERAL_SETTINGS.get().isShowJSONRawView() || JSONAwareEntry.class.isInstance(entry);
+        return XMLAwareEntry.class.isInstance(entry);
     }
 
     @Override
-    protected JsonTabView createView(Entry entry) {
-        return new JsonTabView(entry);
+    protected XMLTabView createView(Entry entry) {
+        return new XMLTabView(entry);
     }
-
 }

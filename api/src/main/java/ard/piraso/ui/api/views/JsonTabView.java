@@ -18,7 +18,7 @@ package ard.piraso.ui.api.views;
 
 import ard.piraso.api.JacksonUtils;
 import ard.piraso.api.entry.Entry;
-import ard.piraso.api.entry.JSONEntry;
+import ard.piraso.api.entry.JSONAwareEntry;
 import ard.piraso.ui.api.formatter.JsonFormatter;
 import ard.piraso.ui.api.manager.FontProviderManager;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -50,8 +50,8 @@ public class JsonTabView extends FilteredSyntaxPaneTabView<Entry> {
             txtEditor.setContentType("text/json");
             txtEditor.setFont(FontProviderManager.INSTANCE.getEditorDefaultFont());
 
-            if(JSONEntry.class.isInstance(entry)) {
-                txtEditor.setText(JsonFormatter.prettyPrint(((JSONEntry) entry).getJsonString()));
+            if(JSONAwareEntry.class.isInstance(entry)) {
+                txtEditor.setText(JsonFormatter.prettyPrint(((JSONAwareEntry) entry).getJsonString()));
             } else {
                 txtEditor.setText(JsonFormatter.prettyPrint(MAPPER.writeValueAsString(entry)));
             }
