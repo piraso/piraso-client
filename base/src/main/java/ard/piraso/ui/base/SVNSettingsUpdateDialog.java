@@ -1,11 +1,11 @@
 /*
- * Copyright 2012 adeleon.
+ * Copyright (c) 2012 Alvin R. de Leon. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package ard.piraso.ui.base;
 
-import ard.piraso.ui.api.SVNSyncModel;
+import ard.piraso.ui.api.SVNSettingsUpdateModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.api.manager.SingleModelManagers;
+import ard.piraso.ui.api.util.NotificationUtils;
 
 /**
  *
@@ -25,7 +27,7 @@ import ard.piraso.ui.api.manager.SingleModelManagers;
  */
 public class SVNSettingsUpdateDialog extends AbstractDialog {
 
-    private SVNSyncModel model;
+    private SVNSettingsUpdateModel model;
 
     /**
      * Creates new form SVNSyncDialog
@@ -39,8 +41,7 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
         setLocationRelativeTo(getOwner());
 
 
-        model = SingleModelManagers.SYNC_SETTINGS.get();
-
+        model = SingleModelManagers.SVN_SETTINGS.get();
         if(model.getUrl() != null) {
             txtURL.setText(model.getUrl().toString());
         }
@@ -61,7 +62,7 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
         jLabel1 = new javax.swing.JLabel();
         txtURL = new javax.swing.JTextField();
         btnUpdate = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
         chkSyncOnStartup = new javax.swing.JCheckBox();
         btnAuthenticate = new javax.swing.JButton();
 
@@ -78,10 +79,10 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
             }
         });
 
-        jButton2.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.jButton2.text")); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.btnCancel.text")); // NOI18N
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnCancelActionPerformed(evt);
             }
         });
 
@@ -107,7 +108,7 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(btnUpdate)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(jButton2))
+                        .add(btnCancel))
                     .add(layout.createSequentialGroup()
                         .add(17, 17, 17)
                         .add(jLabel1)
@@ -133,7 +134,7 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 42, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(btnUpdate)
-                    .add(jButton2)
+                    .add(btnCancel)
                     .add(btnAuthenticate))
                 .addContainerGap())
         );
@@ -141,25 +142,31 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        SingleModelManagers.SYNC_SETTINGS.save(model);
-
-
+        SingleModelManagers.SVN_SETTINGS.save(model);
+        NotificationUtils.info(String.format("SVN Settings update from url '%s' was successful.", model.getUrl()));
+        dispose();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnAuthenticateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAuthenticateActionPerformed
-        // TODO add your handling code here:
+        SVNSettingsUpdateInputDialog dialog = new SVNSettingsUpdateInputDialog();
+        dialog.setVisible(true);
+
+        if(!dialog.isCancelled()) {
+            model.setName(dialog.getUsername());
+            model.setPassword(dialog.getPassword());
+        }
     }//GEN-LAST:event_btnAuthenticateActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAuthenticate;
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBox chkSyncOnStartup;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JTextField txtURL;
     // End of variables declaration//GEN-END:variables

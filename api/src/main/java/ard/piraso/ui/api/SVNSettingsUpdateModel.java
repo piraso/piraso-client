@@ -16,32 +16,29 @@
 
 package ard.piraso.ui.api;
 
-import java.util.Set;
+import java.net.URL;
 
 /**
- * Profile model
+ * SVNSync model
  */
-public class ProfileModel implements WithNameModel {
+public class SVNSettingsUpdateModel {
+
+    private URL url;
+
     private String name;
 
-    private String desc;
+    private String password;
 
-    private Set<String> monitors;
+    private Long revision;
 
-    public String getDesc() {
-        return desc;
+    private boolean loadOnStartup = true;
+
+    public boolean isLoadOnStartup() {
+        return loadOnStartup;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public Set<String> getMonitors() {
-        return monitors;
-    }
-
-    public void setMonitors(Set<String> monitors) {
-        this.monitors = monitors;
+    public void setLoadOnStartup(boolean loadOnStartup) {
+        this.loadOnStartup = loadOnStartup;
     }
 
     public String getName() {
@@ -50,5 +47,29 @@ public class ProfileModel implements WithNameModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public URL getUrl() {
+        return url;
+    }
+
+    public void setUrl(URL url) {
+        this.url = url;
+    }
+
+    public Long getRevision() {
+        return revision;
+    }
+
+    public void setRevision(Long revision) {
+        this.revision = revision;
     }
 }
