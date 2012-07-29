@@ -20,6 +20,10 @@ import ard.piraso.ui.api.SVNSettingsUpdateModel;
 import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.api.util.NotificationUtils;
+import ard.piraso.ui.base.manager.SVNUpdateManager;
+import org.openide.ErrorManager;
+
+import java.net.URL;
 
 /**
  *
@@ -147,9 +151,17 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        SingleModelManagers.SVN_SETTINGS.save(model);
-        NotificationUtils.info(String.format("SVN Settings update from url '%s' was successful.", model.getUrl()));
-        dispose();
+        try {
+            model.setUrl(new URL(txtURL.getText()));
+            SingleModelManagers.SVN_SETTINGS.save(model);
+
+            SVNUpdateManager.create().updateSettings(true);
+
+            NotificationUtils.info(String.format("SVN Settings update from url '%s' was successful.", model.getUrl()));
+            dispose();
+        } catch (Exception e) {
+            ErrorManager.getDefault().notify(e);
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnAuthenticateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAuthenticateActionPerformed

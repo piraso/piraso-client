@@ -18,6 +18,8 @@ package ard.piraso.ui.base;
 
 import ard.piraso.api.io.PirasoObjectLoaderRegistry;
 import ard.piraso.ui.api.PirasoObjectLoaderProvider;
+import ard.piraso.ui.api.manager.SingleModelManagers;
+import ard.piraso.ui.base.manager.SVNUpdateManager;
 import jsyntaxpane.DefaultSyntaxKit;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
@@ -44,6 +46,15 @@ public class Installer extends ModuleInstall {
         for(PirasoObjectLoaderProvider loaderProvider : providers) {
             LOG.info("Added loader by: " + loaderProvider.getClass().getName());
             PirasoObjectLoaderRegistry.INSTANCE.addEntryLoader(loaderProvider.getLoader());
+        }
+
+        LOG.info("Loading SVN if needed...");
+        try {
+            if(SingleModelManagers.SVN_SETTINGS.get().isLoadOnStartup()) {
+                SVNUpdateManager.create().updateSettings(false);
+            }
+        } catch (Exception e) {
+            LOG.warning(e.getMessage());
         }
     }
 
