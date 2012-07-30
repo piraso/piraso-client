@@ -40,11 +40,13 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * SVN update manager
  */
 public class SVNUpdateManager extends HttpBasicAuthentication {
+    private static final Logger LOG = Logger.getLogger(SVNUpdateManager.class.getName());
 
     public static SVNUpdateManager create() {
         ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager();
@@ -128,7 +130,7 @@ public class SVNUpdateManager extends HttpBasicAuthentication {
                 handler.handle(settingsStr);
             }
 
-            System.out.println("Updated Settings");
+            LOG.info(String.format("Updated Settings from %s with revision %d.", model.getUrl(), model.getRevision()));
             SingleModelManagers.SVN_SETTINGS.save(model);
         }
     }

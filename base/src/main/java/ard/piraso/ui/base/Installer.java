@@ -52,9 +52,11 @@ public class Installer extends ModuleInstall {
         try {
             if(SingleModelManagers.SVN_SETTINGS.get().isLoadOnStartup()) {
                 SVNUpdateManager.create().updateSettings(false);
+            } else {
+                LOG.info("SVN Update settings is not load on startup.");
             }
         } catch (Exception e) {
-            LOG.warning(e.getMessage());
+            LOG.warning(String.valueOf(e));
         }
     }
 
