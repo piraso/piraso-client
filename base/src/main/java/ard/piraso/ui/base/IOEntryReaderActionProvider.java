@@ -62,6 +62,7 @@ public class IOEntryReaderActionProvider implements IOEntryLifecycleListener {
         setSavable(false);
         this.startCookie.setReader(reader);
         this.stopCookie.setReader(reader);
+        this.saveCookie.setReader(reader);
         this.reader.addLiveCycleListener(this);
     }
 
