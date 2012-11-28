@@ -97,18 +97,19 @@
         <junit.version>4.8.1</junit.version>
         <mokito.version>1.8.4</mokito.version>
         <junit.dep.version>4.5</junit.dep.version>
-        <netbeans.version>RELEASE712</netbeans.version>
-
+        <netbeans.version>RELEASE721</netbeans.version>
+        
+        <piraso.version>1.0</piraso.version>
         <piraso.client.branding.version>1.0-SNAPSHOT</piraso.client.branding.version>
         <piraso.client.base.version>1.0-SNAPSHOT</piraso.client.base.version>
         <piraso.client.sql.version>1.0-SNAPSHOT</piraso.client.sql.version>
         <piraso.client.log4j.version>1.0-SNAPSHOT</piraso.client.log4j.version>
         <piraso.clieant.api.version>1.0-SNAPSHOT</piraso.clieant.api.version>
         <piraso.client.spring.version>1.0-SNAPSHOT</piraso.client.spring.version>
-        <context.logger.api.version>1.0-SNAPSHOT</context.logger.api.version>
-        <context.logger.api.version>1.0-SNAPSHOT</context.logger.api.version>
-        <context.logger.api.test.version>1.0-SNAPSHOT</context.logger.api.test.version>
-        <log4j.context.logger.api.version>1.0-SNAPSHOT</log4j.context.logger.api.version>
+        <piraso.client.api.version>1.0-SNAPSHOT</piraso.client.api.version>
+        <context.logger.api.version>1.0</context.logger.api.version>
+        <context.logger.api.test.version>1.0</context.logger.api.test.version>
+        <log4j.context.logger.api.version>1.0</log4j.context.logger.api.version>        
     </properties>
 
     <dependencies>
@@ -138,12 +139,12 @@
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>context-logger-api</artifactId>
-            <version>${context.logger.api.version}</version>
+            <version>${piraso.version}</version>
         </dependency>
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>context-logger-api</artifactId>
-            <version>${context.logger.api.test.version}</version>
+            <version>${piraso.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

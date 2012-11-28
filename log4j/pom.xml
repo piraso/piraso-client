@@ -72,12 +72,12 @@
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>piraso-client-api</artifactId>
-            <version>${piraso.clieant.api.version}</version>
+            <version>${piraso.client.api.version}</version>
         </dependency>
         <dependency>
             <groupId>ard.piraso</groupId>
             <artifactId>log4j-context-logger-api</artifactId>
-            <version>${log4j.context.logger.api.version}</version>
+            <version>${piraso.version}</version>
         </dependency>
     </dependencies>
 
