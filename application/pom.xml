@@ -77,6 +77,17 @@
         <artifactId>nbm-maven-plugin</artifactId>
         <configuration>
           <etcConfFile>${project.basedir}/piraso_client.conf</etcConfFile>
+          <installerLicenseFile>../LICENSE.txt</installerLicenseFile>
+          <installerOsLinux>true</installerOsLinux>
+          <installerOsWindows>true</installerOsWindows>
+          <installerOsSolaris>true</installerOsSolaris>
+          <templateFile>${project.basedir}/installer/template.xml</templateFile>
+          <binDirectory>${project.basedir}/installer/bin</binDirectory>
+          <userSettings>
+            <nbi.instleftcorner.file>${project.basedir}/installer/piraso_32.png</nbi.instleftcorner.file>
+            <nbi.dock.icon.file>${project.basedir}/installer/dock-icons.icns</nbi.dock.icon.file>
+            <nbi.icon.file>${project.basedir}/installer/piraso_32.png</nbi.icon.file>
+          </userSettings>
         </configuration>
       </plugin>
     </plugins>

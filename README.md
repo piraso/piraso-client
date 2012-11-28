@@ -15,7 +15,7 @@ Please see  http://netbeans.org/features/platform/.
 
 Here are the instructions to build and run:
 
-1. Install Maven 2 and JDK 6
+1. Install Maven 3 and JDK 6
 
 2. To build source code go to `${piraso-client.home}` and execute the following command:
 ```
@@ -25,6 +25,11 @@ Here are the instructions to build and run:
 3. To run go to `${piraso-client.home}/application`
 ```
     mvn nbm:run-platform
+```
+
+4. To build installers go to `${piraso-client.home}/application`
+```
+    mvn nbm:build-installers
 ```
 
 ## Author
