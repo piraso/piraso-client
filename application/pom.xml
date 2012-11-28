@@ -77,7 +77,7 @@
         <artifactId>nbm-maven-plugin</artifactId>
         <configuration>
           <etcConfFile>${project.basedir}/piraso_client.conf</etcConfFile>
-          <installerLicenseFile>../LICENSE.txt</installerLicenseFile>
+          <installerLicenseFile>${project.basedir}/../LICENSE.txt</installerLicenseFile>
           <installerOsLinux>true</installerOsLinux>
           <installerOsWindows>true</installerOsWindows>
           <installerOsSolaris>true</installerOsSolaris>
