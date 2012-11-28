@@ -21,6 +21,7 @@ import ard.piraso.ui.api.extension.AbstractDialog;
 import ard.piraso.ui.api.manager.SingleModelManagers;
 import ard.piraso.ui.api.util.NotificationUtils;
 import ard.piraso.ui.base.manager.SVNUpdateManager;
+import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
 
 import java.net.URL;
@@ -43,7 +44,6 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
         
         getRootPane().setDefaultButton(btnUpdate);
         setLocationRelativeTo(getOwner());
-
 
         model = SingleModelManagers.SVN_SETTINGS.get();
         if(model.getUrl() != null) {
@@ -166,6 +166,12 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
 
     private void btnAuthenticateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAuthenticateActionPerformed
         SVNSettingsUpdateInputDialog dialog = new SVNSettingsUpdateInputDialog();
+
+        if(StringUtils.isNotBlank(dialog.getUsername())) {
+            dialog.setUsername(dialog.getUsername());
+            dialog.setPassword(dialog.getPassword());
+        }
+
         dialog.setVisible(true);
 
         if(!dialog.isCancelled()) {
