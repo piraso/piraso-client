@@ -5,9 +5,11 @@ Piraso Client [![Build Status](https://buildhive.cloudbees.com/job/alvinrdeleon/
 
 This is the Piraso client source code. This is created using Netbeans Platform.
 
-http://netbeans.org/features/platform/
-
 http://alvinrdeleon.github.com/piraso/
+
+### NetBeans Platform
+
+Please see  http://netbeans.org/features/platform/.
 
 ### Quick Start
 
@@ -27,7 +29,7 @@ Here are the instructions to build and run:
 
 ## Author
 
-[Alvin R. de Leon](https://github.com/alvinrdeleon/)
+Designed and built by [Alvin R. de Leon](https://github.com/alvinrdeleon/)
 
 ## License
 
