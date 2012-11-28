@@ -6,6 +6,7 @@ Piraso Client [![Build Status](https://buildhive.cloudbees.com/job/alvinrdeleon/
 This is the Piraso client source code. This is created using Netbeans Platform.
 
 http://netbeans.org/features/platform/
+
 http://alvinrdeleon.github.com/piraso/
 
 ### Quick Start
@@ -14,14 +15,14 @@ Here are the instructions to build and run:
 
 1. Install Maven 2 and JDK 6
 
-2. To build source code go to ${piraso-client.home} and execute the following command:
+2. To build source code go to `${piraso-client.home}` and execute the following command:
 ```
     mvn clean install
 ```
 
-3. To run go to ${piraso-client.home}/application
+3. To run go to `${piraso-client.home}/application`
 ```
-    > mvn nbm:run-platform
+    mvn nbm:run-platform
 ```
 
 ## Author
