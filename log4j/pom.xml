@@ -22,11 +22,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <artifactId>piraso-client</artifactId>
-        <groupId>ard.piraso</groupId>
+        <groupId>org.piraso</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>ard.piraso</groupId>
+    <groupId>org.piraso</groupId>
     <artifactId>piraso-client-log4j</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
@@ -70,12 +70,12 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>ard.piraso</groupId>
+            <groupId>org.piraso</groupId>
             <artifactId>piraso-client-api</artifactId>
             <version>${piraso.client.api.version}</version>
         </dependency>
         <dependency>
-            <groupId>ard.piraso</groupId>
+            <groupId>org.piraso</groupId>
             <artifactId>log4j-context-logger-api</artifactId>
             <version>${piraso.version}</version>
         </dependency>
@@ -89,7 +89,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publicPackages>
-                        <publicPackage>ard.piraso.ui.log4j.provider</publicPackage>
+                        <publicPackage>org.piraso.ui.log4j.provider</publicPackage>
                     </publicPackages>
                 </configuration>
             </plugin>

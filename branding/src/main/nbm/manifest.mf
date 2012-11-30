@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-OpenIDE-Module-Localizing-Bundle: ard/piraso/ui/branding/Bundle.properties
+OpenIDE-Module-Localizing-Bundle: org/piraso/ui/branding/Bundle.properties

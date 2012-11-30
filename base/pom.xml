@@ -22,11 +22,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
     <artifactId>piraso-client</artifactId>
-    <groupId>ard.piraso</groupId>
+    <groupId>org.piraso</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
 
-    <groupId>ard.piraso</groupId>
+    <groupId>org.piraso</groupId>
     <artifactId>piraso-client-base</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>nbm</packaging>
@@ -85,12 +85,12 @@
             <version>${netbeans.version}</version>
         </dependency>
         <dependency>
-            <groupId>ard.piraso</groupId>
+            <groupId>org.piraso</groupId>
             <artifactId>piraso-client-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>ard.piraso</groupId>
+            <groupId>org.piraso</groupId>
             <artifactId>piraso-client-io</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -109,11 +109,11 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publicPackages>
-                        <publicPackage>ard.piraso.api.*</publicPackage>
-                        <publicPackage>ard.piraso.client.net</publicPackage>
-                        <publicPackage>ard.piraso.ui.api.*</publicPackage>
-                        <publicPackage>ard.piraso.ui.base.*</publicPackage>
-                        <publicPackage>ard.piraso.ui.io.*</publicPackage>
+                        <publicPackage>org.piraso.api.*</publicPackage>
+                        <publicPackage>org.piraso.client.net</publicPackage>
+                        <publicPackage>org.piraso.ui.api.*</publicPackage>
+                        <publicPackage>org.piraso.ui.base.*</publicPackage>
+                        <publicPackage>org.piraso.ui.io.*</publicPackage>
                         <publicPackage>org.apache.http.*</publicPackage>
                     </publicPackages>
                 </configuration>

@@ -5,7 +5,7 @@
 
 This is the Piraso client source code. This is created using Netbeans Platform.
 
-http://alvinrdeleon.github.com/piraso/
+http://www.piraso.org/
 
 ### NetBeans Platform
 

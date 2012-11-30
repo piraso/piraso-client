@@ -21,7 +21,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>ard.piraso</groupId>
+    <groupId>org.piraso</groupId>
     <artifactId>piraso-client</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
@@ -44,27 +44,27 @@
       <type>pom</type>
     </dependency>
     <dependency>
-      <groupId>ard.piraso</groupId>
+      <groupId>org.piraso</groupId>
       <artifactId>piraso-client-branding</artifactId>
       <version>${piraso.client.branding.version}</version>
     </dependency>
     <dependency>
-      <groupId>ard.piraso</groupId>
+      <groupId>org.piraso</groupId>
       <artifactId>piraso-client-base</artifactId>
       <version>${piraso.client.base.version}</version>
     </dependency>
     <dependency>
-      <groupId>ard.piraso</groupId>
+      <groupId>org.piraso</groupId>
       <artifactId>piraso-client-spring</artifactId>
       <version>${piraso.client.spring.version}</version>
     </dependency>
     <dependency>
-      <groupId>ard.piraso</groupId>
+      <groupId>org.piraso</groupId>
       <artifactId>piraso-client-sql</artifactId>
       <version>${piraso.client.sql.version}</version>
     </dependency>
     <dependency>
-      <groupId>ard.piraso</groupId>
+      <groupId>org.piraso</groupId>
       <artifactId>piraso-client-log4j</artifactId>
       <version>${piraso.client.log4j.version}</version>
     </dependency>
