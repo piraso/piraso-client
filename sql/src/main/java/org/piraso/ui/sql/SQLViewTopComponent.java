@@ -16,7 +16,8 @@
 
 package org.piraso.ui.sql;
 
-import SQLinForm_200.SQLForm;
+import org.hibernate.jdbc.util.BasicFormatterImpl;
+import org.hibernate.jdbc.util.Formatter;
 import org.piraso.api.entry.ObjectEntryUtils;
 import org.piraso.api.sql.SQLParameterEntry;
 import org.piraso.api.sql.SQLViewEntry;
@@ -114,8 +115,8 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
                 txtSQL.setContentType("text/sql");
 
                 if(btnFormat.isSelected()) {
-                    SQLForm form = createSQLInForm();
-                    txtSQL.setText(form.formatSQLAsString(sql));
+                    Formatter formatter = new BasicFormatterImpl();
+                    txtSQL.setText(formatter.format(sql));
                 } else {
                     txtSQL.setText(sql);
                 }
@@ -145,23 +146,6 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
         JTableUtils.scrollToFirstRow(table);
         txtSQL.setEditable(false);
         txtSQL.select(0, 0);        
-    }
-
-    private SQLForm createSQLInForm() {
-        SQLForm form = new SQLForm();
-        form.setAlignmentKeyword(true);
-        form.setAlignmentOperator(true);
-        form.setLowerCase(true);
-        form.setSuppressEmptyLine(true);
-        form.setSuppressLinebreak(true);
-        form.setSuppressSpace(true);
-        form.setIndentJoin(false);
-        form.setSuppressEmptyLine(true);
-        form.setSuppressLinebreak(true);
-        form.setSuppressSpace(true);
-        form.setLineBreak(true, false, true, false, false, false);
-
-        return form;
     }
     
     void writeProperties(java.util.Properties p) {

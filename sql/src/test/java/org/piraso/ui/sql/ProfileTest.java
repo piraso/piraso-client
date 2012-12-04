@@ -16,6 +16,8 @@
 
 package org.piraso.ui.sql;
 
+import org.hibernate.jdbc.util.BasicFormatterImpl;
+import org.hibernate.jdbc.util.Formatter;
 import org.piraso.api.AbstractJacksonTest;
 import org.piraso.api.GeneralPreferenceEnum;
 import org.piraso.api.Preferences;
@@ -57,5 +59,11 @@ public class ProfileTest extends AbstractJacksonTest {
 
         System.out.println("JSON: " + str);
         System.out.println("REPLACE: " + str.replaceAll("\"", "&quot;"));
+    }
+
+    @Test
+    public void testSQLFormat() throws Exception {
+        BasicFormatterImpl formatter = new BasicFormatterImpl();
+        System.out.println(formatter.format("select * from dog"));
     }
 }
