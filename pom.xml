@@ -60,9 +60,9 @@
   </distributionManagement>
 
   <scm>
-    <connection>scm:git:https://github.com/alvinrdeleon/piraso-client.git</connection>
-    <url>scm:git:https://github.com/alvinrdeleon/piraso-client.git</url>
-    <developerConnection>scm:git:https://github.com/alvinrdeleon/piraso-client.git</developerConnection>
+    <connection>scm:git:https://github.com/piraso/piraso-client.git</connection>
+    <url>scm:git:https://github.com/piraso/piraso-client.git</url>
+    <developerConnection>scm:git:https://github.com/piraso/piraso-client.git</developerConnection>
   </scm>
 
   <repositories>
