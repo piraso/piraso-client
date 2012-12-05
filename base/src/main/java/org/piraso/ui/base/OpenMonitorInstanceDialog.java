@@ -18,7 +18,7 @@ package org.piraso.ui.base;
 
 import org.piraso.ui.api.extension.AbstractDialog;
 import org.piraso.ui.api.util.NotificationUtils;
-import org.piraso.ui.io.impl.PirasoFileFilter;
+import org.piraso.io.impl.PirasoFileFilter;
 import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;
 import org.openide.filesystems.FileChooserBuilder;

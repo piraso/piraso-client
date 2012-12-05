@@ -22,7 +22,7 @@ import org.piraso.ui.api.ObjectEntrySettings;
 import org.piraso.ui.api.extension.AbstractDialog;
 import org.piraso.ui.api.util.NotificationUtils;
 import org.piraso.ui.base.manager.ImportExportProviderManager;
-import org.piraso.ui.io.impl.PirasoSettingsFileFilter;
+import org.piraso.io.impl.PirasoSettingsFileFilter;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openide.ErrorManager;

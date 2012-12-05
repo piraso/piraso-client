@@ -17,9 +17,9 @@
 package org.piraso.ui.base;
 
 import org.piraso.ui.base.cookie.*;
-import org.piraso.ui.io.IOEntryEvent;
-import org.piraso.ui.io.IOEntryLifecycleListener;
-import org.piraso.ui.io.IOEntryReader;
+import org.piraso.io.IOEntryEvent;
+import org.piraso.io.IOEntryLifecycleListener;
+import org.piraso.io.IOEntryReader;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
 

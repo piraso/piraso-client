@@ -21,8 +21,8 @@ import org.piraso.api.entry.Entry;
 import org.piraso.ui.api.manager.SingleModelManagers;
 import org.piraso.ui.base.manager.MessageProviderManager;
 import org.piraso.ui.base.manager.PreferenceProviderManager;
-import org.piraso.ui.io.IOEntry;
-import org.piraso.ui.io.IOEntryReader;
+import org.piraso.io.IOEntry;
+import org.piraso.io.IOEntryReader;
 
 import java.io.IOException;
 import java.util.ArrayList;

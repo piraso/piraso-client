@@ -16,7 +16,7 @@
 
 package org.piraso.ui.base.cookie;
 
-import org.piraso.ui.io.IOEntryReader;
+import org.piraso.io.IOEntryReader;
 import org.openide.ErrorManager;
 
 /**

@@ -17,14 +17,14 @@
 package org.piraso.ui.base.cookie;
 
 import org.piraso.ui.base.SaveMonitorInstanceDialog;
-import org.piraso.ui.io.IOEntryReader;
+import org.piraso.io.IOEntryReader;
 import org.openide.cookies.SaveCookie;
 import org.openide.windows.TopComponent;
 
 import java.io.IOException;
 
 /**
- * Saves the {@link org.piraso.ui.io.IOEntryReader}.
+ * Saves the {@link org.piraso.io.IOEntryReader}.
  */
 public class IOEntryReaderSaveCookie extends AbstractIOEntryReaderCookie implements SaveCookie {
 

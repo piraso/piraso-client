@@ -91,8 +91,8 @@
         </dependency>
         <dependency>
             <groupId>org.piraso</groupId>
-            <artifactId>piraso-client-io</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>context-logger-io</artifactId>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.jgoodies</groupId>
@@ -113,7 +113,7 @@
                         <publicPackage>org.piraso.client.net</publicPackage>
                         <publicPackage>org.piraso.ui.api.*</publicPackage>
                         <publicPackage>org.piraso.ui.base.*</publicPackage>
-                        <publicPackage>org.piraso.ui.io.*</publicPackage>
+                        <publicPackage>org.piraso.io.*</publicPackage>
                         <publicPackage>org.apache.http.*</publicPackage>
                     </publicPackages>
                 </configuration>

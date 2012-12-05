@@ -16,11 +16,11 @@
 
 package org.piraso.ui.base.cookie;
 
-import org.piraso.ui.io.IOEntryReader;
+import org.piraso.io.IOEntryReader;
 import org.openide.nodes.Node;
 
 /**
- * Base class for {@link org.piraso.ui.io.IOEntryReader} cookie based implementation.
+ * Base class for {@link org.piraso.io.IOEntryReader} cookie based implementation.
  */
 public class AbstractIOEntryReaderCookie implements Node.Cookie {
 

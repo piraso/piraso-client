@@ -21,10 +21,10 @@ import org.piraso.api.entry.Entry;
 import org.piraso.api.entry.RequestEntry;
 import org.piraso.ui.api.manager.SingleModelManagers;
 import org.piraso.ui.api.util.JTableUtils;
-import org.piraso.ui.io.IOEntry;
-import org.piraso.ui.io.IOEntryEvent;
-import org.piraso.ui.io.IOEntryReader;
-import org.piraso.ui.io.IOEntryReceivedListener;
+import org.piraso.io.IOEntry;
+import org.piraso.io.IOEntryEvent;
+import org.piraso.io.IOEntryReader;
+import org.piraso.io.IOEntryReceivedListener;
 import org.apache.commons.collections.CollectionUtils;
 
 import javax.swing.*;
@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * Table model for handling {@link org.piraso.ui.io.IOEntry} class.
+ * Table model for handling {@link org.piraso.io.IOEntry} class.
  * 
  * @author adleon
  */

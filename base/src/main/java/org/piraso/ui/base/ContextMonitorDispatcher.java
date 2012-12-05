@@ -19,10 +19,10 @@ package org.piraso.ui.base;
 import org.piraso.ui.api.NewContextMonitorModel;
 import org.piraso.ui.api.ProfileModel;
 import org.piraso.ui.base.manager.ModelManagers;
-import org.piraso.ui.io.IOEntryReader;
-import org.piraso.ui.io.IOEntrySource;
-import org.piraso.ui.io.impl.FileEntrySource;
-import org.piraso.ui.io.impl.HttpEntrySource;
+import org.piraso.io.IOEntryReader;
+import org.piraso.io.IOEntrySource;
+import org.piraso.io.impl.FileEntrySource;
+import org.piraso.io.impl.HttpEntrySource;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 

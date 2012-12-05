@@ -184,7 +184,6 @@
   <modules>
     <module>branding</module>
     <module>application</module>
-    <module>io</module>
     <module>api</module>
     <module>sql</module>
     <module>base</module>

@@ -30,9 +30,9 @@ import org.piraso.ui.base.manager.MessageProviderManager;
 import org.piraso.ui.base.manager.PreferenceProviderManager;
 import org.piraso.ui.base.model.IOEntryComboBoxModel;
 import org.piraso.ui.base.model.IOEntryTableModel;
-import org.piraso.ui.io.IOEntryEvent;
-import org.piraso.ui.io.IOEntryListener;
-import org.piraso.ui.io.IOEntryReader;
+import org.piraso.io.IOEntryEvent;
+import org.piraso.io.IOEntryListener;
+import org.piraso.io.IOEntryReader;
 import org.apache.commons.lang.StringUtils;
 import org.openide.util.ImageUtilities;
 import org.openide.util.NbBundle;
@@ -155,6 +155,9 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         initComboBox();
         refreshUIStates();
         initKeyboardActions();
+    }
+
+    public ContextMonitorTopComponent() {
     }
 
     public void reset() {

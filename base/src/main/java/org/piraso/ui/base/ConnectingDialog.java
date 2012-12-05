@@ -16,8 +16,8 @@
 
 package org.piraso.ui.base;
 
+import org.piraso.io.impl.HttpEntrySource;
 import org.piraso.ui.api.NewContextMonitorModel;
-import org.piraso.ui.io.impl.HttpEntrySource;
 import org.apache.commons.lang.StringUtils;
 import org.openide.windows.TopComponent;
 import org.openide.windows.WindowManager;
