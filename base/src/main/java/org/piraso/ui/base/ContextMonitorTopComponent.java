@@ -157,9 +157,6 @@ public final class ContextMonitorTopComponent extends TopComponent implements Li
         initKeyboardActions();
     }
 
-    public ContextMonitorTopComponent() {
-    }
-
     public void reset() {
         boolean ensureStarted = reader.isAlive();
         if(ensureStarted) {

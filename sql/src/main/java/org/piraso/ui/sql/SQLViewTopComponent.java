@@ -16,8 +16,6 @@
 
 package org.piraso.ui.sql;
 
-import org.hibernate.jdbc.util.BasicFormatterImpl;
-import org.hibernate.jdbc.util.Formatter;
 import org.piraso.api.entry.ObjectEntryUtils;
 import org.piraso.api.sql.SQLParameterEntry;
 import org.piraso.api.sql.SQLViewEntry;
@@ -115,8 +113,7 @@ public final class SQLViewTopComponent extends AbstractEntryViewTopComponent<SQL
                 txtSQL.setContentType("text/sql");
 
                 if(btnFormat.isSelected()) {
-                    Formatter formatter = new BasicFormatterImpl();
-                    txtSQL.setText(formatter.format(sql));
+                    txtSQL.setText(new SQLFormatter().format(sql));
                 } else {
                     txtSQL.setText(sql);
                 }
