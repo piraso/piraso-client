@@ -36,9 +36,9 @@ public class SQLPreferenceProviderImpl implements PreferenceProvider {
 
     @Override
     public List<? extends PreferenceProperty> getPreferences() {
-        NCPreferenceProperty conn = new NCPreferenceProperty(SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName(), Boolean.class, true);
+        NCPreferenceProperty conn = new NCPreferenceProperty(SQLPreferenceEnum.CONNECTION_ENABLED.getPropertyName(), Boolean.class);
         NCPreferenceProperty connMC = new NCPreferenceProperty(SQLPreferenceEnum.CONNECTION_METHOD_CALL_ENABLED.getPropertyName(), Boolean.class);
-        NCPreferenceProperty prepared = new NCPreferenceProperty(SQLPreferenceEnum.PREPARED_STATEMENT_ENABLED.getPropertyName(), Boolean.class, true);
+        NCPreferenceProperty prepared = new NCPreferenceProperty(SQLPreferenceEnum.PREPARED_STATEMENT_ENABLED.getPropertyName(), Boolean.class);
         NCPreferenceProperty viewSQL = new NCPreferenceProperty(SQLPreferenceEnum.VIEW_SQL_ENABLED.getPropertyName(), Boolean.class);
         NCPreferenceProperty preparedMC = new NCPreferenceProperty(SQLPreferenceEnum.PREPARED_STATEMENT_METHOD_CALL_ENABLED.getPropertyName(), Boolean.class);
         NCPreferenceProperty resultSet = new NCPreferenceProperty(SQLPreferenceEnum.RESULTSET_ENABLED.getPropertyName(), Boolean.class);

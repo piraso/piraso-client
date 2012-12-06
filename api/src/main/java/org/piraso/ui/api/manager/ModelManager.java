@@ -33,4 +33,5 @@ public interface ModelManager<T extends WithNameModel> extends BaseModelManager 
     T get(String name);
     void save(T model) throws IOException;
     void remove(String name) throws IOException;
+    void clear() throws IOException;
 }

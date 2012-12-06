@@ -21,7 +21,7 @@ import org.piraso.client.net.HttpBasicAuthentication;
 import org.piraso.client.net.HttpPirasoException;
 import org.piraso.ui.api.ImportHandler;
 import org.piraso.ui.api.ObjectEntrySettings;
-import org.piraso.ui.api.SVNSettingsUpdateModel;
+import org.piraso.ui.api.HttpSettingsUpdateModel;
 import org.piraso.ui.api.manager.SingleModelManagers;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.*;
@@ -42,13 +42,10 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.logging.Logger;
 
-/**
- * SVN update manager
- */
-public class SVNUpdateManager extends HttpBasicAuthentication {
-    private static final Logger LOG = Logger.getLogger(SVNUpdateManager.class.getName());
+public class HttpUpdateManager extends HttpBasicAuthentication {
+    private static final Logger LOG = Logger.getLogger(HttpUpdateManager.class.getName());
 
-    public static SVNUpdateManager create() {
+    public static HttpUpdateManager create() {
         ThreadSafeClientConnManager manager = new ThreadSafeClientConnManager();
         manager.setDefaultMaxPerRoute(1);
         manager.setMaxTotal(1);
@@ -63,28 +60,29 @@ public class SVNUpdateManager extends HttpBasicAuthentication {
         HttpClient client = new DefaultHttpClient(manager, params);
         HttpContext context = new BasicHttpContext();
 
-        return new SVNUpdateManager(client, context);
+        return new HttpUpdateManager(client, context);
     }
 
-    private SVNSettingsUpdateModel model;
+    private HttpSettingsUpdateModel model;
 
     private HttpEntity responseEntity;
 
     private boolean force;
 
-    public SVNUpdateManager(HttpClient client, HttpContext context) {
+    public HttpUpdateManager(HttpClient client, HttpContext context) {
         super(client, context);
     }
 
     public void updateSettings(boolean force) throws URISyntaxException, IOException {
         this.force = force;
-        model = SingleModelManagers.SVN_SETTINGS.get();
+        model = SingleModelManagers.HTTP_SETTINGS.get();
 
         if(model.getUrl() != null) {
             URI uri = model.getUrl().toURI();
 
             setUserName(model.getName());
             setPassword(model.getPassword());
+
             setUri(uri);
             setTargetHost(new HttpHost(this.uri.getHost(), this.uri.getPort(), this.uri.getScheme()));
 
@@ -94,7 +92,9 @@ public class SVNUpdateManager extends HttpBasicAuthentication {
 
     @Override
     public void execute() throws IOException {
-        super.execute();
+        if(StringUtils.isNotBlank(model.getName())) {
+            super.execute();
+        }
 
         try {
             doExecuteInternal();
@@ -114,24 +114,31 @@ public class SVNUpdateManager extends HttpBasicAuthentication {
         }
 
         // retrieve revision
-        String eTag = response.getFirstHeader("Etag").getValue();
-        Long revision = Long.valueOf(StringUtils.split(eTag, "/")[0].substring(1));
+        if(response.containsHeader("Etag")) {
+            String eTag = response.getFirstHeader("Etag").getValue();
 
-        if(model.getRevision() == null || !model.getRevision().equals(revision) || force) {
-            model.setRevision(revision);
-
-            responseEntity = response.getEntity();
-            ObjectEntrySettings settings = JacksonUtils.MAPPER.readValue(responseEntity.getContent(), ObjectEntrySettings.class);
-
-            List<ImportHandler> options = ImportExportProviderManager.INSTANCE.getImportHandlers();
-            for(ImportHandler handler : options) {
-                String settingsStr = settings.getModels().get(handler.getOption());
-
-                handler.handle(settingsStr);
+            if(model.getRevision() == null || !StringUtils.equals(model.getRevision(), eTag) || force) {
+                model.setRevision(eTag);
+                
+                updateFromHttp(response);
             }
-
-            LOG.info(String.format("Updated Settings from %s with revision %d.", model.getUrl(), model.getRevision()));
-            SingleModelManagers.SVN_SETTINGS.save(model);
+        } else {
+            updateFromHttp(response);
         }
+    }
+    
+    private void updateFromHttp(HttpResponse response) throws IOException {
+        responseEntity = response.getEntity();
+        ObjectEntrySettings settings = JacksonUtils.MAPPER.readValue(responseEntity.getContent(), ObjectEntrySettings.class);
+
+        List<ImportHandler> options = ImportExportProviderManager.INSTANCE.getImportHandlers();
+        for(ImportHandler handler : options) {
+            String settingsStr = settings.getModels().get(handler.getOption());
+
+            handler.handle(settingsStr);
+        }
+
+        LOG.info(String.format("Updated Settings from '%s' with revision '%s'.", model.getUrl(), model.getRevision()));
+        SingleModelManagers.HTTP_SETTINGS.save(model);
     }
 }

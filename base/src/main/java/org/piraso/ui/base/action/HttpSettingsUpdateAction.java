@@ -16,7 +16,7 @@
 
 package org.piraso.ui.base.action;
 
-import org.piraso.ui.base.SVNSettingsUpdateDialog;
+import org.piraso.ui.base.HttpSettingsUpdateDialog;
 import org.openide.awt.ActionID;
 import org.openide.awt.ActionReference;
 import org.openide.awt.ActionReferences;
@@ -25,15 +25,15 @@ import org.openide.awt.ActionRegistration;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-@ActionID(category = "File", id = "org.piraso.ui.base.action.SVNSettingsUpdateAction")
-@ActionRegistration(displayName = "SVN Settings Update...")
+@ActionID(category = "File", id = "org.piraso.ui.base.action.HttpSettingsUpdateAction")
+@ActionRegistration(displayName = "Http Settings Update...")
 @ActionReferences({
     @ActionReference(path = "Menu/File", position = 1992)
 })
-public final class SVNSettingsUpdateAction implements ActionListener {
+public final class HttpSettingsUpdateAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        new SVNSettingsUpdateDialog().setVisible(true);
+        new HttpSettingsUpdateDialog().setVisible(true);
     }
 }

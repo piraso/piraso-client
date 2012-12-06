@@ -153,4 +153,12 @@ public class ModelManagerImpl<T extends WithNameModel> extends AbstractModelMana
         fireOnChangeEvent();
     }
 
+    @Override
+    public void clear() throws IOException {
+        for(FileObject monitor : persistent.getChildren()) {
+            monitor.delete();
+        }
+
+        fireOnChangeEvent();
+    }
 }

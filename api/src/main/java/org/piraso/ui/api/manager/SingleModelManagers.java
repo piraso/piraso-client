@@ -17,7 +17,7 @@
 package org.piraso.ui.api.manager;
 
 import org.piraso.ui.api.GeneralSettingsModel;
-import org.piraso.ui.api.SVNSettingsUpdateModel;
+import org.piraso.ui.api.HttpSettingsUpdateModel;
 import org.piraso.ui.api.StackTraceFilterModel;
 import org.piraso.ui.api.WorkingSetSettings;
 import org.openide.filesystems.FileUtil;
@@ -40,5 +40,5 @@ public interface SingleModelManagers {
 
     public static final SingleModelManager<GeneralSettingsModel> GENERAL_SETTINGS = new SingleModelManagerImpl<GeneralSettingsModel>(FileUtil.getConfigRoot().getFileObject("GeneralSettings"), GeneralSettingsModel.class, new GeneralSettingsModel());
 
-    public static final SingleModelManager<SVNSettingsUpdateModel> SVN_SETTINGS = new SingleModelManagerImpl<SVNSettingsUpdateModel>(FileUtil.getConfigRoot().getFileObject("SVNSyncSettings"), SVNSettingsUpdateModel.class, new SVNSettingsUpdateModel());
+    public static final SingleModelManager<HttpSettingsUpdateModel> HTTP_SETTINGS = new SingleModelManagerImpl<HttpSettingsUpdateModel>(FileUtil.getConfigRoot().getFileObject("SVNSyncSettings"), HttpSettingsUpdateModel.class, new HttpSettingsUpdateModel());
 }

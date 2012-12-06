@@ -19,7 +19,7 @@ package org.piraso.ui.base;
 import org.piraso.api.io.PirasoObjectLoaderRegistry;
 import org.piraso.ui.api.PirasoObjectLoaderProvider;
 import org.piraso.ui.api.manager.SingleModelManagers;
-import org.piraso.ui.base.manager.SVNUpdateManager;
+import org.piraso.ui.base.manager.HttpUpdateManager;
 import jsyntaxpane.DefaultSyntaxKit;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
@@ -48,12 +48,12 @@ public class Installer extends ModuleInstall {
             PirasoObjectLoaderRegistry.INSTANCE.addEntryLoader(loaderProvider.getLoader());
         }
 
-        LOG.info("Loading SVN if needed...");
+        LOG.info("Loading HTTP if needed...");
         try {
-            if(SingleModelManagers.SVN_SETTINGS.get().isLoadOnStartup()) {
-                SVNUpdateManager.create().updateSettings(false);
+            if(SingleModelManagers.HTTP_SETTINGS.get().isLoadOnStartup()) {
+                HttpUpdateManager.create().updateSettings(false);
             } else {
-                LOG.info("SVN Update settings is not load on startup.");
+                LOG.info("HTTP Update settings is not load on startup.");
             }
         } catch (Exception e) {
             LOG.warning(String.valueOf(e));

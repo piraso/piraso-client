@@ -23,14 +23,14 @@ import org.apache.commons.lang.StringUtils;
  *
  * @author adeleon
  */
-public final class SVNSettingsUpdateInputDialog extends AbstractDialog {
+public final class HttpSettingsAuthenticationDialog extends AbstractDialog {
 
     private boolean cancelled;
     
     /**
      * Creates new form Log4jPreferenceInputDialog
      */
-    public SVNSettingsUpdateInputDialog() {
+    public HttpSettingsAuthenticationDialog() {
         super();
         initComponents();
 
@@ -87,13 +87,13 @@ public final class SVNSettingsUpdateInputDialog extends AbstractDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(HttpSettingsAuthenticationDialog.class, "HttpSettingsAuthenticationDialog.jLabel1.text")); // NOI18N
 
-        txtName.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.txtName.text")); // NOI18N
+        txtName.setText(org.openide.util.NbBundle.getMessage(HttpSettingsAuthenticationDialog.class, "HttpSettingsAuthenticationDialog.txtName.text")); // NOI18N
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.jLabel2.text")); // NOI18N
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(HttpSettingsAuthenticationDialog.class, "HttpSettingsAuthenticationDialog.jLabel2.text")); // NOI18N
 
-        btnOk.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.btnOk.text")); // NOI18N
+        btnOk.setText(org.openide.util.NbBundle.getMessage(HttpSettingsAuthenticationDialog.class, "HttpSettingsAuthenticationDialog.btnOk.text")); // NOI18N
         btnOk.setEnabled(false);
         btnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,14 +101,14 @@ public final class SVNSettingsUpdateInputDialog extends AbstractDialog {
             }
         });
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.btnCancel.text")); // NOI18N
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(HttpSettingsAuthenticationDialog.class, "HttpSettingsAuthenticationDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
 
-        txtValue.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateInputDialog.class, "SVNSettingsUpdateInputDialog.txtValue.text")); // NOI18N
+        txtValue.setText(org.openide.util.NbBundle.getMessage(HttpSettingsAuthenticationDialog.class, "HttpSettingsAuthenticationDialog.txtValue.text")); // NOI18N
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

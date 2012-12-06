@@ -239,6 +239,7 @@ public final class ProfilesDialog extends AbstractDialog {
         jLabel5 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         btnClose = new javax.swing.JButton();
+        deleteAll = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -443,6 +444,13 @@ public final class ProfilesDialog extends AbstractDialog {
             }
         });
 
+        deleteAll.setText(org.openide.util.NbBundle.getMessage(ProfilesDialog.class, "ProfilesDialog.deleteAll.text")); // NOI18N
+        deleteAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteAllActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -454,7 +462,8 @@ public final class ProfilesDialog extends AbstractDialog {
                         .add(jSplitPane1)
                         .addContainerGap())
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
+                        .add(deleteAll)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(btnClose)
                         .add(15, 15, 15))))
         );
@@ -463,7 +472,9 @@ public final class ProfilesDialog extends AbstractDialog {
             .add(layout.createSequentialGroup()
                 .add(jSplitPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(btnClose)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(btnClose)
+                    .add(deleteAll))
                 .add(0, 10, Short.MAX_VALUE))
         );
 
@@ -559,6 +570,15 @@ public final class ProfilesDialog extends AbstractDialog {
         refresh();
     }//GEN-LAST:event_chkWorkingSetActionPerformed
 
+    private void deleteAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteAllActionPerformed
+        try {
+            ModelManagers.PROFILES.clear();
+            refresh();
+        } catch (IOException e) {
+            ErrorManager.getDefault().notify(e);
+        }
+    }//GEN-LAST:event_deleteAllActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAssociate;
     private javax.swing.JButton btnClear;
@@ -567,6 +587,7 @@ public final class ProfilesDialog extends AbstractDialog {
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSave;
     private javax.swing.JCheckBox chkWorkingSet;
+    private javax.swing.JButton deleteAll;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;

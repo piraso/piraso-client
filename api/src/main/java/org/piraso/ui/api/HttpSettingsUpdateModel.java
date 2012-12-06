@@ -21,7 +21,7 @@ import java.net.URL;
 /**
  * SVNSync model
  */
-public class SVNSettingsUpdateModel {
+public class HttpSettingsUpdateModel {
 
     private URL url;
 
@@ -29,9 +29,9 @@ public class SVNSettingsUpdateModel {
 
     private String password;
 
-    private Long revision;
+    private String revision;
 
-    private boolean loadOnStartup = true;
+    private boolean loadOnStartup = false;
 
     public boolean isLoadOnStartup() {
         return loadOnStartup;
@@ -65,11 +65,11 @@ public class SVNSettingsUpdateModel {
         this.url = url;
     }
 
-    public Long getRevision() {
+    public String getRevision() {
         return revision;
     }
 
-    public void setRevision(Long revision) {
+    public void setRevision(String revision) {
         this.revision = revision;
     }
 }

@@ -16,36 +16,35 @@
 
 package org.piraso.ui.base;
 
-import org.piraso.ui.api.SVNSettingsUpdateModel;
+import java.net.URL;
+import org.apache.commons.lang.StringUtils;
+import org.openide.ErrorManager;
+import org.piraso.ui.api.HttpSettingsUpdateModel;
 import org.piraso.ui.api.extension.AbstractDialog;
 import org.piraso.ui.api.manager.SingleModelManagers;
 import org.piraso.ui.api.util.NotificationUtils;
-import org.piraso.ui.base.manager.SVNUpdateManager;
-import org.apache.commons.lang.StringUtils;
-import org.openide.ErrorManager;
-
-import java.net.URL;
+import org.piraso.ui.base.manager.HttpUpdateManager;
 
 /**
  *
  * @author adeleon
  */
-public class SVNSettingsUpdateDialog extends AbstractDialog {
+public class HttpSettingsUpdateDialog extends AbstractDialog {
 
-    private SVNSettingsUpdateModel model;
+    private HttpSettingsUpdateModel model;
 
     /**
-     * Creates new form SVNSyncDialog
+     * Creates new form HttpSettingsUpdateDialog
      */
-    public SVNSettingsUpdateDialog() {
+    public HttpSettingsUpdateDialog() {
         super();
-        setTitle("SVN Update Settings");
+        setTitle("Http Settings Update");
         initComponents();
         
         getRootPane().setDefaultButton(btnUpdate);
         setLocationRelativeTo(getOwner());
 
-        model = SingleModelManagers.SVN_SETTINGS.get();
+        model = SingleModelManagers.HTTP_SETTINGS.get();
         if(model.getUrl() != null) {
             txtURL.setText(model.getUrl().toString());
         }
@@ -72,28 +71,27 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(HttpSettingsUpdateDialog.class, "HttpSettingsUpdateDialog.jLabel1.text")); // NOI18N
 
-        txtURL.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.txtURL.text")); // NOI18N
+        txtURL.setText(org.openide.util.NbBundle.getMessage(HttpSettingsUpdateDialog.class, "HttpSettingsUpdateDialog.txtURL.text")); // NOI18N
 
-        btnUpdate.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.btnUpdate.text")); // NOI18N
+        btnUpdate.setText(org.openide.util.NbBundle.getMessage(HttpSettingsUpdateDialog.class, "HttpSettingsUpdateDialog.btnUpdate.text")); // NOI18N
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
 
-        btnCancel.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.btnCancel.text")); // NOI18N
+        btnCancel.setText(org.openide.util.NbBundle.getMessage(HttpSettingsUpdateDialog.class, "HttpSettingsUpdateDialog.btnCancel.text")); // NOI18N
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
             }
         });
 
-        chkSyncOnStartup.setSelected(true);
-        chkSyncOnStartup.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.chkSyncOnStartup.text")); // NOI18N
+        chkSyncOnStartup.setText(org.openide.util.NbBundle.getMessage(HttpSettingsUpdateDialog.class, "HttpSettingsUpdateDialog.chkSyncOnStartup.text")); // NOI18N
 
-        btnAuthenticate.setText(org.openide.util.NbBundle.getMessage(SVNSettingsUpdateDialog.class, "SVNSettingsUpdateDialog.btnAuthenticate.text")); // NOI18N
+        btnAuthenticate.setText(org.openide.util.NbBundle.getMessage(HttpSettingsUpdateDialog.class, "HttpSettingsUpdateDialog.btnAuthenticate.text")); // NOI18N
         btnAuthenticate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAuthenticateActionPerformed(evt);
@@ -120,7 +118,7 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
                             .add(layout.createSequentialGroup()
                                 .add(15, 15, 15)
                                 .add(chkSyncOnStartup)
-                                .add(0, 154, Short.MAX_VALUE))
+                                .add(0, 183, Short.MAX_VALUE))
                             .add(layout.createSequentialGroup()
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
                                 .add(txtURL)))))
@@ -153,11 +151,11 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         try {
             model.setUrl(new URL(txtURL.getText()));
-            SingleModelManagers.SVN_SETTINGS.save(model);
+            SingleModelManagers.HTTP_SETTINGS.save(model);
 
-            SVNUpdateManager.create().updateSettings(true);
+            HttpUpdateManager.create().updateSettings(true);
 
-            NotificationUtils.info(String.format("SVN Settings update from url '%s' was successful.", model.getUrl()));
+            NotificationUtils.info(String.format("Http Settings update from url '%s' was successful.", model.getUrl()));
             dispose();
         } catch (Exception e) {
             ErrorManager.getDefault().notify(e);
@@ -165,7 +163,7 @@ public class SVNSettingsUpdateDialog extends AbstractDialog {
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnAuthenticateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAuthenticateActionPerformed
-        SVNSettingsUpdateInputDialog dialog = new SVNSettingsUpdateInputDialog();
+        HttpSettingsAuthenticationDialog dialog = new HttpSettingsAuthenticationDialog();
 
         if(StringUtils.isNotBlank(dialog.getUsername())) {
             dialog.setUsername(dialog.getUsername());
