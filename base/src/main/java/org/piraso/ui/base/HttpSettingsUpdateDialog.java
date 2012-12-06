@@ -150,7 +150,7 @@ public class HttpSettingsUpdateDialog extends AbstractDialog {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         try {
-            model.setUrl(new URL(txtURL.getText()));
+            model.setUrl(new URL(StringUtils.trim(txtURL.getText())));
             SingleModelManagers.HTTP_SETTINGS.save(model);
 
             HttpUpdateManager.create().updateSettings(true);
@@ -166,8 +166,8 @@ public class HttpSettingsUpdateDialog extends AbstractDialog {
         HttpSettingsAuthenticationDialog dialog = new HttpSettingsAuthenticationDialog();
 
         if(StringUtils.isNotBlank(dialog.getUsername())) {
-            dialog.setUsername(dialog.getUsername());
-            dialog.setPassword(dialog.getPassword());
+            dialog.setUsername(StringUtils.trim(dialog.getUsername()));
+            dialog.setPassword(StringUtils.trim(dialog.getPassword()));
         }
 
         dialog.setVisible(true);

@@ -94,7 +94,11 @@ public class ModelManagerImpl<T extends WithNameModel> extends AbstractModelMana
         for(FileObject monitor : persistent.getChildren()) {
             try {
                 String json = (String) monitor.getAttribute("value");
-                visitor.visit(MAPPER.readValue(json, clazz));
+                T t = MAPPER.readValue(json, clazz);
+
+                if(t != null && StringUtils.isNotBlank(t.getName())) {
+                    visitor.visit(t);
+                }
             } catch (Exception e) {
                 LOG.log(Level.WARNING, String.format("Error while parsing json '%s'", monitor.getName()), e);
             }

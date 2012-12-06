@@ -124,7 +124,7 @@ public class NewMonitorInstanceAction extends AbstractAction implements ActionLi
             if(model.getWorkingSetName() != null) {
                 String regex = workingSet.getRegex(model.getWorkingSetName());
 
-                if(!monitorName.matches(regex)) {
+                if(regex != null && !monitorName.matches(regex)) {
                     continue;
                 }
             }
