@@ -72,6 +72,36 @@
       <groupId>org.piraso</groupId>
       <artifactId>sql-context-logger-api</artifactId>
       <version>${piraso.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.piraso</groupId>
+          <artifactId>context-logger-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.thoughtworks.xstream</groupId>
+          <artifactId>xstream</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xmlpull</groupId>
+          <artifactId>xmlpull</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xpp3</groupId>
+          <artifactId>xpp3_min</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>commons-lang</groupId>
+          <artifactId>commons-lang</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
@@ -83,7 +113,7 @@
         <extensions>true</extensions>
         <configuration>
           <publicPackages>
-            <publicPackage>ard.*</publicPackage>
+            <publicPackage>org.piraso.ui.sql.provider</publicPackage>
           </publicPackages>
         </configuration>
       </plugin>
