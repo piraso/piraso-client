@@ -45,7 +45,7 @@ import java.util.List;
  * Top component which displays something.
  */
 @ActionID(category = "Window", id = "org.piraso.ui.sql.SQLViewTopComponent")
-@ActionReference(path = "Menu/Window", position = 334)
+@ActionReference(path = "Menu/Window", position = 337)
 @ConvertAsProperties(dtd = "-//org.piraso.ui.sql//SQLView//EN", autostore = false)
 @TopComponent.Description(preferredID = "SQLViewTopComponent", iconBase= "org/piraso/ui/sql/icons/sql.png", persistenceType = TopComponent.PERSISTENCE_ALWAYS)
 @TopComponent.Registration(mode = "output", openAtStartup = true)
