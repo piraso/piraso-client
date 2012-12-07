@@ -34,6 +34,7 @@ public final class Log4jPreferenceInputDialog extends AbstractDialog {
         super();
         initComponents();
 
+        setTitle(org.openide.util.NbBundle.getMessage(Log4jPreferenceInputDialog.class, "Log4jPreferenceInputDialog.jLabel1.text"));
         addButtonRefreshListeners();
         getRootPane().setDefaultButton(btnOk);
         setLocationRelativeTo(getOwner());

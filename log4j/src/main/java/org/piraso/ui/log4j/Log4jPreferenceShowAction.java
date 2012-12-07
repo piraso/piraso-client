@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 @ActionID(category="Tools", id="org.piraso.ui.base.action.Log4jPreferenceShowAction")
-@ActionRegistration(displayName="Log4j Preferences")
+@ActionRegistration(displayName="Log4j Loggers")
 @ActionReferences({
     @ActionReference(path = "Menu/Tools", position = 620)
 })
