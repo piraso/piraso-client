@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-OpenIDE-Module-Localizing-Bundle: org/piraso/ui/log4j/Bundle.properties
-OpenIDE-Module-Layer: org/piraso/ui/log4j/layer.xml
-OpenIDE-Module-Requires: org.openide.windows.WindowManager

@@ -168,12 +168,7 @@
   </build>
 
   <modules>
-    <module>branding</module>
-    <module>application</module>
     <module>api</module>
-    <module>sql</module>
     <module>base</module>
-    <module>log4j</module>
-    <module>spring</module>
   </modules>
 </project>
