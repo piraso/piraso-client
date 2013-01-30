@@ -16,6 +16,7 @@
 
 package org.piraso.ui.base.model;
 
+import org.apache.commons.lang.StringUtils;
 import org.piraso.api.entry.ElapseTimeAware;
 import org.piraso.api.entry.Entry;
 import org.piraso.ui.api.manager.SingleModelManagers;
@@ -165,6 +166,10 @@ public class IOEntryFastCache {
             Entry entry = ioEntry.getEntry();
 
             StringBuilder buf = new StringBuilder();
+
+            if(entry.getIndent() > 0) {
+                buf.append(StringUtils.leftPad("", entry.getIndent(), "  "));
+            }
 
             if(SingleModelManagers.GENERAL_SETTINGS.get().isShowRequestId()) {
                 buf.append(String.format("[%d]", entry.getBaseRequestId()));
