@@ -58,4 +58,14 @@
     <module>api</module>
     <module>base</module>
   </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.piraso</groupId>
+      <artifactId>context-logger-api</artifactId>
+      <version>${piraso.version}</version>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 </project>
