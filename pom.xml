@@ -22,9 +22,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.sonatype.oss</groupId>
-    <artifactId>oss-parent</artifactId>
-    <version>7</version>
+    <groupId>org.piraso</groupId>
+    <artifactId>piraso-pom</artifactId>
+    <version>1.1-SNAPSHOT</version>
   </parent>
 
   <groupId>org.piraso</groupId>
@@ -48,124 +48,11 @@
     </developer>
   </developers>
 
-  <distributionManagement>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </snapshotRepository>
-  </distributionManagement>
-
   <scm>
     <connection>scm:git:https://github.com/piraso/piraso-client.git</connection>
     <url>scm:git:https://github.com/piraso/piraso-client.git</url>
     <developerConnection>scm:git:https://github.com/piraso/piraso-client.git</developerConnection>
   </scm>
-
-  <repositories>
-    <repository>
-      <id>netbeans</id>
-      <name>NetBeans</name>
-      <url>http://bits.netbeans.org/maven2/</url>
-    </repository>
-  </repositories>
-
-  <properties>
-    <brandingToken>piraso_client</brandingToken>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-    <opencsv.version>2.0</opencsv.version>
-    <junit.version>4.8.1</junit.version>
-    <mokito.version>1.8.4</mokito.version>
-    <junit.dep.version>4.5</junit.dep.version>
-    <netbeans.version>RELEASE721</netbeans.version>
-    <commons.io>2.4</commons.io>
-    <swing-layout.version>1.0.3</swing-layout.version>
-
-    <commons.collection.version>3.2.1</commons.collection.version>
-    <piraso.version>1.1-SNAPSHOT</piraso.version>
-    <piraso.client.branding.version>1.0-SNAPSHOT</piraso.client.branding.version>
-    <piraso.client.base.version>1.0-SNAPSHOT</piraso.client.base.version>
-    <piraso.client.sql.version>1.0-SNAPSHOT</piraso.client.sql.version>
-    <piraso.client.log4j.version>1.0-SNAPSHOT</piraso.client.log4j.version>
-    <piraso.client.spring.version>1.0-SNAPSHOT</piraso.client.spring.version>
-    <piraso.client.api.version>1.0-SNAPSHOT</piraso.client.api.version>
-  </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-      <version>${mokito.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit-dep</artifactId>
-      <version>${junit.dep.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.piraso</groupId>
-      <artifactId>context-logger-api</artifactId>
-      <version>${piraso.version}</version>
-      <type>test-jar</type>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>nbm-maven-plugin</artifactId>
-          <version>3.7</version>
-          <extensions>true</extensions>
-          <configuration>
-            <brandingToken>${brandingToken}</brandingToken>
-            <cluster>${brandingToken}</cluster>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>2.3.2</version>
-          <configuration>
-            <source>1.6</source>
-            <target>1.6</target>
-          </configuration>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>2.3.1</version>
-        </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-source-plugin</artifactId>
-          <executions>
-            <execution>
-              <id>attach-sources</id>
-              <goals>
-                <goal>jar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-      </plugins>
-    </pluginManagement>
-  </build>
 
   <modules>
     <module>api</module>
