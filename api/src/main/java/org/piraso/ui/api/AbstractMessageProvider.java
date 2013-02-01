@@ -16,8 +16,8 @@
 
 package org.piraso.ui.api;
 
-import org.piraso.api.entry.Entry;
 import org.apache.commons.collections.CollectionUtils;
+import org.piraso.api.entry.Entry;
 
 /**
  * message provider
@@ -29,7 +29,6 @@ public abstract class AbstractMessageProvider implements MessageProvider {
         if(entry.getGroup() == null) {
             return "";
         }
-
         if(CollectionUtils.isNotEmpty(entry.getGroup().getGroups())) {
             String group = entry.getGroup().getGroups().iterator().next();
             return String.format("[%s] ", group);
