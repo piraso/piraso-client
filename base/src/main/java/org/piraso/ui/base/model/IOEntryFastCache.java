@@ -168,7 +168,7 @@ public class IOEntryFastCache {
             StringBuilder buf = new StringBuilder();
 
             if(entry.getIndent() > 0) {
-                buf.append(StringUtils.leftPad("", entry.getIndent(), "  "));
+                buf.append(StringUtils.leftPad("", entry.getIndent(), "    "));
             }
 
             if(SingleModelManagers.GENERAL_SETTINGS.get().isShowRequestId()) {
