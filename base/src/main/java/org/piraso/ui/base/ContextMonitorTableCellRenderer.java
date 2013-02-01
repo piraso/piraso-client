@@ -18,6 +18,7 @@ package org.piraso.ui.base;
 
 import org.piraso.api.entry.Entry;
 import org.piraso.api.entry.MethodCallEntry;
+import org.piraso.ui.api.EntryRowColumn;
 import org.piraso.ui.api.manager.FontProviderManager;
 import org.piraso.ui.base.manager.EntryRowRenderingProviderManager;
 import org.piraso.ui.base.model.IOEntryTableModel;
@@ -31,6 +32,8 @@ import java.awt.*;
  */
 public class ContextMonitorTableCellRenderer extends JLabel implements TableCellRenderer {
     private static final int ROWNUM_INDEX = 0;
+    private static final int TYPE_INDEX = 1;
+    private static final int MESSAGE_INDEX = 2;
     private static final int ELAPSE_INDEX = 3;
     public static final int ROW_NUM_FONT_SIZE = 10;
 
@@ -44,6 +47,8 @@ public class ContextMonitorTableCellRenderer extends JLabel implements TableCell
             boolean isSelected, boolean hasFocus,
             int row, int column) {
         setFont(table.getFont());
+        setIcon(null);
+        EntryRowColumn rowColumn = null;
         IOEntryTableModel model = (IOEntryTableModel) table.getModel();
         Entry entry = model.getEntryAt(row).getEntry();
 
@@ -69,8 +74,15 @@ public class ContextMonitorTableCellRenderer extends JLabel implements TableCell
             setHorizontalAlignment(LEFT);
         }
 
+        switch(column) {
+            case ELAPSE_INDEX: rowColumn = EntryRowColumn.ELAPSE; break;
+            case ROWNUM_INDEX: rowColumn = EntryRowColumn.NUMBER; break;
+            case TYPE_INDEX: rowColumn = EntryRowColumn.TYPE; break;
+            case MESSAGE_INDEX: rowColumn = EntryRowColumn.MESSAGE; break;
+        }
+
         // start rendering table cell.
-        EntryRowRenderingProviderManager.INSTANCE.render(this, entry);
+        EntryRowRenderingProviderManager.INSTANCE.render(this, entry, rowColumn);
 
         if (isSelected) {
             setBackground(table.getSelectionBackground());

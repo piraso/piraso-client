@@ -17,6 +17,7 @@
 package org.piraso.ui.base.manager;
 
 import org.piraso.api.entry.Entry;
+import org.piraso.ui.api.EntryRowColumn;
 import org.piraso.ui.api.EntryRowRenderingProvider;
 import org.openide.util.Lookup;
 
@@ -29,12 +30,12 @@ import java.util.Collection;
 public enum EntryRowRenderingProviderManager {
     INSTANCE;
 
-    public void render(JLabel cell, Entry entry) {
+    public void render(JLabel cell, Entry entry, EntryRowColumn column) {
         Collection<? extends EntryRowRenderingProvider> providers = Lookup.getDefault().lookupAll(EntryRowRenderingProvider.class);
 
         for(EntryRowRenderingProvider provider : providers) {
             if(provider.isSupported(entry)) {
-                provider.render(cell, entry);
+                provider.render(cell, entry, column);
                 break;
             }
         }

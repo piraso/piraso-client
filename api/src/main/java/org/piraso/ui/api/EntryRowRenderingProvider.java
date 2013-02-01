@@ -27,5 +27,5 @@ public interface EntryRowRenderingProvider {
 
     public boolean isSupported(Entry entry);
 
-    public void render(JLabel cell, Entry entry);
+    public void render(JLabel cell, Entry entry, EntryRowColumn column);
 }

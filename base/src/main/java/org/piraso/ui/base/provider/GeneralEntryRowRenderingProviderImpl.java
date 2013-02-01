@@ -19,6 +19,7 @@ package org.piraso.ui.base.provider;
 import org.piraso.api.entry.Entry;
 import org.piraso.api.entry.RequestEntry;
 import org.piraso.api.entry.ResponseEntry;
+import org.piraso.ui.api.EntryRowColumn;
 import org.piraso.ui.api.EntryRowRenderingProvider;
 import org.openide.util.lookup.ServiceProvider;
 
@@ -36,7 +37,7 @@ public class GeneralEntryRowRenderingProviderImpl implements EntryRowRenderingPr
     }
 
     @Override
-    public void render(JLabel cell, Entry entry) {
+    public void render(JLabel cell, Entry entry, EntryRowColumn column) {
         cell.setForeground(new Color(0x000080));
         cell.setBackground(new Color(0xE2FAFF));
     }
