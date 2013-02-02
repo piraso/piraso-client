@@ -16,18 +16,6 @@
 
 package org.piraso.ui.base;
 
-import org.piraso.api.entry.Entry;
-import org.piraso.api.entry.RequestEntry;
-import org.piraso.api.entry.ResponseEntry;
-import org.piraso.ui.api.manager.FontProviderManager;
-import org.piraso.ui.api.manager.ModelEvent;
-import org.piraso.ui.api.manager.ModelOnChangeListener;
-import org.piraso.ui.api.manager.SingleModelManagers;
-import org.piraso.ui.api.util.SingleClassInstanceContent;
-import org.piraso.ui.api.util.WindowUtils;
-import org.piraso.ui.base.manager.EntryViewProviderManager;
-import org.piraso.io.IOEntryEvent;
-import org.piraso.io.IOEntryListener;
 import org.apache.commons.collections.CollectionUtils;
 import org.netbeans.api.settings.ConvertAsProperties;
 import org.openide.awt.ActionID;
@@ -37,6 +25,18 @@ import org.openide.util.NbBundle.Messages;
 import org.openide.util.lookup.AbstractLookup;
 import org.openide.util.lookup.InstanceContent;
 import org.openide.windows.TopComponent;
+import org.piraso.api.entry.Entry;
+import org.piraso.api.entry.RequestEntry;
+import org.piraso.api.entry.ResponseEntry;
+import org.piraso.io.IOEntryEvent;
+import org.piraso.io.IOEntryListener;
+import org.piraso.ui.api.manager.FontProviderManager;
+import org.piraso.ui.api.manager.ModelEvent;
+import org.piraso.ui.api.manager.ModelOnChangeListener;
+import org.piraso.ui.api.manager.SingleModelManagers;
+import org.piraso.ui.api.util.SingleClassInstanceContent;
+import org.piraso.ui.api.util.WindowUtils;
+import org.piraso.ui.base.manager.EntryViewProviderManager;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -133,7 +133,7 @@ public final class RequestTreeTopComponent extends TopComponent implements Looku
                         child = (Child) node.getUserObject();
                     }
 
-                    if(child != null && e.getClickCount() == 2) {
+                    if(child != null && e.getClickCount() == 1) {
                         child.select();
                     }
                 }
