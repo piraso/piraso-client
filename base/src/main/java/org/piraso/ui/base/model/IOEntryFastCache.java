@@ -19,11 +19,11 @@ package org.piraso.ui.base.model;
 import org.apache.commons.lang.StringUtils;
 import org.piraso.api.entry.ElapseTimeAware;
 import org.piraso.api.entry.Entry;
+import org.piraso.io.IOEntry;
+import org.piraso.io.IOEntryReader;
 import org.piraso.ui.api.manager.SingleModelManagers;
 import org.piraso.ui.base.manager.MessageProviderManager;
 import org.piraso.ui.base.manager.PreferenceProviderManager;
-import org.piraso.io.IOEntry;
-import org.piraso.io.IOEntryReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,6 +40,7 @@ public class IOEntryFastCache {
     private static final Logger LOG = Logger.getLogger(IOEntryTableModel.class.getName());
 
     public static final int MAX_CACHE_SIZE = 1000;
+    public static final int MAX_MESSAGE_SIZE = 100;
 
     private Map<Long, Element> cache = new HashMap<Long, Element>(MAX_CACHE_SIZE);
 
@@ -179,7 +180,13 @@ public class IOEntryFastCache {
                 buf.append(getGroup(entry));
             }
 
-            buf.append(getMessage(entry));
+            String message = getMessage(entry);
+
+            if(StringUtils.trimToEmpty(message).length() > MAX_MESSAGE_SIZE) {
+                buf.append(StringUtils.substring(message, 0, MAX_MESSAGE_SIZE)).append("...");
+            } else {
+                buf.append(message);
+            }
 
             return buf.toString();
         }

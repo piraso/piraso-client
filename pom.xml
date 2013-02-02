@@ -24,12 +24,10 @@
   <parent>
     <artifactId>piraso-client-pom</artifactId>
     <groupId>org.piraso</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
   </parent>
 
-  <groupId>org.piraso</groupId>
   <artifactId>piraso-client</artifactId>
-  <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>piraso-client-parent</name>
   <url>http://www.piraso.org/</url>
