@@ -37,6 +37,8 @@ public class GeneralSettingsModel {
 
     private String workingSetName = null;
 
+    private boolean runBridgeServerOnStartUp = true;
+
     public GeneralSettingsModel() {
         fontSize = FontProviderManager.INSTANCE.getDefaultFont().getSize();
     }
@@ -123,5 +125,13 @@ public class GeneralSettingsModel {
 
     public void biggerFontSize() {
         fontSize++;
+    }
+
+    public boolean isRunBridgeServerOnStartUp() {
+        return runBridgeServerOnStartUp;
+    }
+
+    public void setRunBridgeServerOnStartUp(boolean runBridgeServerOnStartUp) {
+        this.runBridgeServerOnStartUp = runBridgeServerOnStartUp;
     }
 }

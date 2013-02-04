@@ -16,17 +16,19 @@
 
 package org.piraso.ui.base;
 
-import org.piraso.api.io.PirasoObjectLoaderRegistry;
-import org.piraso.ui.api.PirasoObjectLoaderProvider;
-import org.piraso.ui.api.manager.SingleModelManagers;
-import org.piraso.ui.base.manager.HttpUpdateManager;
 import jsyntaxpane.DefaultSyntaxKit;
 import org.openide.modules.ModuleInstall;
 import org.openide.util.Lookup;
 import org.openide.windows.TopComponent;
+import org.piraso.api.io.PirasoObjectLoaderRegistry;
+import org.piraso.ui.api.PirasoObjectLoaderProvider;
+import org.piraso.ui.api.bridge.PirasoServerBridge;
+import org.piraso.ui.api.manager.SingleModelManagers;
+import org.piraso.ui.base.manager.HttpUpdateManager;
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Installer extends ModuleInstall {
@@ -35,7 +37,17 @@ public class Installer extends ModuleInstall {
     @Override
     public void restored() {
         LOG.info("Module Started.");
-        
+
+        if(SingleModelManagers.GENERAL_SETTINGS.get().isRunBridgeServerOnStartUp()) {
+            try {
+                PirasoServerBridge.start();
+
+                LOG.info("Piraso bridge server started.");
+            } catch (Exception e) {
+                LOG.log(Level.WARNING, "Fail to start piraso bridge server.", e);
+            }
+        }
+
         DefaultSyntaxKit.initKit();
         registerEntryLoaders();
     }
@@ -71,6 +83,16 @@ public class Installer extends ModuleInstall {
                 ContextMonitorTopComponent editor = (ContextMonitorTopComponent) component;
                 editor.componentClosed();
             }
+        }
+
+        try {
+            if(PirasoServerBridge.isAlive()) {
+                PirasoServerBridge.stop();
+            }
+
+            LOG.info("Piraso bridge server stopped.");
+        } catch (Exception e) {
+            LOG.log(Level.WARNING, "Failure stopping piraso bridge server.", e);
         }
 
         return true;
